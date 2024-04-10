@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-04-10T13:26:25.320Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15" etag="yFVXwAJZI0xWQY5N8y6t" version="24.2.3" type="github">
+<mxfile host="app.diagrams.net" modified="2024-04-10T13:32:58.499Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15" etag="M_pS7myH-wSkGncsCF_h" version="24.2.3" type="github">
   <diagram id="PVUJfkXwOaY9LK6kwLpK" name="store algo">
     <mxGraphModel dx="3023" dy="826" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -67,7 +67,7 @@
         <mxCell id="L4kl2bhydgzRn_6nqGPS-56" value="Сервер сравнивает переданный хэш с хэшем в своей базе данных и логином" style="whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;rounded=1;arcSize=40;" vertex="1" parent="1">
           <mxGeometry x="-605" y="319.5" width="125" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="L4kl2bhydgzRn_6nqGPS-59" value="Пользователь получает jwt токен для обращения к другим запросам" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;rounded=1;arcSize=40;" vertex="1" parent="1">
+        <mxCell id="L4kl2bhydgzRn_6nqGPS-59" value="Пользователь получает jwt токен для обращения к другим запросам и сохраняет его в память" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;rounded=1;arcSize=40;" vertex="1" parent="1">
           <mxGeometry x="-610" y="464.5" width="135" height="120" as="geometry" />
         </mxCell>
         <mxCell id="L4kl2bhydgzRn_6nqGPS-61" value="Хэши совпали" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
@@ -82,7 +82,7 @@
         <mxCell id="L4kl2bhydgzRn_6nqGPS-77" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="L4kl2bhydgzRn_6nqGPS-70" target="L4kl2bhydgzRn_6nqGPS-25">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="L4kl2bhydgzRn_6nqGPS-70" value="Пользователь вводит мастер пароль и клиент сохраняет его в памяти" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="L4kl2bhydgzRn_6nqGPS-70" value="Пользователь вводит мастер пароль" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
           <mxGeometry x="-610" y="140" width="130" height="60" as="geometry" />
         </mxCell>
         <mxCell id="L4kl2bhydgzRn_6nqGPS-81" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="L4kl2bhydgzRn_6nqGPS-78" target="L4kl2bhydgzRn_6nqGPS-80">
