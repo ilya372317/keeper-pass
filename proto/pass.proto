@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "github.com/ilya372317/pass-keeper/proto";
+
+message RegisterRequest {
+  string email = 1;
+  string hashed_password = 2;
+}
+
+message RegisterResponse {
+}
+
+message AuthRequest {
+  string email = 1;
+  string hashed_password = 2;
+}
+
+message AuthResponse {
+  string access_token = 1;
+}
+
+service PassService {
+  rpc Auth(AuthRequest) returns (AuthResponse);
+}
