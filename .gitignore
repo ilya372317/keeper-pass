@@ -25,3 +25,6 @@ go.work
 
 #Github
 .github
+
+#IDE
+/.idea
