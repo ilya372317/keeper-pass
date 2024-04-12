@@ -1,2 +1,2 @@
 grpc:
-  host: ":8090"
+  host: "localhost:3200"
