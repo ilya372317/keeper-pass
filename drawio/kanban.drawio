@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-04-12T07:36:44.359Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0" etag="8yv7SiprOby8rzWIpsGu" version="24.2.3" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2024-04-12T08:25:01.687Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0" etag="KZa3_UQM-R8TsNWZsxzt" version="24.2.3" type="github" pages="2">
   <diagram id="PVUJfkXwOaY9LK6kwLpK" name="store algo">
     <mxGraphModel dx="2680" dy="598" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -125,7 +125,7 @@
         <mxCell id="L4kl2bhydgzRn_6nqGPS-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="L4kl2bhydgzRn_6nqGPS-94" target="L4kl2bhydgzRn_6nqGPS-21" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="L4kl2bhydgzRn_6nqGPS-94" value="Сервер добавляет к хэшу мастер пароля соль и кэширует полученную строку" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+        <mxCell id="L4kl2bhydgzRn_6nqGPS-94" value="Сервер добавляет к хэшу мастер пароля соль и хэширует полученную строку" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="-882.5" y="460" width="165" height="80" as="geometry" />
         </mxCell>
       </root>
