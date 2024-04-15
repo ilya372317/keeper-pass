@@ -17,7 +17,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
 	defer stop()
 
-	if err := a.StartGRPCServer(ctx); err != nil {
+	if err = a.StartGRPCServer(ctx); err != nil {
 		panic(err)
 	}
 }

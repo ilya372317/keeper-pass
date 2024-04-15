@@ -4,10 +4,16 @@ import (
 	pb "github.com/ilya372317/pass-keeper/proto"
 )
 
-type Handler struct {
-	pb.UnimplementedPassServiceServer
+type AuthService interface {
 }
 
-func New() *Handler {
-	return &Handler{}
+type Handler struct {
+	pb.UnimplementedPassServiceServer
+	authService AuthService
+}
+
+func New(authService AuthService) *Handler {
+	return &Handler{
+		authService: authService,
+	}
 }

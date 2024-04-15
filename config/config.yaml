@@ -1,2 +1,14 @@
 grpc:
   host: "localhost:3200"
+jwt:
+  secret_key: "secret-key"
+  token_exp: 6h
+main_db:
+  host: localhost
+  port: 5432
+  name: pass_keeper
+  user: root
+  password: root
+  read_timeout: 1m
+  write_timeout: 1m
+  timeout: 1m

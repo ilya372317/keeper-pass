@@ -2,23 +2,53 @@ package app
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/logger"
+	"github.com/jmoiron/sqlx"
 )
 
 type App struct {
+	c    *Container
 	conf config.Config
 }
 
-func New(configPath string) (App, error) {
+func New(configPath string) (*App, error) {
 	conf, err := config.New(configPath)
 	logger.InitMust()
 	if err != nil {
-		return App{}, fmt.Errorf("failed create new config: %w", err)
+		return nil, fmt.Errorf("failed create new config: %w", err)
+	}
+	app := App{
+		conf: conf,
+	}
+	pgsqlxConnect, err := app.newPgSqlxConnect(conf.MainDB)
+	if err != nil {
+		return nil, fmt.Errorf("failed make connection with postgresql db: %w", err)
+	}
+	app.c = NewContainer(conf, pgsqlxConnect)
+	return &app, nil
+}
+
+func (a *App) newPgSqlxConnect(cfg config.SQLConfig) (*sqlx.DB, error) {
+	builder := strings.Builder{}
+	builder.WriteString(fmt.Sprintf("host=%s port=%s ", cfg.Host, cfg.Port))
+	builder.WriteString(fmt.Sprintf("user=%s password=%s ", cfg.User, cfg.Password))
+	builder.WriteString(fmt.Sprintf("dbname=%s ", cfg.DBName))
+	builder.WriteString(fmt.Sprintf("timezone=%s ", cfg.Timezone))
+	builder.WriteString("sslmode=disable ")
+
+	params := builder.String()
+
+	db, err := sqlx.Open("postgres", params)
+	if err != nil {
+		return nil, fmt.Errorf("failed open pgsql connection. invalid config data: %w", err)
 	}
 
-	return App{
-		conf: conf,
-	}, nil
+	db.SetConnMaxLifetime(cfg.ConnMaxLifetime)
+	db.SetMaxOpenConns(cfg.MaxOpenConns)
+	db.SetMaxIdleConns(cfg.MaxIdleConns)
+
+	return db, nil
 }

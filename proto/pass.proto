@@ -21,4 +21,5 @@ message AuthResponse {
 
 service PassService {
   rpc Auth(AuthRequest) returns (AuthResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
 }

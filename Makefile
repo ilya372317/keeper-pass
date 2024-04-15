@@ -38,3 +38,7 @@ build: _create_build_dir
 .PHONY: _create_build_dir
 _create_build_dir:
 	mkdir -p ./build
+
+.PHONY: ggen
+ggen:
+	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/pass.proto
