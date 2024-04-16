@@ -2,15 +2,20 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os/signal"
 	"syscall"
 
 	"github.com/ilya372317/pass-keeper/internal/server/app"
 	_ "github.com/ilya372317/pass-keeper/proto"
+	_ "github.com/lib/pq"
 )
 
+var configFilePath string
+
 func main() {
-	a, err := app.New("config/config.yaml")
+	fmt.Println(configFilePath)
+	a, err := app.New(configFilePath)
 	if err != nil {
 		panic(err)
 	}

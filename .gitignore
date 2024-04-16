@@ -29,3 +29,6 @@ go.work
 #IDE
 /.idea
 /docker/.env
+.vscode
+
+/build

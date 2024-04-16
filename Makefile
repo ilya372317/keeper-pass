@@ -42,3 +42,8 @@ _create_build_dir:
 .PHONY: ggen
 ggen:
 	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/pass.proto
+
+.PHONY: start-server
+start-server:
+	go build -ldflags "-X main.configFilePath=config/config.yaml" -o build/temp_server cmd/server/main.go
+	-./build/temp_server

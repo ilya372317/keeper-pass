@@ -16,10 +16,11 @@ type App struct {
 
 func New(configPath string) (*App, error) {
 	conf, err := config.New(configPath)
-	logger.InitMust()
 	if err != nil {
 		return nil, fmt.Errorf("failed create new config: %w", err)
 	}
+	logger.InitMust()
+
 	app := App{
 		conf: conf,
 	}
