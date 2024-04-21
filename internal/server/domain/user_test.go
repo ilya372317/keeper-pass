@@ -43,14 +43,9 @@ func TestUser_IsPasswordCorrect(t *testing.T) {
 			u := &User{
 				Salt: tt.fields.salt,
 			}
-			hashedPasswordBytes := sha256.Sum256([]byte(tt.fields.password))
-			hashedPassword := hex.EncodeToString(hashedPasswordBytes[:])
-			u.SetHashedPassword(hashedPassword)
+			u.SetHashedPassword(tt.fields.password)
 
-			argumentPasswordBytes := sha256.Sum256([]byte(tt.arg))
-			argumentPassword := hex.EncodeToString(argumentPasswordBytes[:])
-
-			got := u.IsPasswordCorrect(argumentPassword)
+			got := u.IsPasswordCorrect(tt.arg)
 
 			assert.Equal(t, tt.want, got)
 		})
@@ -95,17 +90,15 @@ func TestUser_SetHashedPassword(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			argBytes := sha256.Sum256([]byte(tt.arg))
-			arg := hex.EncodeToString(argBytes[:])
 			u := &User{
 				Salt: tt.salt,
 			}
 
-			u.SetHashedPassword(arg)
+			u.SetHashedPassword(tt.arg)
 
 			got := u.HashedPassword
 
-			argWithSaltBytes := sha256.Sum256([]byte(arg + tt.salt))
+			argWithSaltBytes := sha256.Sum256([]byte(tt.arg + tt.salt))
 			argWithSalt := hex.EncodeToString(argWithSaltBytes[:])
 
 			assert.Equal(t, argWithSalt, got)

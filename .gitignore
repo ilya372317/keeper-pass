@@ -32,3 +32,5 @@ go.work
 .vscode
 
 /build
+
+.DS_Store
