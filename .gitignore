@@ -23,9 +23,6 @@ go.work
 # Linter
 /golangci-lint
 
-#Github
-.github
-
 #IDE
 /.idea
 /docker/.env
