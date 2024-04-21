@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-04-20T08:59:16.222Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15" etag="-ZmYBl0rEpt9Dje2eiwJ" version="24.2.5" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2024-04-21T14:53:40.332Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15" etag="RNGD61yUYUi6bQhau3QC" version="24.2.7" type="github" pages="2">
   <diagram id="PVUJfkXwOaY9LK6kwLpK" name="store algo">
-    <mxGraphModel dx="2612" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3444" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -22,41 +22,121 @@
         <mxCell id="L4kl2bhydgzRn_6nqGPS-84" value="Удаление пароля" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="480" y="89.5" width="170" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="HORocToaPUwsFrPt66IJ-3" target="HORocToaPUwsFrPt66IJ-5">
+        <mxCell id="HORocToaPUwsFrPt66IJ-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="HORocToaPUwsFrPt66IJ-3" target="HORocToaPUwsFrPt66IJ-5" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-3" value="Пользователь вводит логин и пароль" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="HORocToaPUwsFrPt66IJ-3" value="Пользователь вводит логин и пароль" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="-860" y="140" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="HORocToaPUwsFrPt66IJ-5" target="HORocToaPUwsFrPt66IJ-7">
+        <mxCell id="HORocToaPUwsFrPt66IJ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="HORocToaPUwsFrPt66IJ-5" target="HORocToaPUwsFrPt66IJ-7" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-5" value="Клиент отправляет логин и пароль на сервер в открытом виде" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="HORocToaPUwsFrPt66IJ-5" value="Клиент отправляет логин и пароль на сервер в открытом виде" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="-880" y="230" width="160" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="HORocToaPUwsFrPt66IJ-7" target="HORocToaPUwsFrPt66IJ-10">
+        <mxCell id="HORocToaPUwsFrPt66IJ-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="HORocToaPUwsFrPt66IJ-7" target="HORocToaPUwsFrPt66IJ-10" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-7" value="Сервер принимает открытый логин и пароль" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="HORocToaPUwsFrPt66IJ-7" value="Сервер принимает открытый логин и пароль" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="-880" y="360" width="160" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="HORocToaPUwsFrPt66IJ-10" target="HORocToaPUwsFrPt66IJ-13">
+        <mxCell id="HORocToaPUwsFrPt66IJ-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="HORocToaPUwsFrPt66IJ-10" target="HORocToaPUwsFrPt66IJ-13" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-10" value="Сервер хэширует пароль пользователя" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="HORocToaPUwsFrPt66IJ-10" value="Сервер хэширует пароль пользователя" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="-880" y="450" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="HORocToaPUwsFrPt66IJ-13" target="HORocToaPUwsFrPt66IJ-16">
+        <mxCell id="HORocToaPUwsFrPt66IJ-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="HORocToaPUwsFrPt66IJ-13" target="HORocToaPUwsFrPt66IJ-16" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-13" value="Сервер сохраняет пароль и логин в базу данных" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="HORocToaPUwsFrPt66IJ-13" value="Сервер сохраняет пароль и логин в базу данных" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="-880" y="530" width="160" height="45.5" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-16" value="Сервер выдает клиенту ответ что регистрация прошла успешно" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="HORocToaPUwsFrPt66IJ-16" value="Сервер выдает клиенту ответ что регистрация прошла успешно" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="-880" y="620" width="160" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="HORocToaPUwsFrPt66IJ-19" value="Запуск сервера" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;fontSize=18;" vertex="1" parent="1">
-          <mxGeometry x="-1130" y="90" width="160" height="30" as="geometry" />
+        <mxCell id="HORocToaPUwsFrPt66IJ-19" value="Запуск сервера" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="-1690" y="90" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-1" target="YoHMu9I83ruupMcuB_Mf-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-1" value="Пользователь передает логин и пароль" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-605" y="140" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-3" target="YoHMu9I83ruupMcuB_Mf-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-3" value="Сервер добавляет к паролю соль и хэширует его" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-612.5" y="220" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-11" value="нет" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-6" target="YoHMu9I83ruupMcuB_Mf-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-6" target="YoHMu9I83ruupMcuB_Mf-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-6" value="Пароль верный" style="rhombus;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-616.5" y="320" width="143" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-10" value="Сервер выдает ошибку доступа" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-380" y="325" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-12" value="Сервер генерирует токен и передает его клиенту" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-612.5" y="410" width="135" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-14" value="Проверка запроса" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-1160" y="90" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-15" target="YoHMu9I83ruupMcuB_Mf-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-15" value="Клиент отправляет запрос на защищенный endpoint" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1145" y="140" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-16" target="YoHMu9I83ruupMcuB_Mf-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-16" value="Сервер извлекает метаданные из запроса с ключом JWT_TOKEN" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1145" y="255" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-18" target="YoHMu9I83ruupMcuB_Mf-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-18" value="Сервер проверяет валидность токены" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1145" y="370" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-20" target="YoHMu9I83ruupMcuB_Mf-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-26" value="нет" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="YoHMu9I83ruupMcuB_Mf-25">
+          <mxGeometry x="-0.2296" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-20" target="YoHMu9I83ruupMcuB_Mf-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-20" value="Токен валидный" style="rhombus;whiteSpace=wrap;html=1;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1150" y="490" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-24" value="Сервер отказывает в дальнейшем доступе к ресурсам" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1380" y="480" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-28" target="YoHMu9I83ruupMcuB_Mf-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-28" value="Сервер использует полученный email пользователя извлекает его из хранилища" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1145" y="600" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="YoHMu9I83ruupMcuB_Mf-30" target="YoHMu9I83ruupMcuB_Mf-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-30" value="Сервер помещает пользователя в метаданные с ключом AUTH_USER" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1145" y="720" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="YoHMu9I83ruupMcuB_Mf-32" value="Сервер позволяет продолжить цепочку вызовов" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+          <mxGeometry x="-1145" y="840" width="150" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
