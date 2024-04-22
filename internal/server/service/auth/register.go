@@ -13,10 +13,11 @@ func (s *Service) Register(ctx context.Context, registerDTO dto.RegisterDTO) (*d
 	user := &domain.User{
 		Email: registerDTO.Email,
 	}
-	user.SetHashedPassword(registerDTO.Password)
+
 	if err := user.GenerateSalt(); err != nil {
 		return nil, fmt.Errorf("failed generate salt on user reigster: %w", err)
 	}
+	user.SetHashedPassword(registerDTO.Password)
 
 	if err := s.userRepository.SaveUser(ctx, user); err != nil {
 		return nil, fmt.Errorf("failed save user to database on register: %w", err)
