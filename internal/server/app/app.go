@@ -6,6 +6,7 @@ import (
 
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/logger"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -42,7 +43,7 @@ func (a *App) newPgSqlxConnect(cfg config.SQLConfig) (*sqlx.DB, error) {
 
 	params := builder.String()
 
-	db, err := sqlx.Open("postgres", params)
+	db, err := sqlx.Open("pgx", params)
 	if err != nil {
 		return nil, fmt.Errorf("failed open pgsql connection. invalid config data: %w", err)
 	}

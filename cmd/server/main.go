@@ -7,8 +7,6 @@ import (
 	"syscall"
 
 	"github.com/ilya372317/pass-keeper/internal/server/app"
-	_ "github.com/ilya372317/pass-keeper/proto"
-	_ "github.com/jackc/pgx"
 )
 
 var configFilePath string

@@ -14,7 +14,7 @@ func (s *Service) Login(ctx context.Context, dto dto.LoginDTO) (string, error) {
 		return "", fmt.Errorf("failed get user from storage for login: %w", err)
 	}
 
-	if passCorrect := user.IsPasswordCorrect(dto.HashedPassword); !passCorrect {
+	if passCorrect := user.IsPasswordCorrect(dto.Password); !passCorrect {
 		return "", domain.ErrInvalidPassword
 	}
 

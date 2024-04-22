@@ -6,7 +6,7 @@ jwt:
 main_db:
   host: localhost
   port: 5432
-  name: pass_keeper
+  name: pass
   user: root
   password: root
   read_timeout: 1m

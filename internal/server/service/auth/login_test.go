@@ -57,8 +57,8 @@ func TestService_Login(t *testing.T) {
 				},
 			},
 			arg: dto.LoginDTO{
-				Email:          "email",
-				HashedPassword: "pass",
+				Email:    "email",
+				Password: "pass",
 			},
 			want: want{
 				err:    false,
@@ -74,8 +74,8 @@ func TestService_Login(t *testing.T) {
 			},
 			tokenManagerSettings: tokenManagerSettings{},
 			arg: dto.LoginDTO{
-				Email:          "email",
-				HashedPassword: "123",
+				Email:    "email",
+				Password: "123",
 			},
 			want: want{
 				err:    true,
@@ -100,8 +100,8 @@ func TestService_Login(t *testing.T) {
 				},
 			},
 			arg: dto.LoginDTO{
-				Email:          "email",
-				HashedPassword: "321",
+				Email:    "email",
+				Password: "321",
 			},
 			want: want{
 				err:    true,
@@ -126,8 +126,8 @@ func TestService_Login(t *testing.T) {
 				},
 			},
 			arg: dto.LoginDTO{
-				Email:          "email",
-				HashedPassword: "123",
+				Email:    "email",
+				Password: "123",
 			},
 			want: want{
 				err:    true,
@@ -146,9 +146,9 @@ func TestService_Login(t *testing.T) {
 			)
 			repoHashedPassword := hex.EncodeToString(repoHashedPasswordBytes[:])
 			tt.repoSettings.getUserByIDResult.SetHashedPassword(repoHashedPassword)
-			hashPasswordBytes := sha256.Sum256([]byte(tt.arg.HashedPassword))
+			hashPasswordBytes := sha256.Sum256([]byte(tt.arg.Password))
 			hashPassword := hex.EncodeToString(hashPasswordBytes[:])
-			tt.arg.HashedPassword = hashPassword
+			tt.arg.Password = hashPassword
 
 			userRepo.EXPECT().
 				GetUserByEmail(ctx, tt.repoSettings.userEmail).
