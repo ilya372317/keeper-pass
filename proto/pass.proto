@@ -5,6 +5,8 @@ option go_package = "github.com/ilya372317/pass-keeper/proto";
 message User {
   int64 id = 1;
   string email = 2;
+  string created_at = 3;
+  string updated_at = 4;
 }
 
 message RegisterRequest {

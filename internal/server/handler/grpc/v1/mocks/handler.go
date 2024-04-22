@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	domain "github.com/ilya372317/pass-keeper/internal/server/domain"
 	dto "github.com/ilya372317/pass-keeper/internal/server/dto"
 )
 
@@ -48,4 +49,19 @@ func (m *MockAuthService) Login(arg0 context.Context, arg1 dto.LoginDTO) (string
 func (mr *MockAuthServiceMockRecorder) Login(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockAuthService)(nil).Login), arg0, arg1)
+}
+
+// Register mocks base method.
+func (m *MockAuthService) Register(arg0 context.Context, arg1 dto.RegisterDTO) (*domain.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Register", arg0, arg1)
+	ret0, _ := ret[0].(*domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Register indicates an expected call of Register.
+func (mr *MockAuthServiceMockRecorder) Register(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockAuthService)(nil).Register), arg0, arg1)
 }
