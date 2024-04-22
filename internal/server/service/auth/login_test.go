@@ -17,7 +17,7 @@ import (
 
 func TestService_Login(t *testing.T) {
 	type repoSettings struct {
-		getUserByIDResult domain.User
+		getUserByIDResult *domain.User
 		userEmail         string
 		errResult         error
 	}
@@ -42,7 +42,7 @@ func TestService_Login(t *testing.T) {
 		{
 			name: "success simple case",
 			repoSettings: repoSettings{
-				getUserByIDResult: domain.User{
+				getUserByIDResult: &domain.User{
 					Email:          "email",
 					HashedPassword: "pass",
 					Salt:           "123",
@@ -68,7 +68,7 @@ func TestService_Login(t *testing.T) {
 		{
 			name: "failed get user from repo",
 			repoSettings: repoSettings{
-				getUserByIDResult: domain.User{},
+				getUserByIDResult: &domain.User{},
 				userEmail:         "email",
 				errResult:         domain.ErrUserNotFound,
 			},
@@ -85,7 +85,7 @@ func TestService_Login(t *testing.T) {
 		{
 			name: "given password is incorrect",
 			repoSettings: repoSettings{
-				getUserByIDResult: domain.User{
+				getUserByIDResult: &domain.User{
 					Email:          "email",
 					HashedPassword: "123",
 					Salt:           "salt",
@@ -111,7 +111,7 @@ func TestService_Login(t *testing.T) {
 		{
 			name: "failed generate token",
 			repoSettings: repoSettings{
-				getUserByIDResult: domain.User{
+				getUserByIDResult: &domain.User{
 					Email:          "email",
 					HashedPassword: "123",
 					Salt:           "salt",
@@ -156,7 +156,7 @@ func TestService_Login(t *testing.T) {
 				Return(tt.repoSettings.getUserByIDResult, tt.repoSettings.errResult)
 			tokenManager.
 				EXPECT().
-				Generate(&tt.repoSettings.getUserByIDResult).
+				Generate(tt.repoSettings.getUserByIDResult).
 				AnyTimes().
 				Return(tt.tokenManagerSettings.generate.result, tt.tokenManagerSettings.generate.resultErr)
 

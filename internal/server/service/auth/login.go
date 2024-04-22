@@ -18,7 +18,7 @@ func (s *Service) Login(ctx context.Context, dto dto.LoginDTO) (string, error) {
 		return "", domain.ErrInvalidPassword
 	}
 
-	tokenString, err := s.tokenManager.Generate(&user)
+	tokenString, err := s.tokenManager.Generate(user)
 	if err != nil {
 		return "", fmt.Errorf("failed generate auth token: %w", err)
 	}

@@ -11,7 +11,8 @@ type TokenManager interface {
 }
 
 type UserRepository interface {
-	GetUserByEmail(ctx context.Context, email string) (domain.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
+	SaveUser(ctx context.Context, user *domain.User) error
 }
 
 type Service struct {

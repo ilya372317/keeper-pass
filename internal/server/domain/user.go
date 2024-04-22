@@ -1,10 +1,15 @@
 package domain
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"fmt"
+	"time"
 )
+
+const saltLength = 32
 
 var (
 	ErrUserNotFound    = errors.New("user not found")
@@ -13,10 +18,12 @@ var (
 
 // User entity which represent users.
 type User struct {
-	Email          string `db:"email"`           // user email.
-	HashedPassword string `db:"hashed_password"` // user hashed password.
-	Salt           string `db:"salt"`            // random generated salt for hash check.
-	ID             uint   `db:"id"`              // identifier
+	CreatedAT      time.Time `db:"created_at"`      // created at date.
+	UpdatedAT      time.Time `db:"updated_at"`      // updated at date.
+	Email          string    `db:"email"`           // user email.
+	HashedPassword string    `db:"hashed_password"` // user hashed password.
+	Salt           string    `db:"salt"`            // random generated salt for hash check.
+	ID             uint      `db:"id"`              // identifier
 }
 
 func (u *User) IsPasswordCorrect(password string) bool {
@@ -26,9 +33,23 @@ func (u *User) IsPasswordCorrect(password string) bool {
 	return u.HashedPassword == userPassWithSalt
 }
 
-func (u *User) SetHashedPassword(hashedPassword string) {
-	passwordWithSaltBytes := sha256.Sum256([]byte(hashedPassword + u.Salt))
+// SetHashedPassword from given user password generate hash and set in HashedPassword field.
+func (u *User) SetHashedPassword(password string) {
+	passwordWithSaltBytes := sha256.Sum256([]byte(password + u.Salt))
 	passwordWithSalt := hex.EncodeToString(passwordWithSaltBytes[:])
 
 	u.HashedPassword = passwordWithSalt
+}
+
+// GenerateSalt generate salt for make password hash more strong.
+func (u *User) GenerateSalt() error {
+	saltBytes := make([]byte, saltLength)
+	if _, err := rand.Read(saltBytes); err != nil {
+		return fmt.Errorf("failed generate salt for user: %w", err)
+	}
+
+	salt := hex.EncodeToString(saltBytes)
+	u.Salt = salt
+
+	return nil
 }

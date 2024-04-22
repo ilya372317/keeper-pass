@@ -74,10 +74,10 @@ func (m *MockUserRepository) EXPECT() *MockUserRepositoryMockRecorder {
 }
 
 // GetUserByEmail mocks base method.
-func (m *MockUserRepository) GetUserByEmail(ctx context.Context, email string) (domain.User, error) {
+func (m *MockUserRepository) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserByEmail", ctx, email)
-	ret0, _ := ret[0].(domain.User)
+	ret0, _ := ret[0].(*domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -86,4 +86,18 @@ func (m *MockUserRepository) GetUserByEmail(ctx context.Context, email string) (
 func (mr *MockUserRepositoryMockRecorder) GetUserByEmail(ctx, email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByEmail", reflect.TypeOf((*MockUserRepository)(nil).GetUserByEmail), ctx, email)
+}
+
+// SaveUser mocks base method.
+func (m *MockUserRepository) SaveUser(ctx context.Context, user *domain.User) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveUser", ctx, user)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveUser indicates an expected call of SaveUser.
+func (mr *MockUserRepositoryMockRecorder) SaveUser(ctx, user interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveUser", reflect.TypeOf((*MockUserRepository)(nil).SaveUser), ctx, user)
 }

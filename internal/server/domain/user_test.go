@@ -5,7 +5,8 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/magiconair/properties/assert"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestUser_IsPasswordCorrect(t *testing.T) {
@@ -102,6 +103,31 @@ func TestUser_SetHashedPassword(t *testing.T) {
 			argWithSalt := hex.EncodeToString(argWithSaltBytes[:])
 
 			assert.Equal(t, argWithSalt, got)
+		})
+	}
+}
+
+func TestUser_GenerateSalt(t *testing.T) {
+	tests := []struct {
+		name string
+	}{
+		{
+			name: "simple success case",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			u := &User{}
+			err := u.GenerateSalt()
+			require.NoError(t, err)
+			saltBytes, err := hex.DecodeString(u.Salt)
+			require.NoError(t, err)
+			assert.Equal(t, saltLength, len(saltBytes))
+
+			u2 := &User{}
+			err = u2.GenerateSalt()
+			require.NoError(t, err)
+			assert.NotEqual(t, u2.Salt, u.Salt)
 		})
 	}
 }

@@ -2,12 +2,18 @@ syntax = "proto3";
 
 option go_package = "github.com/ilya372317/pass-keeper/proto";
 
+message User {
+  int64 id = 1;
+  string email = 2;
+}
+
 message RegisterRequest {
   string email = 1;
   string password = 2;
 }
 
 message RegisterResponse {
+  User user = 1;
 }
 
 message AuthRequest {

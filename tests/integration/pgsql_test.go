@@ -44,7 +44,7 @@ func TestMain(m *testing.M) {
 func TestRepository_GetUserByEmail(t *testing.T) {
 	type want struct {
 		err  bool
-		user domain.User
+		user *domain.User
 	}
 	tests := []struct {
 		name   string
@@ -57,7 +57,7 @@ func TestRepository_GetUserByEmail(t *testing.T) {
 			arg:  "email1",
 			want: want{
 				err: false,
-				user: domain.User{
+				user: &domain.User{
 					Email:          "email1",
 					HashedPassword: "123",
 					Salt:           "salt",
@@ -76,7 +76,7 @@ func TestRepository_GetUserByEmail(t *testing.T) {
 			arg:  "email1",
 			want: want{
 				err: false,
-				user: domain.User{
+				user: &domain.User{
 					Email:          "email1",
 					HashedPassword: "pass1",
 					Salt:           "salt1",
@@ -132,6 +132,40 @@ func TestRepository_GetUserByEmail(t *testing.T) {
 			assert.Equal(t, tt.want.user.Email, got.Email)
 			assert.Equal(t, tt.want.user.HashedPassword, got.HashedPassword)
 			assert.Equal(t, tt.want.user.Salt, got.Salt)
+			clearUsersTable(t)
+		})
+	}
+}
+
+func TestRepository_SaveUser(t *testing.T) {
+	tests := []struct {
+		name     string
+		argument *domain.User
+		wantErr  bool
+	}{
+		{
+			name: "save user success case",
+			argument: &domain.User{
+				Email:          "email",
+				HashedPassword: "password",
+				Salt:           "salt",
+			},
+		},
+	}
+	ctx := context.Background()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := repo.SaveUser(ctx, tt.argument)
+			require.NoError(t, err)
+			var savedUser domain.User
+
+			err = db.Get(&savedUser, "SELECT * FROM users WHERE email = $1", tt.argument.Email)
+
+			require.NoError(t, err)
+			assert.Equal(t, tt.argument.Email, savedUser.Email)
+			assert.Equal(t, tt.argument.Salt, savedUser.Salt)
+			assert.Equal(t, tt.argument.HashedPassword, savedUser.HashedPassword)
+
 			clearUsersTable(t)
 		})
 	}
