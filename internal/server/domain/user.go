@@ -12,8 +12,9 @@ import (
 const saltLength = 32
 
 var (
-	ErrUserNotFound    = errors.New("user not found")
-	ErrInvalidPassword = errors.New("invalid user password given")
+	ErrUserNotFound      = errors.New("user not found")
+	ErrInvalidPassword   = errors.New("invalid user password given")
+	ErrUserAlreadyExists = errors.New("user already registered")
 )
 
 type CtxUserKey struct{}

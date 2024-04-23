@@ -174,6 +174,31 @@ func TestHandler_Register(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "user already exists",
+			argument: &pb.RegisterRequest{
+				Email:    "1@gmail.com",
+				Password: "123",
+			},
+			want: want{
+				err:      true,
+				errCode:  codes.AlreadyExists,
+				wantUser: wantUser{},
+			},
+			serviceConfig: serviceConfig{
+				returnUser: serviceUser{
+					createdAT: "2023-01-01 00:00:00",
+					updatedAT: "2023-01-01 00:00:00",
+					email:     "email",
+					id:        1,
+				},
+				returnErr: domain.ErrUserAlreadyExists,
+				argument: dto.RegisterDTO{
+					Email:    "1@gmail.com",
+					Password: "123",
+				},
+			},
+		},
 	}
 	ctrl := gomock.NewController(t)
 	ctx := context.Background()

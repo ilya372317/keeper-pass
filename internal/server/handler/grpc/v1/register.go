@@ -2,8 +2,10 @@ package v1
 
 import (
 	"context"
+	"errors"
 	"time"
 
+	"github.com/ilya372317/pass-keeper/internal/server/domain"
 	"github.com/ilya372317/pass-keeper/internal/server/dto"
 	pb "github.com/ilya372317/pass-keeper/proto"
 	"google.golang.org/grpc/codes"
@@ -22,6 +24,9 @@ func (h *Handler) Register(ctx context.Context, in *pb.RegisterRequest) (*pb.Reg
 
 	user, err := h.authService.Register(ctx, registerDTO)
 	if err != nil {
+		if errors.Is(err, domain.ErrUserAlreadyExists) {
+			return nil, status.Errorf(codes.AlreadyExists, "user already registered: %v", err)
+		}
 		return nil, status.Errorf(codes.Internal, "failed register user: %v", err)
 	}
 

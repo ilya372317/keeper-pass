@@ -17,6 +17,11 @@ func TestService_Register(t *testing.T) {
 	type saveUserConfig struct {
 		returnErr error
 	}
+	type HasUserConfig struct {
+		argumentEmail string
+		returnResult  bool
+		returnErr     error
+	}
 	type getByEmailConfig struct {
 		argument   string
 		returnUser *domain.User
@@ -25,6 +30,7 @@ func TestService_Register(t *testing.T) {
 	type repositoryConfig struct {
 		saveUserConfig   saveUserConfig
 		getByEmailConfig getByEmailConfig
+		hasUserConfig    HasUserConfig
 	}
 	type argument struct {
 		registerDTO dto.RegisterDTO
@@ -116,6 +122,56 @@ func TestService_Register(t *testing.T) {
 				err:    true,
 			},
 		},
+		{
+			name: "user already exists",
+			repositoryConfig: repositoryConfig{
+				saveUserConfig: saveUserConfig{
+					returnErr: nil,
+				},
+				getByEmailConfig: getByEmailConfig{
+					argument:   "email",
+					returnUser: nil,
+					returnErr:  nil,
+				},
+				hasUserConfig: HasUserConfig{
+					argumentEmail: "email",
+					returnResult:  true,
+					returnErr:     nil,
+				},
+			},
+			argument: argument{
+				registerDTO: dto.RegisterDTO{
+					Email:    "email",
+					Password: "pass",
+				},
+			},
+			want: want{
+				result: domain.User{},
+				err:    true,
+			},
+		},
+		{
+			name: "has user return unexpected error",
+			repositoryConfig: repositoryConfig{
+				saveUserConfig:   saveUserConfig{returnErr: nil},
+				getByEmailConfig: getByEmailConfig{argument: "email"},
+				hasUserConfig: HasUserConfig{
+					argumentEmail: "email",
+					returnResult:  false,
+					returnErr:     fmt.Errorf("failed check user exists"),
+				},
+			},
+			argument: argument{
+				registerDTO: dto.RegisterDTO{
+					Email:    "email",
+					Password: "pass",
+				},
+			},
+			want: want{
+				result: domain.User{},
+				err:    true,
+			},
+		},
 	}
 	ctrl := gomock.NewController(t)
 	ctx := context.Background()
@@ -132,6 +188,11 @@ func TestService_Register(t *testing.T) {
 				GetUserByEmail(gomock.Any(), tt.repositoryConfig.getByEmailConfig.argument).
 				AnyTimes().
 				Return(tt.repositoryConfig.getByEmailConfig.returnUser, tt.repositoryConfig.getByEmailConfig.returnErr)
+			repository.
+				EXPECT().
+				HasUser(gomock.Any(), gomock.Any()).
+				AnyTimes().
+				Return(tt.repositoryConfig.hasUserConfig.returnResult, tt.repositoryConfig.hasUserConfig.returnErr)
 
 			tokenManager := auth_mock.NewMockTokenManager(ctrl)
 			service := NewAuthService(tokenManager, repository)

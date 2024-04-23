@@ -171,8 +171,60 @@ func TestRepository_SaveUser(t *testing.T) {
 	}
 }
 
+func TestRepository_HasUser(t *testing.T) {
+	tests := []struct {
+		name     string
+		argument string
+		data     []domain.User
+		want     bool
+	}{
+		{
+			name:     "success case with empty storage",
+			argument: "email",
+			want:     false,
+		},
+		{
+			name:     "success case with filled storage",
+			argument: "email1",
+			data: []domain.User{
+				{
+					Email:          "email2",
+					HashedPassword: "123",
+					Salt:           "salt",
+				},
+			},
+			want: false,
+		},
+		{
+			name:     "has user case",
+			argument: "email",
+			data: []domain.User{
+				{
+					Email:          "email",
+					HashedPassword: "123",
+					Salt:           "salt",
+				},
+			},
+			want: true,
+		},
+	}
+	ctx := context.Background()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fillUsersTable(t, tt.data)
+			got, err := repo.HasUser(ctx, tt.argument)
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+			clearUsersTable(t)
+		})
+	}
+}
+
 func fillUsersTable(t *testing.T, users []domain.User) {
 	t.Helper()
+	if len(users) == 0 {
+		return
+	}
 	_, err := db.NamedExec(
 		"INSERT INTO users (email, hashed_password, salt) VALUES (:email, :hashed_password, :salt)",
 		users,

@@ -13,8 +13,8 @@ CREATE TABLE users
 (
     id              SERIAL PRIMARY KEY,
     hashed_password text                      NOT NULL,
-    email           text                      NOT NULL,
-    salt varchar(255) NOT NULL,
+    email text UNIQUE  NOT NULL,
+    salt  varchar(255) NOT NULL,
     created_at      timestamptz DEFAULT NOW() NOT NULL,
     updated_at      timestamptz DEFAULT NOW() NOT NULL
 );
