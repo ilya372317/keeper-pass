@@ -16,6 +16,8 @@ var (
 	ErrInvalidPassword = errors.New("invalid user password given")
 )
 
+type CtxUserKey struct{}
+
 // User entity which represent users.
 type User struct {
 	CreatedAT      time.Time `db:"created_at"`      // created at date.

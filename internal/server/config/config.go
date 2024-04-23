@@ -10,7 +10,8 @@ import (
 const defaultTokenExpInHours = 6
 
 type GRPCConfig struct {
-	Host string
+	Host        string
+	OpenMethods []string
 }
 
 type JWTConfig struct {
@@ -53,9 +54,13 @@ func New(configPath string) (Config, error) {
 	viper.SetDefault("grpc.host", ":3200")
 	viper.SetDefault("jwt.secret_key", "")
 	viper.SetDefault("jwt.token_exp", time.Hour*defaultTokenExpInHours)
+	viper.SetDefault("grpc.open_methods", []string{"/PassService/Auth", "/PassService/Register"})
 
 	cnfg = Config{
-		GRPC: GRPCConfig{Host: viper.GetString("grpc.host")},
+		GRPC: GRPCConfig{
+			Host:        viper.GetString("grpc.host"),
+			OpenMethods: viper.GetStringSlice("grpc.open_methods"),
+		},
 		JWT: JWTConfig{
 			SecretKey:        viper.GetString("jwt.secret_key"),
 			TokenExpDuration: viper.GetDuration("jwt.token_exp"),

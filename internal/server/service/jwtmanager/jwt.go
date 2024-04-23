@@ -6,6 +6,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
+	"github.com/ilya372317/pass-keeper/internal/server/dto"
 )
 
 type JWTManager struct {
@@ -42,7 +43,7 @@ func (j *JWTManager) Generate(user *domain.User) (string, error) {
 	return tokenString, nil
 }
 
-func (j *JWTManager) Verify(accessToken string) (string, error) {
+func (j *JWTManager) Verify(accessToken string) (dto.JWTClaimsDTO, error) {
 	token, err := jwt.ParseWithClaims(accessToken, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected token sign method")
@@ -51,13 +52,13 @@ func (j *JWTManager) Verify(accessToken string) (string, error) {
 		return []byte(j.secretKey), nil
 	})
 	if err != nil {
-		return "", fmt.Errorf("failed parse jwt token: %w", err)
+		return dto.JWTClaimsDTO{}, fmt.Errorf("failed parse jwt token: %w", err)
 	}
 
 	claims, ok := token.Claims.(*UserClaims)
 	if !ok {
-		return "", fmt.Errorf("unexcpeted token claims type")
+		return dto.JWTClaimsDTO{}, fmt.Errorf("unexcpeted token claims type")
 	}
 
-	return claims.Email, nil
+	return dto.JWTClaimsDTO{Email: claims.Email}, nil
 }

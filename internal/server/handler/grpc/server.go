@@ -6,8 +6,6 @@ import (
 	"net"
 	"sync"
 
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/logger"
 	pb "github.com/ilya372317/pass-keeper/proto"
@@ -19,11 +17,14 @@ type Server struct {
 	conf config.Config
 }
 
-func New(cnfg config.Config) *Server {
+func New(cnfg config.Config,
+	unaryInterceptors []grpc.UnaryServerInterceptor,
+	streamInterceptors []grpc.StreamServerInterceptor,
+) *Server {
 	return &Server{
 		srv: grpc.NewServer(
-			grpc.ChainUnaryInterceptor(getUnaryInterceptors()...),
-			grpc.ChainStreamInterceptor(getStreamInterceptors()...),
+			grpc.ChainUnaryInterceptor(unaryInterceptors...),
+			grpc.ChainStreamInterceptor(streamInterceptors...),
 		),
 		conf: cnfg}
 }
@@ -54,18 +55,4 @@ func (s *Server) StartAndListen(ctx context.Context) error {
 	logger.Log.Info("grpc server was gracefully shutdown")
 
 	return nil
-}
-
-func getUnaryInterceptors() []grpc.UnaryServerInterceptor {
-	return []grpc.UnaryServerInterceptor{
-		logging.UnaryServerInterceptor(logger.InterceptorLogger()),
-		recovery.UnaryServerInterceptor(),
-	}
-}
-
-func getStreamInterceptors() []grpc.StreamServerInterceptor {
-	return []grpc.StreamServerInterceptor{
-		logging.StreamServerInterceptor(logger.InterceptorLogger()),
-		recovery.StreamServerInterceptor(),
-	}
 }

@@ -80,7 +80,7 @@ func TestJWTManager_Verify(t *testing.T) {
 			tokenStr, err := token.SignedString([]byte(key))
 			require.NoError(t, err)
 
-			email, err := j.Verify(tokenStr)
+			dto, err := j.Verify(tokenStr)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -88,7 +88,7 @@ func TestJWTManager_Verify(t *testing.T) {
 				require.NoError(t, err)
 			}
 
-			assert.Equal(t, tt.want.Email, email)
+			assert.Equal(t, tt.want.Email, dto.Email)
 		})
 	}
 }
