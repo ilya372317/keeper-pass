@@ -2,18 +2,19 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os/signal"
 	"syscall"
 
 	"github.com/ilya372317/pass-keeper/internal/server/app"
 )
 
-var configFilePath string
+var (
+	configFilePath string
+	masterKey      string
+)
 
 func main() {
-	fmt.Println(configFilePath)
-	a, err := app.New(configFilePath)
+	a, err := app.New(configFilePath, masterKey)
 	if err != nil {
 		panic(err)
 	}

@@ -12,23 +12,26 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type TokenManager interface {
+type tokenManager interface {
 	Verify(accessToken string) (dto.JWTClaimsDTO, error)
 }
 
-type UserRepository interface {
+type userRepository interface {
 	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
 }
 
+// AuthInterceptor is a gRPC server interceptor that checks the validity of the token.
 type AuthInterceptor struct {
-	tokenManager   TokenManager
-	userRepository UserRepository
+	tokenManager   tokenManager
+	userRepository userRepository
 }
 
-func NewAuthInterceptor(tokenManager TokenManager, repository UserRepository) *AuthInterceptor {
+// NewAuthInterceptor creates new auth interceptor.
+func NewAuthInterceptor(tokenManager tokenManager, repository userRepository) *AuthInterceptor {
 	return &AuthInterceptor{tokenManager: tokenManager, userRepository: repository}
 }
 
+// Unary check if user is authenticated in unary mode.
 func (a *AuthInterceptor) Unary(openMethods []string) grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
@@ -45,6 +48,7 @@ func (a *AuthInterceptor) Unary(openMethods []string) grpc.UnaryServerIntercepto
 	}
 }
 
+// Stream check if user is authorized in stream mode.
 func (a *AuthInterceptor) Stream(openMethods []string) grpc.StreamServerInterceptor {
 	return func(srv any,
 		ss grpc.ServerStream,

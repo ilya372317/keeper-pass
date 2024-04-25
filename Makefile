@@ -1,4 +1,6 @@
 GOLANGCI_LINT_CACHE?=/tmp/praktikum-golangci-lint-cache
+CONFIG_FILE=not_set
+MASTER_KEY=change_me
 
 .PHONY: golangci-lint-run
 golangci-lint-run: _golangci-lint-rm-unformatted-report
@@ -45,5 +47,5 @@ ggen:
 
 .PHONY: start-server
 start-server:
-	go build -ldflags "-X main.configFilePath=config/config.yaml" -o build/temp_server cmd/server/main.go
+	go build -ldflags "-X main.configFilePath=$(CONFIG_FILE) -X main.masterKey=$(MASTER_KEY)" -o build/temp_server cmd/server/main.go
 	-./build/temp_server

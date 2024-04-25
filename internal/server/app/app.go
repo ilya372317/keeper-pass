@@ -15,8 +15,8 @@ type App struct {
 	conf config.Config
 }
 
-func New(configPath string) (*App, error) {
-	conf, err := config.New(configPath)
+func New(configPath, masterKey string) (*App, error) {
+	conf, err := config.New(configPath, masterKey)
 	if err != nil {
 		return nil, fmt.Errorf("failed create new config: %w", err)
 	}
