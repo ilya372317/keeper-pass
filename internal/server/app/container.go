@@ -1,9 +1,11 @@
 package app
 
 import (
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/keyrepo"
 	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/userrepo"
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/interceptor"
+	"github.com/ilya372317/pass-keeper/internal/server/keyring"
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
 	"github.com/jmoiron/sqlx"
@@ -11,6 +13,7 @@ import (
 
 type Container struct {
 	pgsqlx *sqlx.DB
+	KRing  *keyring.Keyring
 
 	conf config.Config
 }
@@ -36,4 +39,16 @@ func (c *Container) GetJWTTokenManager() *jwtmanager.JWTManager {
 
 func (c *Container) GetAuthInterceptor() *interceptor.AuthInterceptor {
 	return interceptor.NewAuthInterceptor(c.GetJWTTokenManager(), c.GetPostgresqlUserRepo())
+}
+
+func (c *Container) GetKeyRepository() *keyrepo.Repository {
+	return keyrepo.New(c.pgsqlx)
+}
+
+func (c *Container) SetKeyring(kring *keyring.Keyring) {
+	c.KRing = kring
+}
+
+func (c *Container) GetKeyring() *keyring.Keyring {
+	return c.KRing
 }

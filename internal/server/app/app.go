@@ -1,14 +1,19 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/ilya372317/pass-keeper/internal/server/config"
+	"github.com/ilya372317/pass-keeper/internal/server/keyring"
 	"github.com/ilya372317/pass-keeper/internal/server/logger"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )
+
+const timeForGetKeyring = time.Second * 5
 
 type App struct {
 	c    *Container
@@ -16,7 +21,7 @@ type App struct {
 }
 
 func New(configPath, masterKey string) (*App, error) {
-	conf, err := config.New(configPath, masterKey)
+	conf, err := config.New(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed create new config: %w", err)
 	}
@@ -30,6 +35,13 @@ func New(configPath, masterKey string) (*App, error) {
 		return nil, fmt.Errorf("failed make connection with postgresql db: %w", err)
 	}
 	app.c = NewContainer(conf, pgsqlxConnect)
+	ctx, stop := context.WithTimeout(context.Background(), timeForGetKeyring)
+	defer stop()
+	kring, err := keyring.New(ctx, masterKey, app.c.GetKeyRepository())
+	if err != nil {
+		return nil, fmt.Errorf("failed create new keyring: %w", err)
+	}
+	app.c.SetKeyring(kring)
 	return &app, nil
 }
 

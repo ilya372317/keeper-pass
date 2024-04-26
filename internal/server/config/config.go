@@ -38,18 +38,13 @@ type SQLConfig struct {
 	ParseTime         bool
 }
 
-type KeyConfig struct {
-	MasterKey string
-}
-
 type Config struct {
-	GRPC      GRPCConfig
-	KeyConfig KeyConfig
-	JWT       JWTConfig
-	MainDB    SQLConfig
+	GRPC   GRPCConfig
+	JWT    JWTConfig
+	MainDB SQLConfig
 }
 
-func New(configPath, masterKey string) (Config, error) {
+func New(configPath string) (Config, error) {
 	var cnfg Config
 	viper.SetConfigFile(configPath)
 	if err := viper.ReadInConfig(); err != nil {
@@ -84,9 +79,6 @@ func New(configPath, masterKey string) (Config, error) {
 			ParseTime:         true,
 			Timezone:          "Europe/Moscow",
 			Collation:         "",
-		},
-		KeyConfig: KeyConfig{
-			MasterKey: masterKey,
 		},
 	}
 

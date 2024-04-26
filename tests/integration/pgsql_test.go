@@ -10,6 +10,7 @@ import (
 
 	"github.com/golang-migrate/migrate/v4/database/pgx/v5"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/keyrepo"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -22,9 +23,14 @@ import (
 )
 
 var (
-	db   *sqlx.DB
-	repo *userrepo.Repository
+	db       *sqlx.DB
+	userRepo *userrepo.Repository
+	keyRepo  *keyrepo.Repository
 )
+
+type keysFields struct {
+	Key string `db:"Key"`
+}
 
 func TestMain(m *testing.M) {
 	database, pool, resource, err := makeTestConnection("../../db/migrations")
@@ -33,7 +39,8 @@ func TestMain(m *testing.M) {
 		return
 	}
 	db = database
-	repo = userrepo.New(database)
+	userRepo = userrepo.New(database)
+	keyRepo = keyrepo.New(database)
 	m.Run()
 	if err = closeTestConnection(database, pool, resource); err != nil {
 		log.Fatal(err)
@@ -41,7 +48,7 @@ func TestMain(m *testing.M) {
 	}
 }
 
-func TestRepository_GetUserByEmail(t *testing.T) {
+func TestUserRepository_GetUserByEmail(t *testing.T) {
 	type want struct {
 		err  bool
 		user *domain.User
@@ -120,7 +127,7 @@ func TestRepository_GetUserByEmail(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			fillUsersTable(t, tt.fields)
 
-			got, err := repo.GetUserByEmail(ctx, tt.arg)
+			got, err := userRepo.GetUserByEmail(ctx, tt.arg)
 
 			if tt.want.err {
 				require.Error(t, err)
@@ -137,7 +144,7 @@ func TestRepository_GetUserByEmail(t *testing.T) {
 	}
 }
 
-func TestRepository_SaveUser(t *testing.T) {
+func TestUserRepository_SaveUser(t *testing.T) {
 	tests := []struct {
 		name     string
 		argument *domain.User
@@ -155,7 +162,7 @@ func TestRepository_SaveUser(t *testing.T) {
 	ctx := context.Background()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := repo.SaveUser(ctx, tt.argument)
+			err := userRepo.SaveUser(ctx, tt.argument)
 			require.NoError(t, err)
 			var savedUser domain.User
 
@@ -171,7 +178,7 @@ func TestRepository_SaveUser(t *testing.T) {
 	}
 }
 
-func TestRepository_HasUser(t *testing.T) {
+func TestUserRepository_HasUser(t *testing.T) {
 	tests := []struct {
 		name     string
 		argument string
@@ -212,12 +219,77 @@ func TestRepository_HasUser(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fillUsersTable(t, tt.data)
-			got, err := repo.HasUser(ctx, tt.argument)
+			got, err := userRepo.HasUser(ctx, tt.argument)
 			require.NoError(t, err)
 			assert.Equal(t, tt.want, got)
 			clearUsersTable(t)
 		})
 	}
+}
+
+func TestKeyRepository_GetKey(t *testing.T) {
+	type want struct {
+		err bool
+		key string
+	}
+	tests := []struct {
+		name string
+		data []keysFields
+		want want
+	}{
+		{
+			name: "get Key success case",
+			data: []keysFields{
+				{
+					Key: "key1",
+				},
+			},
+			want: want{
+				err: false,
+				key: "key1",
+			},
+		},
+		{
+			name: "key not found case",
+			data: nil,
+			want: want{
+				err: true,
+			},
+		},
+	}
+	ctx := context.Background()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fillKeysTable(t, tt.data)
+
+			got, err := keyRepo.GetKey(ctx)
+
+			if tt.want.err {
+				require.Error(t, err)
+				require.ErrorIs(t, err, sql.ErrNoRows)
+				return
+			} else {
+				require.NoError(t, err)
+			}
+
+			assert.Equal(t, tt.want.key, got.Key)
+			clearKeysTable(t)
+		})
+	}
+}
+
+func fillKeysTable(t *testing.T, data []keysFields) {
+	t.Helper()
+	for _, key := range data {
+		_, err := db.NamedExec("INSERT INTO keys (Key) VALUES (:Key)", key)
+		require.NoError(t, err)
+	}
+}
+
+func clearKeysTable(t *testing.T) {
+	t.Helper()
+	_, err := db.Exec("DELETE FROM keys WHERE id > 0")
+	require.NoError(t, err)
 }
 
 func fillUsersTable(t *testing.T, users []domain.User) {
