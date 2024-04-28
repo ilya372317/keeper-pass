@@ -5,6 +5,7 @@ CREATE TABLE keys
     id         serial PRIMARY KEY,
     key        varchar(255)              NOT NULL,
     is_current BOOLEAN                   NOT NULL DEFAULT true,
+    nonce varchar(255) NOT NULL,
     created_at timestamptz DEFAULT NOW() NOT NULL,
     updated_at timestamptz DEFAULT NOW() NOT NULL
 );

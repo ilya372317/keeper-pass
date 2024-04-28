@@ -51,15 +51,15 @@ func (mr *MockkeyStorageMockRecorder) GetKey(arg0 interface{}) *gomock.Call {
 }
 
 // SaveKey mocks base method.
-func (m *MockkeyStorage) SaveKey(ctx context.Context, key string) error {
+func (m *MockkeyStorage) SaveKey(ctx context.Context, keys *domain.Keys) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SaveKey", ctx, key)
+	ret := m.ctrl.Call(m, "SaveKey", ctx, keys)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // SaveKey indicates an expected call of SaveKey.
-func (mr *MockkeyStorageMockRecorder) SaveKey(ctx, key interface{}) *gomock.Call {
+func (mr *MockkeyStorageMockRecorder) SaveKey(ctx, keys interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveKey", reflect.TypeOf((*MockkeyStorage)(nil).SaveKey), ctx, key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveKey", reflect.TypeOf((*MockkeyStorage)(nil).SaveKey), ctx, keys)
 }

@@ -37,9 +37,9 @@ func New(configPath, masterKey string) (*App, error) {
 	app.c = NewContainer(conf, pgsqlxConnect)
 	ctx, stop := context.WithTimeout(context.Background(), timeForGetKeyring)
 	defer stop()
-	kring, err := keyring.New(ctx, masterKey, app.c.GetKeyRepository())
-	if err != nil {
-		return nil, fmt.Errorf("failed create new keyring: %w", err)
+	kring := keyring.New([]byte(masterKey), app.c.GetKeyRepository())
+	if err = kring.InitGeneralKey(ctx); err != nil {
+		return nil, fmt.Errorf("failed init general key: %w", err)
 	}
 	app.c.SetKeyring(kring)
 	return &app, nil

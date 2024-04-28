@@ -29,7 +29,8 @@ var (
 )
 
 type keysFields struct {
-	Key string `db:"Key"`
+	Key   string `db:"key"`
+	Nonce string `db:"nonce"`
 }
 
 func TestMain(m *testing.M) {
@@ -227,10 +228,68 @@ func TestUserRepository_HasUser(t *testing.T) {
 	}
 }
 
+func TestKeyRepository_SaveKey(t *testing.T) {
+	const expectedKeyNumber = 1
+	tests := []struct {
+		name     string
+		fields   []keysFields
+		argument *domain.Keys
+	}{
+		{
+			name: "success save case with filled storage",
+			fields: []keysFields{
+				{
+					Key:   "key1",
+					Nonce: "nonce1",
+				},
+				{
+					Key:   "key2",
+					Nonce: "nonce2",
+				},
+				{
+					Key:   "key3",
+					Nonce: "nonce3",
+				},
+				{
+					Key:   "key4",
+					Nonce: "nonce4",
+				},
+			},
+			argument: &domain.Keys{
+				Key:       "key5",
+				Nonce:     "nonce5",
+				IsCurrent: true,
+			},
+		},
+		{
+			name:   "success case with empty storage",
+			fields: nil,
+			argument: &domain.Keys{
+				Key:   "key1",
+				Nonce: "nonce1",
+			},
+		},
+	}
+	ctx := context.Background()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fillKeysTable(t, tt.fields)
+			err := keyRepo.SaveKey(ctx, tt.argument)
+			require.NoError(t, err)
+			var currentKeyNumber int
+			err = db.Get(&currentKeyNumber, "SELECT COUNT(*) FROM keys WHERE is_current = true")
+			require.NoError(t, err)
+			assert.Equal(t, expectedKeyNumber, currentKeyNumber)
+			clearKeysTable(t)
+		})
+	}
+}
+
 func TestKeyRepository_GetKey(t *testing.T) {
 	type want struct {
-		err bool
-		key string
+		err   bool
+		key   string
+		nonce string
 	}
 	tests := []struct {
 		name string
@@ -241,12 +300,14 @@ func TestKeyRepository_GetKey(t *testing.T) {
 			name: "get Key success case",
 			data: []keysFields{
 				{
-					Key: "key1",
+					Key:   "key1",
+					Nonce: "nonce1",
 				},
 			},
 			want: want{
-				err: false,
-				key: "key1",
+				err:   false,
+				key:   "key1",
+				nonce: "nonce1",
 			},
 		},
 		{
@@ -273,6 +334,7 @@ func TestKeyRepository_GetKey(t *testing.T) {
 			}
 
 			assert.Equal(t, tt.want.key, got.Key)
+			assert.Equal(t, tt.want.nonce, got.Nonce)
 			clearKeysTable(t)
 		})
 	}
@@ -281,7 +343,7 @@ func TestKeyRepository_GetKey(t *testing.T) {
 func fillKeysTable(t *testing.T, data []keysFields) {
 	t.Helper()
 	for _, key := range data {
-		_, err := db.NamedExec("INSERT INTO keys (Key) VALUES (:Key)", key)
+		_, err := db.NamedExec("INSERT INTO keys (key, nonce) VALUES (:key, :nonce)", key)
 		require.NoError(t, err)
 	}
 }

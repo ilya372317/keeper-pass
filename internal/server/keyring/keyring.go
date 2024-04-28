@@ -2,84 +2,101 @@ package keyring
 
 import (
 	"context"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
 	"database/sql"
 	"encoding/hex"
 	"errors"
 	"fmt"
 
+	"github.com/ilya372317/pass-keeper/internal/server/cryptomanager"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
 )
 
 const generalKeySize = 32
 
+var cryptoKey []byte
+
 type keyStorage interface {
 	GetKey(context.Context) (*domain.Keys, error)
-	SaveKey(ctx context.Context, key string) error
+	SaveKey(ctx context.Context, keys *domain.Keys) error
 }
 
+// Keyring is a keyring for general key and set of functions for manipulate with them.
 type Keyring struct {
 	keyStorage keyStorage
-	GeneralKey []byte
+	masterKey  []byte
 }
 
-func New(ctx context.Context, masterKey string, keyStorage keyStorage) (*Keyring, error) {
-	keyRing := &Keyring{
+// New creates new Keyring instance.
+func New(masterKey []byte, keyStorage keyStorage) *Keyring {
+	return &Keyring{
 		keyStorage: keyStorage,
+		masterKey:  masterKey,
+	}
+}
+
+// GetGeneralKey returns the general key in open form.
+func (k *Keyring) GetGeneralKey(ctx context.Context) ([]byte, error) {
+	if cryptoKey == nil {
+		if err := k.InitGeneralKey(ctx); err != nil {
+			return nil, fmt.Errorf("failed init general key: %w", err)
+		}
 	}
 
-	keys, err := keyRing.keyStorage.GetKey(ctx)
+	return cryptoKey, nil
+}
+
+// InitGeneralKey initializes the general key.
+func (k *Keyring) InitGeneralKey(ctx context.Context) error {
+	aesgcm, err := cryptomanager.NewAESGCM(k.masterKey)
+	if err != nil {
+		return fmt.Errorf("failed init general key: %w", err)
+	}
+	keys, err := k.keyStorage.GetKey(ctx)
 	if err == nil {
-		generalKey, err := hex.DecodeString(keys.Key)
+		var generalKey []byte
+		generalKey, err = hex.DecodeString(keys.Key)
 		if err != nil {
-			return nil, fmt.Errorf("failed decode key from storage: %w", err)
+			return fmt.Errorf("failed decode key from storage: %w", err)
+		}
+		var nonce []byte
+		nonce, err = hex.DecodeString(keys.Nonce)
+		if err != nil {
+			return fmt.Errorf("failed decode nonce from storage: %w", err)
 		}
 
-		keyRing.GeneralKey = generalKey
-		return keyRing, nil
+		var openKey []byte
+		openKey, err = cryptomanager.Decrypt(aesgcm, generalKey, nonce)
+		if err != nil {
+			return fmt.Errorf("failed open general key: %w", err)
+		}
+		cryptoKey = openKey
+
+		return nil
 	}
 	if !errors.Is(err, sql.ErrNoRows) {
-		return nil, fmt.Errorf("failed get key from storage: %w", err)
+		return fmt.Errorf("failed get key from storage: %w", err)
 	}
 
-	generalKey, err := generateRandom(generalKeySize)
+	generalKey, err := cryptomanager.GenerateRandom(generalKeySize)
 	if err != nil {
-		return nil, fmt.Errorf("failed generate random key: %w", err)
+		return fmt.Errorf("failed generate random key: %w", err)
 	}
-	keyRing.GeneralKey = generalKey
+	cryptoKey = generalKey
 
-	aesblock, err := aes.NewCipher([]byte(masterKey))
+	nonce, err := cryptomanager.GenerateRandom(aesgcm.NonceSize())
 	if err != nil {
-		return nil, fmt.Errorf("failed create new aes block: %w", err)
+		return fmt.Errorf("failed generate nonce: %w", err)
+	}
+	keyForSave := cryptomanager.Encrypt(aesgcm, generalKey, nonce)
+
+	key := &domain.Keys{
+		Key:   hex.EncodeToString(keyForSave),
+		Nonce: hex.EncodeToString(nonce),
 	}
 
-	aesgcm, err := cipher.NewGCM(aesblock)
-	if err != nil {
-		return nil, fmt.Errorf("failed create new aes gcm: %w", err)
+	if err = k.keyStorage.SaveKey(ctx, key); err != nil {
+		return fmt.Errorf("failed save key to storage: %w", err)
 	}
 
-	nonce, err := generateRandom(aesgcm.NonceSize())
-	if err != nil {
-		return nil, fmt.Errorf("failed generate random nonce: %w", err)
-	}
-
-	keyForSave := aesgcm.Seal(nil, nonce, generalKey, nil)
-
-	if err = keyRing.keyStorage.SaveKey(ctx, hex.EncodeToString(keyForSave)); err != nil {
-		return nil, fmt.Errorf("failed save key to storage: %w", err)
-	}
-
-	return keyRing, nil
-}
-
-func generateRandom(size int) ([]byte, error) {
-	b := make([]byte, size)
-	_, err := rand.Read(b)
-	if err != nil {
-		return nil, fmt.Errorf("failed generate random bytes: %w", err)
-	}
-
-	return b, nil
+	return nil
 }
