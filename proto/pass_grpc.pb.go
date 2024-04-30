@@ -19,8 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PassService_Auth_FullMethodName     = "/PassService/Auth"
-	PassService_Register_FullMethodName = "/PassService/Register"
+	PassService_Auth_FullMethodName           = "/PassService/Auth"
+	PassService_Register_FullMethodName       = "/PassService/Register"
+	PassService_ShowData_FullMethodName       = "/PassService/ShowData"
+	PassService_DownloadFile_FullMethodName   = "/PassService/DownloadFile"
+	PassService_UploadFile_FullMethodName     = "/PassService/UploadFile"
+	PassService_SaveSimpleData_FullMethodName = "/PassService/SaveSimpleData"
+	PassService_DeleteData_FullMethodName     = "/PassService/DeleteData"
+	PassService_UpdateMetadata_FullMethodName = "/PassService/UpdateMetadata"
+	PassService_UpdatePayload_FullMethodName  = "/PassService/UpdatePayload"
+	PassService_IndexData_FullMethodName      = "/PassService/IndexData"
 )
 
 // PassServiceClient is the client API for PassService service.
@@ -29,6 +37,14 @@ const (
 type PassServiceClient interface {
 	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	ShowData(ctx context.Context, in *ShowDataRequest, opts ...grpc.CallOption) (*ShowDataResponse, error)
+	DownloadFile(ctx context.Context, in *GetFileContentRequest, opts ...grpc.CallOption) (PassService_DownloadFileClient, error)
+	UploadFile(ctx context.Context, opts ...grpc.CallOption) (PassService_UploadFileClient, error)
+	SaveSimpleData(ctx context.Context, in *SaveSimpleDataRequest, opts ...grpc.CallOption) (*SaveSimpleDataResponse, error)
+	DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error)
+	UpdateMetadata(ctx context.Context, in *UpdateMetadataRequest, opts ...grpc.CallOption) (*UpdateMetadataResponse, error)
+	UpdatePayload(ctx context.Context, in *UpdatePayloadRequest, opts ...grpc.CallOption) (*UpdatePayloadResponse, error)
+	IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error)
 }
 
 type passServiceClient struct {
@@ -57,12 +73,140 @@ func (c *passServiceClient) Register(ctx context.Context, in *RegisterRequest, o
 	return out, nil
 }
 
+func (c *passServiceClient) ShowData(ctx context.Context, in *ShowDataRequest, opts ...grpc.CallOption) (*ShowDataResponse, error) {
+	out := new(ShowDataResponse)
+	err := c.cc.Invoke(ctx, PassService_ShowData_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) DownloadFile(ctx context.Context, in *GetFileContentRequest, opts ...grpc.CallOption) (PassService_DownloadFileClient, error) {
+	stream, err := c.cc.NewStream(ctx, &PassService_ServiceDesc.Streams[0], PassService_DownloadFile_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &passServiceDownloadFileClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type PassService_DownloadFileClient interface {
+	Recv() (*FileChunk, error)
+	grpc.ClientStream
+}
+
+type passServiceDownloadFileClient struct {
+	grpc.ClientStream
+}
+
+func (x *passServiceDownloadFileClient) Recv() (*FileChunk, error) {
+	m := new(FileChunk)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *passServiceClient) UploadFile(ctx context.Context, opts ...grpc.CallOption) (PassService_UploadFileClient, error) {
+	stream, err := c.cc.NewStream(ctx, &PassService_ServiceDesc.Streams[1], PassService_UploadFile_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &passServiceUploadFileClient{stream}
+	return x, nil
+}
+
+type PassService_UploadFileClient interface {
+	Send(*FileChunk) error
+	CloseAndRecv() (*UploadStatus, error)
+	grpc.ClientStream
+}
+
+type passServiceUploadFileClient struct {
+	grpc.ClientStream
+}
+
+func (x *passServiceUploadFileClient) Send(m *FileChunk) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *passServiceUploadFileClient) CloseAndRecv() (*UploadStatus, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UploadStatus)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *passServiceClient) SaveSimpleData(ctx context.Context, in *SaveSimpleDataRequest, opts ...grpc.CallOption) (*SaveSimpleDataResponse, error) {
+	out := new(SaveSimpleDataResponse)
+	err := c.cc.Invoke(ctx, PassService_SaveSimpleData_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error) {
+	out := new(DeleteDataResponse)
+	err := c.cc.Invoke(ctx, PassService_DeleteData_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) UpdateMetadata(ctx context.Context, in *UpdateMetadataRequest, opts ...grpc.CallOption) (*UpdateMetadataResponse, error) {
+	out := new(UpdateMetadataResponse)
+	err := c.cc.Invoke(ctx, PassService_UpdateMetadata_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) UpdatePayload(ctx context.Context, in *UpdatePayloadRequest, opts ...grpc.CallOption) (*UpdatePayloadResponse, error) {
+	out := new(UpdatePayloadResponse)
+	err := c.cc.Invoke(ctx, PassService_UpdatePayload_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error) {
+	out := new(IndexDataResponse)
+	err := c.cc.Invoke(ctx, PassService_IndexData_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PassServiceServer is the server API for PassService service.
 // All implementations must embed UnimplementedPassServiceServer
 // for forward compatibility
 type PassServiceServer interface {
 	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	ShowData(context.Context, *ShowDataRequest) (*ShowDataResponse, error)
+	DownloadFile(*GetFileContentRequest, PassService_DownloadFileServer) error
+	UploadFile(PassService_UploadFileServer) error
+	SaveSimpleData(context.Context, *SaveSimpleDataRequest) (*SaveSimpleDataResponse, error)
+	DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error)
+	UpdateMetadata(context.Context, *UpdateMetadataRequest) (*UpdateMetadataResponse, error)
+	UpdatePayload(context.Context, *UpdatePayloadRequest) (*UpdatePayloadResponse, error)
+	IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error)
 	mustEmbedUnimplementedPassServiceServer()
 }
 
@@ -75,6 +219,30 @@ func (UnimplementedPassServiceServer) Auth(context.Context, *AuthRequest) (*Auth
 }
 func (UnimplementedPassServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedPassServiceServer) ShowData(context.Context, *ShowDataRequest) (*ShowDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowData not implemented")
+}
+func (UnimplementedPassServiceServer) DownloadFile(*GetFileContentRequest, PassService_DownloadFileServer) error {
+	return status.Errorf(codes.Unimplemented, "method DownloadFile not implemented")
+}
+func (UnimplementedPassServiceServer) UploadFile(PassService_UploadFileServer) error {
+	return status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
+}
+func (UnimplementedPassServiceServer) SaveSimpleData(context.Context, *SaveSimpleDataRequest) (*SaveSimpleDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveSimpleData not implemented")
+}
+func (UnimplementedPassServiceServer) DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteData not implemented")
+}
+func (UnimplementedPassServiceServer) UpdateMetadata(context.Context, *UpdateMetadataRequest) (*UpdateMetadataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMetadata not implemented")
+}
+func (UnimplementedPassServiceServer) UpdatePayload(context.Context, *UpdatePayloadRequest) (*UpdatePayloadResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePayload not implemented")
+}
+func (UnimplementedPassServiceServer) IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IndexData not implemented")
 }
 func (UnimplementedPassServiceServer) mustEmbedUnimplementedPassServiceServer() {}
 
@@ -125,6 +293,161 @@ func _PassService_Register_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PassService_ShowData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).ShowData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_ShowData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).ShowData(ctx, req.(*ShowDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_DownloadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetFileContentRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(PassServiceServer).DownloadFile(m, &passServiceDownloadFileServer{stream})
+}
+
+type PassService_DownloadFileServer interface {
+	Send(*FileChunk) error
+	grpc.ServerStream
+}
+
+type passServiceDownloadFileServer struct {
+	grpc.ServerStream
+}
+
+func (x *passServiceDownloadFileServer) Send(m *FileChunk) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _PassService_UploadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(PassServiceServer).UploadFile(&passServiceUploadFileServer{stream})
+}
+
+type PassService_UploadFileServer interface {
+	SendAndClose(*UploadStatus) error
+	Recv() (*FileChunk, error)
+	grpc.ServerStream
+}
+
+type passServiceUploadFileServer struct {
+	grpc.ServerStream
+}
+
+func (x *passServiceUploadFileServer) SendAndClose(m *UploadStatus) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *passServiceUploadFileServer) Recv() (*FileChunk, error) {
+	m := new(FileChunk)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _PassService_SaveSimpleData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveSimpleDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).SaveSimpleData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_SaveSimpleData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).SaveSimpleData(ctx, req.(*SaveSimpleDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_DeleteData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).DeleteData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_DeleteData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).DeleteData(ctx, req.(*DeleteDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_UpdateMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateMetadataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).UpdateMetadata(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_UpdateMetadata_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).UpdateMetadata(ctx, req.(*UpdateMetadataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_UpdatePayload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePayloadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).UpdatePayload(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_UpdatePayload_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).UpdatePayload(ctx, req.(*UpdatePayloadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_IndexData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndexDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).IndexData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_IndexData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).IndexData(ctx, req.(*IndexDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PassService_ServiceDesc is the grpc.ServiceDesc for PassService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -140,7 +463,42 @@ var PassService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "Register",
 			Handler:    _PassService_Register_Handler,
 		},
+		{
+			MethodName: "ShowData",
+			Handler:    _PassService_ShowData_Handler,
+		},
+		{
+			MethodName: "SaveSimpleData",
+			Handler:    _PassService_SaveSimpleData_Handler,
+		},
+		{
+			MethodName: "DeleteData",
+			Handler:    _PassService_DeleteData_Handler,
+		},
+		{
+			MethodName: "UpdateMetadata",
+			Handler:    _PassService_UpdateMetadata_Handler,
+		},
+		{
+			MethodName: "UpdatePayload",
+			Handler:    _PassService_UpdatePayload_Handler,
+		},
+		{
+			MethodName: "IndexData",
+			Handler:    _PassService_IndexData_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "DownloadFile",
+			Handler:       _PassService_DownloadFile_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "UploadFile",
+			Handler:       _PassService_UploadFile_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "proto/pass.proto",
 }

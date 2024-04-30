@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -222,7 +222,7 @@ func TestHandler_Register(t *testing.T) {
 				Register(gomock.Any(), tt.serviceConfig.argument).
 				AnyTimes().
 				Return(returnServiceUser, tt.serviceConfig.returnErr)
-			conn := setupServer(t, New(service))
+			conn := setupServer(t, New(service, v1_mock.NewMockdataService(ctrl)))
 			client := pb.NewPassServiceClient(conn)
 
 			got, err := client.Register(ctx, tt.argument)
@@ -246,175 +246,102 @@ func TestHandler_Register(t *testing.T) {
 	}
 }
 
-func TestHandler_Auth(t *testing.T) {
-	type want struct {
-		token   string
-		err     bool
-		errCode codes.Code
-	}
-	type serviceArgument struct {
-		loginDTO dto.LoginDTO
-	}
-	type serviceResult struct {
-		token string
-		err   error
-	}
+func TestHandler_SaveSimpleData(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
-	type serviceState struct {
-		argument serviceArgument
-		result   serviceResult
-	}
+	mockDataService := v1_mock.NewMockdataService(ctrl)
+	handler := New(nil, mockDataService)
+
 	tests := []struct {
-		name         string
-		serviceState serviceState
-		argument     *pb.AuthRequest
-		want         want
+		name       string
+		input      *pb.SaveSimpleDataRequest
+		setupMocks func()
+		want       *pb.SaveSimpleDataResponse
+		wantErr    error
 	}{
 		{
-			name: "success login case",
-			serviceState: serviceState{
-				argument: serviceArgument{
-					loginDTO: dto.LoginDTO{
-						Email:    "ilya.otinov@gmail.com",
-						Password: "pass",
-					},
+			name: "successful save",
+			input: &pb.SaveSimpleDataRequest{
+				Payload:  `{"test": "payload"}`,
+				Metadata: `{"test": "metadata"}`,
+			},
+			setupMocks: func() {
+				mockDataService.EXPECT().
+					SaveSimpleData(gomock.Any(), dto.SaveSimpleDataDTO{
+						Payload:  `{"test": "payload"}`,
+						Metadata: `{"test": "metadata"}`,
+					}).
+					Return(&domain.Data{
+						Payload:  `{"test": "payload"}`,
+						Metadata: `{"test": "metadata"}`,
+						ID:       1,
+					}, nil)
+			},
+			want: &pb.SaveSimpleDataResponse{
+				Data: &pb.Data{
+					Payload:  `{"test": "payload"}`,
+					Metadata: `{"test": "metadata"}`,
+					Id:       1,
 				},
-				result: serviceResult{
-					token: "token",
-					err:   nil,
-				},
 			},
-			argument: &pb.AuthRequest{
-				Email:    "ilya.otinov@gmail.com",
-				Password: "pass",
-			},
-			want: want{
-				token: "token",
-				err:   false,
-			},
+			wantErr: nil,
 		},
 		{
-			name: "incorrect request data case",
-			serviceState: serviceState{
-				argument: serviceArgument{
-					loginDTO: dto.LoginDTO{
-						Email:    "invalid-email",
-						Password: "123",
-					},
-				},
-				result: serviceResult{
-					token: "",
-					err:   nil,
-				},
+			name: "validation payload error",
+			input: &pb.SaveSimpleDataRequest{
+				Metadata: `{"test": "metadata"}`,
+				Payload:  "invalid payload",
 			},
-			argument: &pb.AuthRequest{
-				Email:    "invalid-email",
-				Password: "123",
-			},
-			want: want{
-				err:     true,
-				errCode: codes.InvalidArgument,
-			},
+			setupMocks: func() {},
+			want:       nil,
+			wantErr:    status.Error(codes.InvalidArgument, "payload is required"),
 		},
 		{
-			name: "user not found case",
-			serviceState: serviceState{
-				argument: serviceArgument{
-					loginDTO: dto.LoginDTO{
-						Email:    "1@gmail.com",
-						Password: "123",
-					},
-				},
-				result: serviceResult{
-					token: "",
-					err:   sql.ErrNoRows,
-				},
+			name: "validation metadata error",
+			input: &pb.SaveSimpleDataRequest{
+				Payload:  `{"test": "payload"}`,
+				Metadata: `invalid metadata`,
+				Type:     1,
 			},
-			argument: &pb.AuthRequest{
-				Email:    "1@gmail.com",
-				Password: "123",
-			},
-			want: want{
-				token:   "",
-				err:     true,
-				errCode: codes.NotFound,
-			},
+			setupMocks: func() {},
+			want:       nil,
+			wantErr:    status.Error(codes.InvalidArgument, "payload invalid"),
 		},
 		{
-			name: "internal server error in service",
-			serviceState: serviceState{
-				argument: serviceArgument{
-					loginDTO: dto.LoginDTO{
-						Email:    "1@gmail.com",
-						Password: "123",
-					},
-				},
-				result: serviceResult{
-					token: "",
-					err:   fmt.Errorf("internal server error"),
-				},
+			name: "internal error from service",
+			input: &pb.SaveSimpleDataRequest{
+				Payload:  `{"test": "payload"}`,
+				Metadata: `{"test": "metadata"}`,
 			},
-			argument: &pb.AuthRequest{
-				Email:    "1@gmail.com",
-				Password: "123",
+			setupMocks: func() {
+				mockDataService.EXPECT().
+					SaveSimpleData(gomock.Any(), dto.SaveSimpleDataDTO{
+						Payload:  `{"test": "payload"}`,
+						Metadata: `{"test": "metadata"}`,
+					}).
+					Return(nil, errors.New("internal error"))
 			},
-			want: want{
-				err:     true,
-				errCode: codes.Internal,
-			},
-		},
-		{
-			name: "invalid password given",
-			serviceState: serviceState{
-				argument: serviceArgument{
-					loginDTO: dto.LoginDTO{
-						Email:    "1@gmail.com",
-						Password: "123",
-					},
-				},
-				result: serviceResult{
-					token: "",
-					err:   domain.ErrInvalidPassword,
-				},
-			},
-			argument: &pb.AuthRequest{
-				Email:    "1@gmail.com",
-				Password: "123",
-			},
-			want: want{
-				token:   "",
-				err:     true,
-				errCode: codes.InvalidArgument,
-			},
+			want:    nil,
+			wantErr: status.Error(codes.Internal, "internal error"),
 		},
 	}
-	ctx := context.Background()
-	ctrl := gomock.NewController(t)
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			service := v1_mock.NewMockAuthService(ctrl)
-			service.
-				EXPECT().
-				Login(gomock.Any(), tt.serviceState.argument.loginDTO).
-				AnyTimes().
-				Return(tt.serviceState.result.token, tt.serviceState.result.err)
-			server := New(service)
-
-			conn := setupServer(t, server)
-
-			client := pb.NewPassServiceClient(conn)
-
-			got, err := client.Auth(ctx, tt.argument)
-			if tt.want.err {
+			tt.setupMocks()
+			got, err := handler.SaveSimpleData(context.Background(), tt.input)
+			if tt.wantErr != nil {
 				require.Error(t, err)
 				e, ok := status.FromError(err)
 				require.True(t, ok)
-				require.Equal(t, tt.want.errCode, e.Code())
-				return
+				wantE, ok := status.FromError(tt.wantErr)
+				require.True(t, ok)
+				require.Equal(t, wantE.Code(), e.Code())
 			} else {
 				require.NoError(t, err)
+				require.Equal(t, tt.want, got)
 			}
-			assert.Equal(t, tt.want.token, got.AccessToken)
 		})
 	}
 }

@@ -1,12 +1,14 @@
 package app
 
 import (
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/datarepo"
 	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/keyrepo"
 	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/userrepo"
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/interceptor"
 	"github.com/ilya372317/pass-keeper/internal/server/keyring"
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
+	"github.com/ilya372317/pass-keeper/internal/server/service/data"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
 	"github.com/jmoiron/sqlx"
 )
@@ -29,8 +31,16 @@ func (c *Container) GetDefaultAuthService() *auth.Service {
 	return auth.NewAuthService(c.GetJWTTokenManager(), c.GetPostgresqlUserRepo())
 }
 
+func (c *Container) GetDefaultDataService() *data.Service {
+	return data.New(c.GetKeyring(), c.GetPostgresqlDataRepo())
+}
+
 func (c *Container) GetPostgresqlUserRepo() *userrepo.Repository {
 	return userrepo.New(c.pgsqlx)
+}
+
+func (c *Container) GetPostgresqlDataRepo() *datarepo.Repository {
+	return datarepo.New(c.pgsqlx)
 }
 
 func (c *Container) GetJWTTokenManager() *jwtmanager.JWTManager {

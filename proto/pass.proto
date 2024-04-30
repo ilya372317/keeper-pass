@@ -27,7 +27,86 @@ message AuthResponse {
   string access_token = 1;
 }
 
+message Data {
+  int64 id = 3;
+  string payload = 1;
+  string metadata = 2;
+}
+
+message FileChunk {
+  bytes content = 1;
+}
+
+message ShowDataRequest {
+  int64 id = 1;
+}
+
+message ShowDataResponse {
+  Data data = 1;
+}
+
+message GetFileContentRequest {
+  int64 id = 1;
+}
+
+message UploadStatus {
+  bool success = 1;
+  string message = 2;
+}
+
+message SaveSimpleDataRequest {
+  string payload = 1;
+  int32 type = 2;
+  string metadata = 3;
+}
+
+message DeleteDataRequest {
+  int64 id = 1;
+}
+
+message DeleteDataResponse {
+  bool success = 1;
+}
+
+message SaveSimpleDataResponse {
+  Data data = 1;
+}
+
+message UpdateMetadataRequest {
+  string newMetadata = 1;
+}
+
+message UpdateMetadataResponse {
+  string metadata = 1;
+}
+
+message UpdatePayloadRequest {
+  string newPayload = 1;
+}
+
+message UpdatePayloadResponse {
+  string payload = 1;
+}
+
+message IndexDataRequest {
+}
+message IndexDataResponse {
+  repeated Data data = 1;
+}
+
 service PassService {
   rpc Auth(AuthRequest) returns (AuthResponse);
   rpc Register(RegisterRequest) returns (RegisterResponse);
+
+  rpc ShowData(ShowDataRequest) returns (ShowDataResponse);
+  rpc DownloadFile(GetFileContentRequest) returns (stream FileChunk);
+
+  rpc UploadFile(stream FileChunk) returns (UploadStatus);
+  rpc SaveSimpleData(SaveSimpleDataRequest) returns (SaveSimpleDataResponse);
+
+  rpc DeleteData(DeleteDataRequest) returns (DeleteDataResponse);
+
+  rpc UpdateMetadata(UpdateMetadataRequest) returns (UpdateMetadataResponse);
+  rpc UpdatePayload(UpdatePayloadRequest) returns (UpdatePayloadResponse);
+  rpc IndexData(IndexDataRequest) returns (IndexDataResponse);
 }

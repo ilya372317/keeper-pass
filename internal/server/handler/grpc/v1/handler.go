@@ -13,13 +13,19 @@ type AuthService interface {
 	Register(context.Context, dto.RegisterDTO) (*domain.User, error)
 }
 
+type dataService interface {
+	SaveSimpleData(context.Context, dto.SaveSimpleDataDTO) (*domain.Data, error)
+}
+
 type Handler struct {
 	pb.UnimplementedPassServiceServer
 	authService AuthService
+	dataService dataService
 }
 
-func New(authService AuthService) *Handler {
+func New(authService AuthService, dataService dataService) *Handler {
 	return &Handler{
 		authService: authService,
+		dataService: dataService,
 	}
 }
