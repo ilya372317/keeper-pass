@@ -17,11 +17,12 @@ const CryptoKeyLength = 32
 
 // Data represent a storing data.
 type Data struct {
-	Payload   string `db:"payload"`    // Payload of the data.
-	Metadata  string `db:"metadata"`   // Metadata of the data.
-	Nonce     string `db:"nonce"`      // Nonce of the data.
-	CryptoKey string `db:"crypto_key"` // CryptoKey of the data.
-	ID        int    `db:"id"`         // ID of the data.
-	UserID    int    `db:"user_id"`    // UserID of the data.
-	Kind      Kind   `db:"kind"`       // Kind of the data.
+	Payload        string `db:"payload"`          // Payload of the data.
+	Metadata       string `db:"metadata"`         // Metadata of the data.
+	PayloadNonce   string `db:"payload_nonce"`    // PayloadNonce of the data.
+	CryptoKeyNonce string `db:"crypto_key_nonce"` // CryptoKeyNonce of the data.
+	CryptoKey      string `db:"crypto_key"`       // CryptoKey of the data.
+	ID             int    `db:"id"`               // ID of the data.
+	UserID         int    `db:"user_id"`          // UserID of the data.
+	Kind           Kind   `db:"kind"`             // Kind of the data.
 }

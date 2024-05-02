@@ -61,11 +61,12 @@ func (s *Service) buildCryptedData(ctx context.Context, d dto.SimpleDataDTO) (do
 	cryptedDataKey := cryptomanager.Encrypt(aesgcmDataKey, cryptokey, nonceDataKey)
 
 	return domain.Data{
-		Payload:   hex.EncodeToString(cryptedPayload),
-		Metadata:  d.Metadata,
-		Nonce:     hex.EncodeToString(noncePayload),
-		CryptoKey: hex.EncodeToString(cryptedDataKey),
-		UserID:    int(user.ID),
-		Kind:      d.Type,
+		Payload:        hex.EncodeToString(cryptedPayload),
+		Metadata:       d.Metadata,
+		PayloadNonce:   hex.EncodeToString(noncePayload),
+		CryptoKey:      hex.EncodeToString(cryptedDataKey),
+		CryptoKeyNonce: hex.EncodeToString(nonceDataKey),
+		UserID:         int(user.ID),
+		Kind:           d.Type,
 	}, nil
 }

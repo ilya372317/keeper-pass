@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 	"testing"
 	"time"
@@ -95,8 +96,10 @@ func TestService_buildCryptedData(t *testing.T) {
 	t.Run("success encryption case", func(t *testing.T) {
 		// Prepare.
 		ctx := context.WithValue(context.Background(), domain.CtxUserKey{}, ctxUser)
+		keyr.EXPECT().GetGeneralKey(gomock.Any()).Times(1).Return(validSecretKey, nil)
+		payload := `{"login":"password"}`
 		arg := dto.SimpleDataDTO{
-			Payload:  "{}",
+			Payload:  payload,
 			Metadata: "{}",
 			Type:     domain.KindLoginPass,
 		}
@@ -106,6 +109,26 @@ func TestService_buildCryptedData(t *testing.T) {
 		// Execute.
 		got, err := serv.buildCryptedData(ctx, arg)
 		require.NoError(t, err)
-		assert.Len(t, got.Nonce, aesgcm.NonceSize())
+
+		// Assert.
+		gotPayloadNonce, err := hex.DecodeString(got.PayloadNonce)
+		require.NoError(t, err)
+		gotKey, err := hex.DecodeString(got.CryptoKey)
+		require.NoError(t, err)
+		gotDataKeyNonce, err := hex.DecodeString(got.CryptoKeyNonce)
+		require.NoError(t, err)
+		gotDecryptedDataKey, err := aesgcm.Open(nil, gotDataKeyNonce, gotKey, nil)
+		require.NoError(t, err)
+		dataAesgcm, err := cryptomanager.NewAESGCM(gotDecryptedDataKey)
+		require.NoError(t, err)
+		gotPayload, err := hex.DecodeString(got.Payload)
+		require.NoError(t, err)
+		decryptedPayload, err := dataAesgcm.Open(nil, gotPayloadNonce, gotPayload, nil)
+		require.NoError(t, err)
+
+		assert.Len(t, gotDecryptedDataKey, domain.CryptoKeyLength)
+		assert.Len(t, gotPayloadNonce, aesgcm.NonceSize())
+		assert.Len(t, gotPayloadNonce, dataAesgcm.NonceSize())
+		assert.Equal(t, payload, string(decryptedPayload))
 	})
 }
