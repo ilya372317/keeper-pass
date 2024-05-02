@@ -10,7 +10,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/dto"
 )
 
-func (s *Service) EncryptAndSaveData(ctx context.Context, d dto.SimpleDataDTO) error {
+func (s *Service) EncryptAndSaveData(ctx context.Context, d dto.SaveSimpleDataDTO) error {
 	data, err := s.buildCryptedData(ctx, d)
 	if err != nil {
 		return fmt.Errorf("failed encrypt data: %w", err)
@@ -23,7 +23,7 @@ func (s *Service) EncryptAndSaveData(ctx context.Context, d dto.SimpleDataDTO) e
 	return nil
 }
 
-func (s *Service) buildCryptedData(ctx context.Context, d dto.SimpleDataDTO) (domain.Data, error) {
+func (s *Service) buildCryptedData(ctx context.Context, d dto.SaveSimpleDataDTO) (domain.Data, error) {
 	user, ok := ctx.Value(domain.CtxUserKey{}).(*domain.User)
 	if !ok {
 		return domain.Data{}, fmt.Errorf("failed get user from context")
@@ -66,7 +66,7 @@ func (s *Service) buildCryptedData(ctx context.Context, d dto.SimpleDataDTO) (do
 		PayloadNonce:   hex.EncodeToString(noncePayload),
 		CryptoKey:      hex.EncodeToString(cryptedDataKey),
 		CryptoKeyNonce: hex.EncodeToString(nonceDataKey),
-		UserID:         int(user.ID),
+		UserID:         user.ID,
 		Kind:           d.Type,
 	}, nil
 }

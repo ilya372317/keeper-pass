@@ -28,6 +28,6 @@ type Data struct {
 	CryptoKeyNonce string    `db:"crypto_key_nonce"` // CryptoKeyNonce of the data.
 	CryptoKey      string    `db:"crypto_key"`       // CryptoKey of the data.
 	ID             int       `db:"id"`               // ID of the data.
-	UserID         int       `db:"user_id"`          // UserID of the data.
+	UserID         uint      `db:"user_id"`          // UserID of the data.
 	Kind           Kind      `db:"kind"`             // Kind of the data.
 }

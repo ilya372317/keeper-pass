@@ -20,7 +20,7 @@ func TestService_Save(t *testing.T) {
 	t.Run("success save case", func(t *testing.T) {
 		// Setup.
 		ctx := context.Background()
-		dataServ.EXPECT().EncryptAndSaveData(ctx, dto.SimpleDataDTO{
+		dataServ.EXPECT().EncryptAndSaveData(ctx, dto.SaveSimpleDataDTO{
 			Payload:  `{"login":"123","password":"123"}`,
 			Metadata: `{"url":"https://localhost"}`,
 			Type:     domain.KindLoginPass,
@@ -45,7 +45,7 @@ func TestService_Save(t *testing.T) {
 	t.Run("failed encrypt and save data case", func(t *testing.T) {
 		// Prepare.
 		ctx := context.Background()
-		dataServ.EXPECT().EncryptAndSaveData(ctx, dto.SimpleDataDTO{
+		dataServ.EXPECT().EncryptAndSaveData(ctx, dto.SaveSimpleDataDTO{
 			Payload:  `{"login":"123","password":"123"}`,
 			Metadata: `{}`,
 			Type:     domain.KindLoginPass,

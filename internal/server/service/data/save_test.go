@@ -40,7 +40,7 @@ func TestService_EncryptAndSaveData(t *testing.T) {
 		strg.EXPECT().SaveData(gomock.Any(), gomock.Any()).
 			Times(1).
 			Return(nil)
-		arg := dto.SimpleDataDTO{
+		arg := dto.SaveSimpleDataDTO{
 			Payload:  `{}`,
 			Metadata: `{}`,
 			Type:     domain.KindLoginPass,
@@ -56,7 +56,7 @@ func TestService_EncryptAndSaveData(t *testing.T) {
 	t.Run("missing user in ctx", func(t *testing.T) {
 		// Prepare.
 		ctx := context.Background()
-		arg := dto.SimpleDataDTO{
+		arg := dto.SaveSimpleDataDTO{
 			Payload:  "{}",
 			Metadata: "{}",
 			Type:     domain.KindLoginPass,
@@ -73,7 +73,7 @@ func TestService_EncryptAndSaveData(t *testing.T) {
 		strg.EXPECT().SaveData(gomock.Any(), gomock.Any()).
 			Times(1).
 			Return(fmt.Errorf("failed save"))
-		arg := dto.SimpleDataDTO{
+		arg := dto.SaveSimpleDataDTO{
 			Payload:  `{}`,
 			Metadata: `{}`,
 			Type:     domain.KindLoginPass,
@@ -98,7 +98,7 @@ func TestService_buildCryptedData(t *testing.T) {
 		ctx := context.WithValue(context.Background(), domain.CtxUserKey{}, ctxUser)
 		keyr.EXPECT().GetGeneralKey(gomock.Any()).Times(1).Return(validSecretKey, nil)
 		payload := `{"login":"password"}`
-		arg := dto.SimpleDataDTO{
+		arg := dto.SaveSimpleDataDTO{
 			Payload:  payload,
 			Metadata: "{}",
 			Type:     domain.KindLoginPass,

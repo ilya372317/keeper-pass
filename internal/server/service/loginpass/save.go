@@ -21,7 +21,7 @@ func (s *Service) Save(ctx context.Context, d dto.SaveLoginPassDTO) error {
 	if err != nil {
 		return fmt.Errorf("failed marshal login pass payload: %w", err)
 	}
-	sd := dto.SimpleDataDTO{
+	sd := dto.SaveSimpleDataDTO{
 		Payload:  string(payloadString),
 		Metadata: string(metadataString),
 		Type:     domain.KindLoginPass,

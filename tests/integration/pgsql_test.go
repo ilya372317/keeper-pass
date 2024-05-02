@@ -362,7 +362,7 @@ func TestDataRepository_SaveData(t *testing.T) {
 				PayloadNonce:   "123",
 				CryptoKeyNonce: "123",
 				CryptoKey:      "123",
-				UserID:         int(user.ID),
+				UserID:         user.ID,
 				Kind:           domain.KindLoginPass,
 			},
 			want: want{
@@ -372,7 +372,7 @@ func TestDataRepository_SaveData(t *testing.T) {
 					PayloadNonce:   "123",
 					CryptoKeyNonce: "123",
 					CryptoKey:      "123",
-					UserID:         int(user.ID),
+					UserID:         user.ID,
 					Kind:           domain.KindLoginPass,
 				},
 				err: false,
@@ -402,7 +402,7 @@ func TestDataRepository_SaveData(t *testing.T) {
 				PayloadNonce:   "123",
 				CryptoKeyNonce: "123",
 				CryptoKey:      "123",
-				UserID:         int(user.ID),
+				UserID:         user.ID,
 				Kind:           domain.KindLoginPass,
 			},
 			want: want{
