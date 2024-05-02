@@ -9,8 +9,8 @@ type SaveSimpleDataDTO struct {
 }
 
 type UpdateSimpleDataDTO struct {
-	ID       int
 	Payload  string
 	Metadata string
 	Type     domain.Kind
+	ID       int
 }
