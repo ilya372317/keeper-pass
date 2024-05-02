@@ -15,6 +15,7 @@ type AuthService interface {
 
 type loginPassService interface {
 	Save(ctx context.Context, d dto.SaveLoginPassDTO) error
+	Update(ctx context.Context, d dto.UpdateLoginPassDTO) error
 }
 
 type Handler struct {

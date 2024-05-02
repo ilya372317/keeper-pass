@@ -102,3 +102,17 @@ func (mr *MockloginPassServiceMockRecorder) Save(ctx, d interface{}) *gomock.Cal
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockloginPassService)(nil).Save), ctx, d)
 }
+
+// Update mocks base method.
+func (m *MockloginPassService) Update(ctx context.Context, d dto.UpdateLoginPassDTO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, d)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockloginPassServiceMockRecorder) Update(ctx, d interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockloginPassService)(nil).Update), ctx, d)
+}

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	"github.com/ilya372317/pass-keeper/internal/server/dto"
 	v1_mock "github.com/ilya372317/pass-keeper/internal/server/handler/grpc/v1/mocks"
 	pb "github.com/ilya372317/pass-keeper/proto"
 	"github.com/stretchr/testify/assert"
@@ -133,4 +134,113 @@ func TestHandler_SaveLoginPass(t *testing.T) {
 		assert.Equal(t, codes.Internal, e.Code())
 		assert.Nil(t, got)
 	})
+}
+
+func TestHandler_SaveLoginPass1(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	serv := v1_mock.NewMockloginPassService(ctrl)
+	handler := New(v1_mock.NewMockAuthService(ctrl), serv)
+	t.Run("success update case with all nil value", func(t *testing.T) {
+		// Prepare.
+		ctx := context.Background()
+		serv.EXPECT().Update(gomock.Any(), dto.UpdateLoginPassDTO{
+			ID:       1,
+			Metadata: nil,
+			Login:    nil,
+			Password: nil,
+		}).Times(1).Return(nil)
+		arg := pb.UpdateLoginPassRequest{
+			Id:       1,
+			Metadata: nil,
+			Login:    nil,
+			Password: nil,
+		}
+
+		// Execute.
+		got, err := handler.UpdateLoginPass(ctx, &arg)
+
+		// Assert.
+		require.NoError(t, err)
+		assert.NotNil(t, got)
+	})
+	t.Run("success case with filled args", func(t *testing.T) {
+		// Prepare.
+		ctx := context.Background()
+		login := stringPtr("123")
+		password := stringPtr("123")
+		arg := pb.UpdateLoginPassRequest{
+			Id:       1,
+			Login:    login,
+			Password: password,
+			Metadata: &pb.LoginPassMetadata{Url: "https://localhost"},
+		}
+		serv.EXPECT().Update(gomock.Any(), gomock.Any()).Times(1).Return(nil)
+
+		// Execute.
+		got, err := handler.UpdateLoginPass(ctx, &arg)
+		require.NoError(t, err)
+		require.NotNil(t, got)
+	})
+	t.Run("invalid metadata given", func(t *testing.T) {
+		// Prepare.
+		ctx := context.Background()
+		arg := &pb.UpdateLoginPassRequest{
+			Id: 1,
+			Metadata: &pb.LoginPassMetadata{
+				Url: "invalid-url",
+			},
+		}
+
+		// Execute.
+		got, err := handler.UpdateLoginPass(ctx, arg)
+
+		// Assert.
+		require.Error(t, err)
+		require.Nil(t, got)
+	})
+	t.Run("invalid password given", func(t *testing.T) {
+		// Prepare.
+		ctx := context.Background()
+		arg := &pb.UpdateLoginPassRequest{
+			Id:       1,
+			Password: stringPtr("1"),
+		}
+
+		// Execute.
+		got, err := handler.UpdateLoginPass(ctx, arg)
+		require.Error(t, err)
+		require.Nil(t, got)
+	})
+	t.Run("invalid login given", func(t *testing.T) {
+		// Prepare.
+		ctx := context.Background()
+		arg := &pb.UpdateLoginPassRequest{
+			Id:    1,
+			Login: stringPtr("1"),
+		}
+
+		// Execute.
+		got, err := handler.UpdateLoginPass(ctx, arg)
+
+		// Assert.
+		require.Error(t, err)
+		require.Nil(t, got)
+	})
+	t.Run("failed update in service", func(t *testing.T) {
+		// Prepare.
+		ctx := context.Background()
+		serv.EXPECT().Update(gomock.Any(), gomock.Any()).Times(1).Return(fmt.Errorf("internal error"))
+		arg := &pb.UpdateLoginPassRequest{
+			Id: 1,
+		}
+
+		// Execute.
+		got, err := handler.UpdateLoginPass(ctx, arg)
+		require.Error(t, err)
+		require.Nil(t, got)
+	})
+}
+
+func stringPtr(val string) *string {
+	return &val
 }
