@@ -66,40 +66,39 @@ func (mr *MockAuthServiceMockRecorder) Register(arg0, arg1 interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockAuthService)(nil).Register), arg0, arg1)
 }
 
-// MockdataService is a mock of dataService interface.
-type MockdataService struct {
+// MockloginPassService is a mock of loginPassService interface.
+type MockloginPassService struct {
 	ctrl     *gomock.Controller
-	recorder *MockdataServiceMockRecorder
+	recorder *MockloginPassServiceMockRecorder
 }
 
-// MockdataServiceMockRecorder is the mock recorder for MockdataService.
-type MockdataServiceMockRecorder struct {
-	mock *MockdataService
+// MockloginPassServiceMockRecorder is the mock recorder for MockloginPassService.
+type MockloginPassServiceMockRecorder struct {
+	mock *MockloginPassService
 }
 
-// NewMockdataService creates a new mock instance.
-func NewMockdataService(ctrl *gomock.Controller) *MockdataService {
-	mock := &MockdataService{ctrl: ctrl}
-	mock.recorder = &MockdataServiceMockRecorder{mock}
+// NewMockloginPassService creates a new mock instance.
+func NewMockloginPassService(ctrl *gomock.Controller) *MockloginPassService {
+	mock := &MockloginPassService{ctrl: ctrl}
+	mock.recorder = &MockloginPassServiceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockdataService) EXPECT() *MockdataServiceMockRecorder {
+func (m *MockloginPassService) EXPECT() *MockloginPassServiceMockRecorder {
 	return m.recorder
 }
 
-// SaveSimpleData mocks base method.
-func (m *MockdataService) SaveSimpleData(arg0 context.Context, arg1 dto.SaveSimpleDataDTO) (*domain.Data, error) {
+// Save mocks base method.
+func (m *MockloginPassService) Save(ctx context.Context, d dto.SaveLoginPassDTO) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SaveSimpleData", arg0, arg1)
-	ret0, _ := ret[0].(*domain.Data)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret := m.ctrl.Call(m, "Save", ctx, d)
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
-// SaveSimpleData indicates an expected call of SaveSimpleData.
-func (mr *MockdataServiceMockRecorder) SaveSimpleData(arg0, arg1 interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockloginPassServiceMockRecorder) Save(ctx, d interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveSimpleData", reflect.TypeOf((*MockdataService)(nil).SaveSimpleData), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockloginPassService)(nil).Save), ctx, d)
 }

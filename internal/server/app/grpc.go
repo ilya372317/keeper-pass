@@ -15,7 +15,7 @@ import (
 // StartGRPCServer starting grpc server. Block gorutine before grpc server will stopped by ctx parameter.
 func (a *App) StartGRPCServer(ctx context.Context) error {
 	server := mygrpc.New(a.conf, a.getUnaryInterceptors(), a.getStreamInterceptors())
-	server.RegisterHandler(v1.New(a.c.GetDefaultAuthService(), a.c.GetDefaultDataService()))
+	server.RegisterHandler(v1.New(a.c.GetDefaultAuthService(), a.c.GetDefaultLoginPassService()))
 	err := server.StartAndListen(ctx)
 	if err != nil {
 		return fmt.Errorf("failed start grpc server: %w", err)

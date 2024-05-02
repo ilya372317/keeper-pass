@@ -37,14 +37,6 @@ message FileChunk {
   bytes content = 1;
 }
 
-message ShowDataRequest {
-  int64 id = 1;
-}
-
-message ShowDataResponse {
-  Data data = 1;
-}
-
 message GetFileContentRequest {
   int64 id = 1;
 }
@@ -52,12 +44,6 @@ message GetFileContentRequest {
 message UploadStatus {
   bool success = 1;
   string message = 2;
-}
-
-message SaveSimpleDataRequest {
-  string payload = 1;
-  int32 type = 2;
-  string metadata = 3;
 }
 
 message DeleteDataRequest {
@@ -68,45 +54,114 @@ message DeleteDataResponse {
   bool success = 1;
 }
 
-message SaveSimpleDataResponse {
-  Data data = 1;
-}
-
-message UpdateMetadataRequest {
-  string newMetadata = 1;
-}
-
-message UpdateMetadataResponse {
-  string metadata = 1;
-}
-
-message UpdatePayloadRequest {
-  string newPayload = 1;
-}
-
-message UpdatePayloadResponse {
-  string payload = 1;
-}
-
 message IndexDataRequest {
 }
+
 message IndexDataResponse {
   repeated Data data = 1;
 }
 
+message LoginPassMetadata {
+  string url = 1;
+}
+
+message SaveLoginPassRequest {
+  LoginPassMetadata metadata = 1;
+  string login = 2;
+  string password = 3;
+}
+
+message SaveLoginPassResponse {
+}
+
+message UpdateLoginPassRequest {
+  int64 id = 4;
+  optional LoginPassMetadata metadata = 1;
+  optional string login = 2;
+  optional string password = 3;
+}
+
+message UpdateLoginPassResponse {
+}
+
+message ShowLoginPassRequest {
+  int64 id = 1;
+}
+
+message LoginPass {
+  int64 id = 1;
+  string login = 2;
+  string password = 3;
+  LoginPassMetadata metadata = 4;
+}
+
+message ShowLoginPassResponse {
+  LoginPass login_pass = 1;
+}
+
+message CreditCardMetadata {
+  string bank_name = 1;
+}
+
+message SaveCreditCardRequest {
+  CreditCardMetadata metadata = 1;
+  string card_number = 2;
+  string expiration = 3;
+  int32 cvv = 4;
+}
+
+message SaveCreditCardResponse {
+}
+
+message UpdateCreditCardRequest {
+  int64 id = 1;
+  optional string card_number = 2;
+  optional string expiration = 3;
+  optional int32 cvv = 4;
+  optional CreditCardMetadata metadata = 5;
+}
+
+message UpdateCreditCardResponse {
+}
+
+message CreditCard {
+  int64 id = 1;
+  string card_number = 2;
+  string expiration = 3;
+  int32 cvv = 4;
+  CreditCardMetadata metadata = 5;
+}
+
+message ShowCreditCardRequest {
+  int64 id = 1;
+}
+
+message ShowCreditCardResponse {
+  CreditCard credit_card = 1;
+}
+
 service PassService {
+  // Auth and register.
   rpc Auth(AuthRequest) returns (AuthResponse);
   rpc Register(RegisterRequest) returns (RegisterResponse);
 
-  rpc ShowData(ShowDataRequest) returns (ShowDataResponse);
-  rpc DownloadFile(GetFileContentRequest) returns (stream FileChunk);
-
-  rpc UploadFile(stream FileChunk) returns (UploadStatus);
-  rpc SaveSimpleData(SaveSimpleDataRequest) returns (SaveSimpleDataResponse);
-
+  // Delete for all data types.
   rpc DeleteData(DeleteDataRequest) returns (DeleteDataResponse);
 
-  rpc UpdateMetadata(UpdateMetadataRequest) returns (UpdateMetadataResponse);
-  rpc UpdatePayload(UpdatePayloadRequest) returns (UpdatePayloadResponse);
+  // Index all data types for user.
   rpc IndexData(IndexDataRequest) returns (IndexDataResponse);
+
+  // Download and upload files.
+  rpc DownloadFile(GetFileContentRequest) returns (stream FileChunk);
+  rpc UploadFile(stream FileChunk) returns (UploadStatus);
+
+  // Operations for login password type.
+  rpc SaveLoginPass(SaveLoginPassRequest) returns (SaveLoginPassResponse);
+  rpc UpdateLoginPass(UpdateLoginPassRequest) returns (UpdateLoginPassResponse);
+  rpc ShowLoginPass(ShowLoginPassRequest) returns (ShowLoginPassResponse);
+
+  // Operations for credit card type.
+  rpc SaveCreditCard(SaveCreditCardRequest) returns (SaveCreditCardResponse);
+  rpc UpdateCreditCard(UpdateCreditCardRequest) returns (UpdateCreditCardResponse);
+  rpc ShowCreditCard(ShowCreditCardRequest) returns (ShowCreditCardResponse);
 }

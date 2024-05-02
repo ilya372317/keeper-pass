@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -222,7 +221,7 @@ func TestHandler_Register(t *testing.T) {
 				Register(gomock.Any(), tt.serviceConfig.argument).
 				AnyTimes().
 				Return(returnServiceUser, tt.serviceConfig.returnErr)
-			conn := setupServer(t, New(service, v1_mock.NewMockdataService(ctrl)))
+			conn := setupServer(t, New(service, v1_mock.NewMockloginPassService(ctrl)))
 			client := pb.NewPassServiceClient(conn)
 
 			got, err := client.Register(ctx, tt.argument)
@@ -242,106 +241,6 @@ func TestHandler_Register(t *testing.T) {
 			assert.Equal(t, tt.want.wantUser.id, gotUser.Id)
 			assert.Equal(t, tt.want.wantUser.createdAT, gotUser.CreatedAt)
 			assert.Equal(t, tt.want.wantUser.updatedAT, gotUser.UpdatedAt)
-		})
-	}
-}
-
-func TestHandler_SaveSimpleData(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockDataService := v1_mock.NewMockdataService(ctrl)
-	handler := New(nil, mockDataService)
-
-	tests := []struct {
-		name       string
-		input      *pb.SaveSimpleDataRequest
-		setupMocks func()
-		want       *pb.SaveSimpleDataResponse
-		wantErr    error
-	}{
-		{
-			name: "successful save",
-			input: &pb.SaveSimpleDataRequest{
-				Payload:  `{"test": "payload"}`,
-				Metadata: `{"test": "metadata"}`,
-			},
-			setupMocks: func() {
-				mockDataService.EXPECT().
-					SaveSimpleData(gomock.Any(), dto.SaveSimpleDataDTO{
-						Payload:  `{"test": "payload"}`,
-						Metadata: `{"test": "metadata"}`,
-					}).
-					Return(&domain.Data{
-						Payload:  `{"test": "payload"}`,
-						Metadata: `{"test": "metadata"}`,
-						ID:       1,
-					}, nil)
-			},
-			want: &pb.SaveSimpleDataResponse{
-				Data: &pb.Data{
-					Payload:  `{"test": "payload"}`,
-					Metadata: `{"test": "metadata"}`,
-					Id:       1,
-				},
-			},
-			wantErr: nil,
-		},
-		{
-			name: "validation payload error",
-			input: &pb.SaveSimpleDataRequest{
-				Metadata: `{"test": "metadata"}`,
-				Payload:  "invalid payload",
-			},
-			setupMocks: func() {},
-			want:       nil,
-			wantErr:    status.Error(codes.InvalidArgument, "payload is required"),
-		},
-		{
-			name: "validation metadata error",
-			input: &pb.SaveSimpleDataRequest{
-				Payload:  `{"test": "payload"}`,
-				Metadata: `invalid metadata`,
-				Type:     1,
-			},
-			setupMocks: func() {},
-			want:       nil,
-			wantErr:    status.Error(codes.InvalidArgument, "payload invalid"),
-		},
-		{
-			name: "internal error from service",
-			input: &pb.SaveSimpleDataRequest{
-				Payload:  `{"test": "payload"}`,
-				Metadata: `{"test": "metadata"}`,
-			},
-			setupMocks: func() {
-				mockDataService.EXPECT().
-					SaveSimpleData(gomock.Any(), dto.SaveSimpleDataDTO{
-						Payload:  `{"test": "payload"}`,
-						Metadata: `{"test": "metadata"}`,
-					}).
-					Return(nil, errors.New("internal error"))
-			},
-			want:    nil,
-			wantErr: status.Error(codes.Internal, "internal error"),
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.setupMocks()
-			got, err := handler.SaveSimpleData(context.Background(), tt.input)
-			if tt.wantErr != nil {
-				require.Error(t, err)
-				e, ok := status.FromError(err)
-				require.True(t, ok)
-				wantE, ok := status.FromError(tt.wantErr)
-				require.True(t, ok)
-				require.Equal(t, wantE.Code(), e.Code())
-			} else {
-				require.NoError(t, err)
-				require.Equal(t, tt.want, got)
-			}
 		})
 	}
 }

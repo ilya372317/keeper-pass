@@ -19,32 +19,42 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PassService_Auth_FullMethodName           = "/PassService/Auth"
-	PassService_Register_FullMethodName       = "/PassService/Register"
-	PassService_ShowData_FullMethodName       = "/PassService/ShowData"
-	PassService_DownloadFile_FullMethodName   = "/PassService/DownloadFile"
-	PassService_UploadFile_FullMethodName     = "/PassService/UploadFile"
-	PassService_SaveSimpleData_FullMethodName = "/PassService/SaveSimpleData"
-	PassService_DeleteData_FullMethodName     = "/PassService/DeleteData"
-	PassService_UpdateMetadata_FullMethodName = "/PassService/UpdateMetadata"
-	PassService_UpdatePayload_FullMethodName  = "/PassService/UpdatePayload"
-	PassService_IndexData_FullMethodName      = "/PassService/IndexData"
+	PassService_Auth_FullMethodName             = "/PassService/Auth"
+	PassService_Register_FullMethodName         = "/PassService/Register"
+	PassService_DeleteData_FullMethodName       = "/PassService/DeleteData"
+	PassService_IndexData_FullMethodName        = "/PassService/IndexData"
+	PassService_DownloadFile_FullMethodName     = "/PassService/DownloadFile"
+	PassService_UploadFile_FullMethodName       = "/PassService/UploadFile"
+	PassService_SaveLoginPass_FullMethodName    = "/PassService/SaveLoginPass"
+	PassService_UpdateLoginPass_FullMethodName  = "/PassService/UpdateLoginPass"
+	PassService_ShowLoginPass_FullMethodName    = "/PassService/ShowLoginPass"
+	PassService_SaveCreditCard_FullMethodName   = "/PassService/SaveCreditCard"
+	PassService_UpdateCreditCard_FullMethodName = "/PassService/UpdateCreditCard"
+	PassService_ShowCreditCard_FullMethodName   = "/PassService/ShowCreditCard"
 )
 
 // PassServiceClient is the client API for PassService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PassServiceClient interface {
+	// Auth and register.
 	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
-	ShowData(ctx context.Context, in *ShowDataRequest, opts ...grpc.CallOption) (*ShowDataResponse, error)
+	// Delete for all data types.
+	DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error)
+	// Index all data types for user.
+	IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error)
+	// Download and upload files.
 	DownloadFile(ctx context.Context, in *GetFileContentRequest, opts ...grpc.CallOption) (PassService_DownloadFileClient, error)
 	UploadFile(ctx context.Context, opts ...grpc.CallOption) (PassService_UploadFileClient, error)
-	SaveSimpleData(ctx context.Context, in *SaveSimpleDataRequest, opts ...grpc.CallOption) (*SaveSimpleDataResponse, error)
-	DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error)
-	UpdateMetadata(ctx context.Context, in *UpdateMetadataRequest, opts ...grpc.CallOption) (*UpdateMetadataResponse, error)
-	UpdatePayload(ctx context.Context, in *UpdatePayloadRequest, opts ...grpc.CallOption) (*UpdatePayloadResponse, error)
-	IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error)
+	// Operations for login password type.
+	SaveLoginPass(ctx context.Context, in *SaveLoginPassRequest, opts ...grpc.CallOption) (*SaveLoginPassResponse, error)
+	UpdateLoginPass(ctx context.Context, in *UpdateLoginPassRequest, opts ...grpc.CallOption) (*UpdateLoginPassResponse, error)
+	ShowLoginPass(ctx context.Context, in *ShowLoginPassRequest, opts ...grpc.CallOption) (*ShowLoginPassResponse, error)
+	// Operations for credit card type.
+	SaveCreditCard(ctx context.Context, in *SaveCreditCardRequest, opts ...grpc.CallOption) (*SaveCreditCardResponse, error)
+	UpdateCreditCard(ctx context.Context, in *UpdateCreditCardRequest, opts ...grpc.CallOption) (*UpdateCreditCardResponse, error)
+	ShowCreditCard(ctx context.Context, in *ShowCreditCardRequest, opts ...grpc.CallOption) (*ShowCreditCardResponse, error)
 }
 
 type passServiceClient struct {
@@ -73,9 +83,18 @@ func (c *passServiceClient) Register(ctx context.Context, in *RegisterRequest, o
 	return out, nil
 }
 
-func (c *passServiceClient) ShowData(ctx context.Context, in *ShowDataRequest, opts ...grpc.CallOption) (*ShowDataResponse, error) {
-	out := new(ShowDataResponse)
-	err := c.cc.Invoke(ctx, PassService_ShowData_FullMethodName, in, out, opts...)
+func (c *passServiceClient) DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error) {
+	out := new(DeleteDataResponse)
+	err := c.cc.Invoke(ctx, PassService_DeleteData_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error) {
+	out := new(IndexDataResponse)
+	err := c.cc.Invoke(ctx, PassService_IndexData_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -148,45 +167,54 @@ func (x *passServiceUploadFileClient) CloseAndRecv() (*UploadStatus, error) {
 	return m, nil
 }
 
-func (c *passServiceClient) SaveSimpleData(ctx context.Context, in *SaveSimpleDataRequest, opts ...grpc.CallOption) (*SaveSimpleDataResponse, error) {
-	out := new(SaveSimpleDataResponse)
-	err := c.cc.Invoke(ctx, PassService_SaveSimpleData_FullMethodName, in, out, opts...)
+func (c *passServiceClient) SaveLoginPass(ctx context.Context, in *SaveLoginPassRequest, opts ...grpc.CallOption) (*SaveLoginPassResponse, error) {
+	out := new(SaveLoginPassResponse)
+	err := c.cc.Invoke(ctx, PassService_SaveLoginPass_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *passServiceClient) DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error) {
-	out := new(DeleteDataResponse)
-	err := c.cc.Invoke(ctx, PassService_DeleteData_FullMethodName, in, out, opts...)
+func (c *passServiceClient) UpdateLoginPass(ctx context.Context, in *UpdateLoginPassRequest, opts ...grpc.CallOption) (*UpdateLoginPassResponse, error) {
+	out := new(UpdateLoginPassResponse)
+	err := c.cc.Invoke(ctx, PassService_UpdateLoginPass_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *passServiceClient) UpdateMetadata(ctx context.Context, in *UpdateMetadataRequest, opts ...grpc.CallOption) (*UpdateMetadataResponse, error) {
-	out := new(UpdateMetadataResponse)
-	err := c.cc.Invoke(ctx, PassService_UpdateMetadata_FullMethodName, in, out, opts...)
+func (c *passServiceClient) ShowLoginPass(ctx context.Context, in *ShowLoginPassRequest, opts ...grpc.CallOption) (*ShowLoginPassResponse, error) {
+	out := new(ShowLoginPassResponse)
+	err := c.cc.Invoke(ctx, PassService_ShowLoginPass_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *passServiceClient) UpdatePayload(ctx context.Context, in *UpdatePayloadRequest, opts ...grpc.CallOption) (*UpdatePayloadResponse, error) {
-	out := new(UpdatePayloadResponse)
-	err := c.cc.Invoke(ctx, PassService_UpdatePayload_FullMethodName, in, out, opts...)
+func (c *passServiceClient) SaveCreditCard(ctx context.Context, in *SaveCreditCardRequest, opts ...grpc.CallOption) (*SaveCreditCardResponse, error) {
+	out := new(SaveCreditCardResponse)
+	err := c.cc.Invoke(ctx, PassService_SaveCreditCard_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *passServiceClient) IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error) {
-	out := new(IndexDataResponse)
-	err := c.cc.Invoke(ctx, PassService_IndexData_FullMethodName, in, out, opts...)
+func (c *passServiceClient) UpdateCreditCard(ctx context.Context, in *UpdateCreditCardRequest, opts ...grpc.CallOption) (*UpdateCreditCardResponse, error) {
+	out := new(UpdateCreditCardResponse)
+	err := c.cc.Invoke(ctx, PassService_UpdateCreditCard_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) ShowCreditCard(ctx context.Context, in *ShowCreditCardRequest, opts ...grpc.CallOption) (*ShowCreditCardResponse, error) {
+	out := new(ShowCreditCardResponse)
+	err := c.cc.Invoke(ctx, PassService_ShowCreditCard_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -197,16 +225,24 @@ func (c *passServiceClient) IndexData(ctx context.Context, in *IndexDataRequest,
 // All implementations must embed UnimplementedPassServiceServer
 // for forward compatibility
 type PassServiceServer interface {
+	// Auth and register.
 	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
-	ShowData(context.Context, *ShowDataRequest) (*ShowDataResponse, error)
+	// Delete for all data types.
+	DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error)
+	// Index all data types for user.
+	IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error)
+	// Download and upload files.
 	DownloadFile(*GetFileContentRequest, PassService_DownloadFileServer) error
 	UploadFile(PassService_UploadFileServer) error
-	SaveSimpleData(context.Context, *SaveSimpleDataRequest) (*SaveSimpleDataResponse, error)
-	DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error)
-	UpdateMetadata(context.Context, *UpdateMetadataRequest) (*UpdateMetadataResponse, error)
-	UpdatePayload(context.Context, *UpdatePayloadRequest) (*UpdatePayloadResponse, error)
-	IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error)
+	// Operations for login password type.
+	SaveLoginPass(context.Context, *SaveLoginPassRequest) (*SaveLoginPassResponse, error)
+	UpdateLoginPass(context.Context, *UpdateLoginPassRequest) (*UpdateLoginPassResponse, error)
+	ShowLoginPass(context.Context, *ShowLoginPassRequest) (*ShowLoginPassResponse, error)
+	// Operations for credit card type.
+	SaveCreditCard(context.Context, *SaveCreditCardRequest) (*SaveCreditCardResponse, error)
+	UpdateCreditCard(context.Context, *UpdateCreditCardRequest) (*UpdateCreditCardResponse, error)
+	ShowCreditCard(context.Context, *ShowCreditCardRequest) (*ShowCreditCardResponse, error)
 	mustEmbedUnimplementedPassServiceServer()
 }
 
@@ -220,8 +256,11 @@ func (UnimplementedPassServiceServer) Auth(context.Context, *AuthRequest) (*Auth
 func (UnimplementedPassServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedPassServiceServer) ShowData(context.Context, *ShowDataRequest) (*ShowDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ShowData not implemented")
+func (UnimplementedPassServiceServer) DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteData not implemented")
+}
+func (UnimplementedPassServiceServer) IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IndexData not implemented")
 }
 func (UnimplementedPassServiceServer) DownloadFile(*GetFileContentRequest, PassService_DownloadFileServer) error {
 	return status.Errorf(codes.Unimplemented, "method DownloadFile not implemented")
@@ -229,20 +268,23 @@ func (UnimplementedPassServiceServer) DownloadFile(*GetFileContentRequest, PassS
 func (UnimplementedPassServiceServer) UploadFile(PassService_UploadFileServer) error {
 	return status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
 }
-func (UnimplementedPassServiceServer) SaveSimpleData(context.Context, *SaveSimpleDataRequest) (*SaveSimpleDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveSimpleData not implemented")
+func (UnimplementedPassServiceServer) SaveLoginPass(context.Context, *SaveLoginPassRequest) (*SaveLoginPassResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveLoginPass not implemented")
 }
-func (UnimplementedPassServiceServer) DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteData not implemented")
+func (UnimplementedPassServiceServer) UpdateLoginPass(context.Context, *UpdateLoginPassRequest) (*UpdateLoginPassResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateLoginPass not implemented")
 }
-func (UnimplementedPassServiceServer) UpdateMetadata(context.Context, *UpdateMetadataRequest) (*UpdateMetadataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateMetadata not implemented")
+func (UnimplementedPassServiceServer) ShowLoginPass(context.Context, *ShowLoginPassRequest) (*ShowLoginPassResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowLoginPass not implemented")
 }
-func (UnimplementedPassServiceServer) UpdatePayload(context.Context, *UpdatePayloadRequest) (*UpdatePayloadResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdatePayload not implemented")
+func (UnimplementedPassServiceServer) SaveCreditCard(context.Context, *SaveCreditCardRequest) (*SaveCreditCardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveCreditCard not implemented")
 }
-func (UnimplementedPassServiceServer) IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IndexData not implemented")
+func (UnimplementedPassServiceServer) UpdateCreditCard(context.Context, *UpdateCreditCardRequest) (*UpdateCreditCardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCreditCard not implemented")
+}
+func (UnimplementedPassServiceServer) ShowCreditCard(context.Context, *ShowCreditCardRequest) (*ShowCreditCardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowCreditCard not implemented")
 }
 func (UnimplementedPassServiceServer) mustEmbedUnimplementedPassServiceServer() {}
 
@@ -293,20 +335,38 @@ func _PassService_Register_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_ShowData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ShowDataRequest)
+func _PassService_DeleteData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).ShowData(ctx, in)
+		return srv.(PassServiceServer).DeleteData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_ShowData_FullMethodName,
+		FullMethod: PassService_DeleteData_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).ShowData(ctx, req.(*ShowDataRequest))
+		return srv.(PassServiceServer).DeleteData(ctx, req.(*DeleteDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_IndexData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndexDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).IndexData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_IndexData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).IndexData(ctx, req.(*IndexDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -358,92 +418,110 @@ func (x *passServiceUploadFileServer) Recv() (*FileChunk, error) {
 	return m, nil
 }
 
-func _PassService_SaveSimpleData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SaveSimpleDataRequest)
+func _PassService_SaveLoginPass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveLoginPassRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).SaveSimpleData(ctx, in)
+		return srv.(PassServiceServer).SaveLoginPass(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_SaveSimpleData_FullMethodName,
+		FullMethod: PassService_SaveLoginPass_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).SaveSimpleData(ctx, req.(*SaveSimpleDataRequest))
+		return srv.(PassServiceServer).SaveLoginPass(ctx, req.(*SaveLoginPassRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_DeleteData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteDataRequest)
+func _PassService_UpdateLoginPass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateLoginPassRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).DeleteData(ctx, in)
+		return srv.(PassServiceServer).UpdateLoginPass(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_DeleteData_FullMethodName,
+		FullMethod: PassService_UpdateLoginPass_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).DeleteData(ctx, req.(*DeleteDataRequest))
+		return srv.(PassServiceServer).UpdateLoginPass(ctx, req.(*UpdateLoginPassRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_UpdateMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateMetadataRequest)
+func _PassService_ShowLoginPass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowLoginPassRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).UpdateMetadata(ctx, in)
+		return srv.(PassServiceServer).ShowLoginPass(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_UpdateMetadata_FullMethodName,
+		FullMethod: PassService_ShowLoginPass_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).UpdateMetadata(ctx, req.(*UpdateMetadataRequest))
+		return srv.(PassServiceServer).ShowLoginPass(ctx, req.(*ShowLoginPassRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_UpdatePayload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdatePayloadRequest)
+func _PassService_SaveCreditCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveCreditCardRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).UpdatePayload(ctx, in)
+		return srv.(PassServiceServer).SaveCreditCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_UpdatePayload_FullMethodName,
+		FullMethod: PassService_SaveCreditCard_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).UpdatePayload(ctx, req.(*UpdatePayloadRequest))
+		return srv.(PassServiceServer).SaveCreditCard(ctx, req.(*SaveCreditCardRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_IndexData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexDataRequest)
+func _PassService_UpdateCreditCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCreditCardRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).IndexData(ctx, in)
+		return srv.(PassServiceServer).UpdateCreditCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_IndexData_FullMethodName,
+		FullMethod: PassService_UpdateCreditCard_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).IndexData(ctx, req.(*IndexDataRequest))
+		return srv.(PassServiceServer).UpdateCreditCard(ctx, req.(*UpdateCreditCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_ShowCreditCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowCreditCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).ShowCreditCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_ShowCreditCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).ShowCreditCard(ctx, req.(*ShowCreditCardRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -464,28 +542,36 @@ var PassService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PassService_Register_Handler,
 		},
 		{
-			MethodName: "ShowData",
-			Handler:    _PassService_ShowData_Handler,
-		},
-		{
-			MethodName: "SaveSimpleData",
-			Handler:    _PassService_SaveSimpleData_Handler,
-		},
-		{
 			MethodName: "DeleteData",
 			Handler:    _PassService_DeleteData_Handler,
 		},
 		{
-			MethodName: "UpdateMetadata",
-			Handler:    _PassService_UpdateMetadata_Handler,
-		},
-		{
-			MethodName: "UpdatePayload",
-			Handler:    _PassService_UpdatePayload_Handler,
-		},
-		{
 			MethodName: "IndexData",
 			Handler:    _PassService_IndexData_Handler,
+		},
+		{
+			MethodName: "SaveLoginPass",
+			Handler:    _PassService_SaveLoginPass_Handler,
+		},
+		{
+			MethodName: "UpdateLoginPass",
+			Handler:    _PassService_UpdateLoginPass_Handler,
+		},
+		{
+			MethodName: "ShowLoginPass",
+			Handler:    _PassService_ShowLoginPass_Handler,
+		},
+		{
+			MethodName: "SaveCreditCard",
+			Handler:    _PassService_SaveCreditCard_Handler,
+		},
+		{
+			MethodName: "UpdateCreditCard",
+			Handler:    _PassService_UpdateCreditCard_Handler,
+		},
+		{
+			MethodName: "ShowCreditCard",
+			Handler:    _PassService_ShowCreditCard_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

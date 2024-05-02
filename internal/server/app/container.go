@@ -10,6 +10,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
 	"github.com/ilya372317/pass-keeper/internal/server/service/data"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
+	"github.com/ilya372317/pass-keeper/internal/server/service/loginpass"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -29,6 +30,10 @@ func NewContainer(conf config.Config, pgsqlx *sqlx.DB) *Container {
 
 func (c *Container) GetDefaultAuthService() *auth.Service {
 	return auth.NewAuthService(c.GetJWTTokenManager(), c.GetPostgresqlUserRepo())
+}
+
+func (c *Container) GetDefaultLoginPassService() *loginpass.Service {
+	return loginpass.New(c.GetDefaultDataService())
 }
 
 func (c *Container) GetDefaultDataService() *data.Service {

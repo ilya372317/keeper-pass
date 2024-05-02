@@ -12,7 +12,6 @@ type keyring interface {
 
 type dataStorage interface {
 	SaveData(context.Context, domain.Data) error
-	GetData(context.Context, int) (*domain.Data, error)
 }
 
 type Service struct {
