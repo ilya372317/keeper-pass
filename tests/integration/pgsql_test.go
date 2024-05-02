@@ -10,6 +10,7 @@ import (
 
 	"github.com/golang-migrate/migrate/v4/database/pgx/v5"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/datarepo"
 	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/keyrepo"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
@@ -26,6 +27,7 @@ var (
 	db       *sqlx.DB
 	userRepo *userrepo.Repository
 	keyRepo  *keyrepo.Repository
+	dataRepo *datarepo.Repository
 )
 
 type keysFields struct {
@@ -42,6 +44,7 @@ func TestMain(m *testing.M) {
 	db = database
 	userRepo = userrepo.New(database)
 	keyRepo = keyrepo.New(database)
+	dataRepo = datarepo.New(database)
 	m.Run()
 	if err = closeTestConnection(database, pool, resource); err != nil {
 		log.Fatal(err)
@@ -338,6 +341,147 @@ func TestKeyRepository_GetKey(t *testing.T) {
 			clearKeysTable(t)
 		})
 	}
+}
+
+func TestDataRepository_SaveData(t *testing.T) {
+	user := getOrCreateUser(t)
+	type want struct {
+		result domain.Data
+		err    bool
+	}
+	tests := []struct {
+		name string
+		arg  domain.Data
+		want want
+	}{
+		{
+			name: "success case with empty storage",
+			arg: domain.Data{
+				Payload:        `{"login":"password"}`,
+				Metadata:       `{"url":"test"}`,
+				PayloadNonce:   "123",
+				CryptoKeyNonce: "123",
+				CryptoKey:      "123",
+				UserID:         int(user.ID),
+				Kind:           domain.KindLoginPass,
+			},
+			want: want{
+				result: domain.Data{
+					Payload:        `{"login":"password"}`,
+					Metadata:       `{"url":"test"}`,
+					PayloadNonce:   "123",
+					CryptoKeyNonce: "123",
+					CryptoKey:      "123",
+					UserID:         int(user.ID),
+					Kind:           domain.KindLoginPass,
+				},
+				err: false,
+			},
+		},
+		{
+			name: "invalid user id case",
+			arg: domain.Data{
+				Payload:        `{"login":"password"}`,
+				Metadata:       `{"url":"test"}`,
+				PayloadNonce:   "123",
+				CryptoKeyNonce: "123",
+				CryptoKey:      "123",
+				UserID:         0,
+				Kind:           domain.KindLoginPass,
+			},
+			want: want{
+				result: domain.Data{},
+				err:    true,
+			},
+		},
+		{
+			name: "invalid payload case",
+			arg: domain.Data{
+				Payload:        `invalid-payload`,
+				Metadata:       `{"url":"test"}`,
+				PayloadNonce:   "123",
+				CryptoKeyNonce: "123",
+				CryptoKey:      "123",
+				UserID:         int(user.ID),
+				Kind:           domain.KindLoginPass,
+			},
+			want: want{
+				result: domain.Data{},
+				err:    true,
+			},
+		},
+		{
+			name: "invalid metadata case",
+			arg: domain.Data{
+				Payload:        `{"login":"password"}`,
+				Metadata:       `invalid-metadata`,
+				PayloadNonce:   "123",
+				CryptoKeyNonce: "123",
+				CryptoKey:      "123",
+				UserID:         int(user.ID),
+				Kind:           domain.KindLoginPass,
+			},
+			want: want{
+				result: domain.Data{},
+				err:    true,
+			},
+		},
+	}
+	ctx := context.Background()
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := dataRepo.SaveData(ctx, tt.arg)
+			if tt.want.err {
+				require.Error(t, err)
+				return
+			} else {
+				require.NoError(t, err)
+			}
+
+			got := getLastInsertData(t)
+
+			assert.Equal(t, tt.want.result.Payload, got.Payload)
+			assert.Equal(t, tt.want.result.CryptoKeyNonce, got.CryptoKeyNonce)
+			assert.Equal(t, tt.want.result.Metadata, got.Metadata)
+			assert.Equal(t, tt.want.result.CryptoKey, got.CryptoKey)
+			assert.Equal(t, tt.want.result.UserID, got.UserID)
+			assert.Equal(t, tt.want.result.Kind, got.Kind)
+			clearDataRecordsTable(t)
+		})
+	}
+}
+
+func getOrCreateUser(t *testing.T) domain.User {
+	t.Helper()
+	var user domain.User
+	err := db.Get(&user, "SELECT * FROM users WHERE id = (SELECT MAX(id) FROM users)")
+	if errors.Is(err, sql.ErrNoRows) {
+		fillUsersTable(t, []domain.User{{
+			Email:          "1@gmail.com",
+			HashedPassword: "123",
+			Salt:           "123",
+		}})
+		err = db.Get(&user, "SELECT * FROM users WHERE id = (SELECT MAX(id) FROM users)")
+		require.NoError(t, err)
+	}
+
+	return user
+}
+
+func getLastInsertData(t *testing.T) *domain.Data {
+	t.Helper()
+	var result domain.Data
+	err := db.Get(&result, "SELECT * FROM data_records WHERE id = (SELECT max(id) FROM data_records)")
+	require.NoError(t, err)
+
+	return &result
+}
+
+func clearDataRecordsTable(t *testing.T) {
+	t.Helper()
+	_, err := db.Exec("DELETE FROM data_records WHERE  id > 0")
+	require.NoError(t, err)
 }
 
 func fillKeysTable(t *testing.T, data []keysFields) {
