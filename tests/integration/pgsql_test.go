@@ -357,7 +357,7 @@ func TestDataRepository_SaveData(t *testing.T) {
 		{
 			name: "success case with empty storage",
 			arg: domain.Data{
-				Payload:        `{"login":"password"}`,
+				Payload:        `payload`,
 				Metadata:       `{"url":"test"}`,
 				PayloadNonce:   "123",
 				CryptoKeyNonce: "123",
@@ -367,7 +367,7 @@ func TestDataRepository_SaveData(t *testing.T) {
 			},
 			want: want{
 				result: domain.Data{
-					Payload:        `{"login":"password"}`,
+					Payload:        `payload`,
 					Metadata:       `{"url":"test"}`,
 					PayloadNonce:   "123",
 					CryptoKeyNonce: "123",
@@ -387,22 +387,6 @@ func TestDataRepository_SaveData(t *testing.T) {
 				CryptoKeyNonce: "123",
 				CryptoKey:      "123",
 				UserID:         0,
-				Kind:           domain.KindLoginPass,
-			},
-			want: want{
-				result: domain.Data{},
-				err:    true,
-			},
-		},
-		{
-			name: "invalid payload case",
-			arg: domain.Data{
-				Payload:        `invalid-payload`,
-				Metadata:       `{"url":"test"}`,
-				PayloadNonce:   "123",
-				CryptoKeyNonce: "123",
-				CryptoKey:      "123",
-				UserID:         int(user.ID),
 				Kind:           domain.KindLoginPass,
 			},
 			want: want{

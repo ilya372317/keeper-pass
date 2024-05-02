@@ -3,7 +3,7 @@ BEGIN;
 CREATE TABLE data_records
 (
     id         SERIAL PRIMARY KEY,
-    payload    JSON         NOT NULL,
+    payload    TEXT         NOT NULL,
     metadata   JSON         NOT NULL,
     payload_nonce    VARCHAR(255) NOT NULL,
     crypto_key VARCHAR(255) NOT NULL,
