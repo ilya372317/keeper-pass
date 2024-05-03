@@ -5,7 +5,10 @@ import (
 	"time"
 )
 
-var ErrPayloadNotValid = fmt.Errorf("payload not valid")
+var (
+	ErrPayloadNotValid       = fmt.Errorf("payload not valid")
+	ErrNotSupportedOperation = fmt.Errorf("this method can`t get data of this kind")
+)
 
 // Kind represent a data type.
 type Kind int
@@ -31,4 +34,15 @@ type Data struct {
 	UserID             uint      `db:"user_id"`          // UserID of the data.
 	Kind               Kind      `db:"kind"`             // Kind of the data.
 	IsPayloadDecrypted bool      // IsPayloadDecrypted flag indicates is payload encrypted or decrypted
+}
+
+type LoginPassMetadata struct {
+	URL string
+}
+
+type LoginPassData struct {
+	Metadata LoginPassMetadata
+	Login    string
+	Password string
+	ID       int
 }

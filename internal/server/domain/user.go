@@ -15,6 +15,7 @@ var (
 	ErrUserNotFound      = errors.New("user not found")
 	ErrInvalidPassword   = errors.New("invalid user password given")
 	ErrUserAlreadyExists = errors.New("user already registered")
+	ErrAccesDenied       = errors.New("user not access this entity")
 )
 
 type CtxUserKey struct{}

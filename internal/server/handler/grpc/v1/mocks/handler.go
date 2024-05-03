@@ -103,6 +103,21 @@ func (mr *MockloginPassServiceMockRecorder) Save(ctx, d interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockloginPassService)(nil).Save), ctx, d)
 }
 
+// Show mocks base method.
+func (m *MockloginPassService) Show(ctx context.Context, id int) (domain.LoginPassData, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", ctx, id)
+	ret0, _ := ret[0].(domain.LoginPassData)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show.
+func (mr *MockloginPassServiceMockRecorder) Show(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockloginPassService)(nil).Show), ctx, id)
+}
+
 // Update mocks base method.
 func (m *MockloginPassService) Update(ctx context.Context, d dto.UpdateLoginPassDTO) error {
 	m.ctrl.T.Helper()
