@@ -436,6 +436,88 @@ func TestDataRepository_SaveData(t *testing.T) {
 	}
 }
 
+func TestDataRepository_Update(t *testing.T) {
+	type want struct {
+		data domain.Data
+		err  bool
+	}
+	tests := []struct {
+		name string
+		arg  domain.Data
+		want want
+	}{
+		{
+			name: "success update case",
+			arg: domain.Data{
+				Payload:        "payload",
+				Metadata:       "{}",
+				PayloadNonce:   "payload-nonce",
+				CryptoKeyNonce: "crypto-key-nonce",
+				CryptoKey:      "crypto-key",
+			},
+			want: want{
+				data: domain.Data{
+					Payload:        "payload",
+					Metadata:       "{}",
+					PayloadNonce:   "payload-nonce",
+					CryptoKeyNonce: "crypto-key-nonce",
+					CryptoKey:      "crypto-key",
+				},
+				err: false,
+			},
+		},
+		{
+			name: "invalid metadata case",
+			arg: domain.Data{
+				Payload:        "payload",
+				Metadata:       "invalid metadata",
+				PayloadNonce:   "payload-nonce",
+				CryptoKeyNonce: "crypto-key-nonce",
+				CryptoKey:      "crypto-key",
+			},
+			want: want{
+				err: true,
+			},
+		},
+	}
+	user := getOrCreateUser(t)
+	ctx := context.Background()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			lastRecordID := createDataRecord(t, int(user.ID))
+			err := dataRepo.UpdateByID(ctx, lastRecordID, tt.arg)
+			if tt.want.err {
+				require.Error(t, err)
+				return
+			} else {
+				require.NoError(t, err)
+			}
+
+			got := getLastInsertData(t)
+
+			assert.Equal(t, tt.want.data.Payload, got.Payload)
+			assert.Equal(t, tt.want.data.Metadata, got.Metadata)
+			assert.Equal(t, tt.want.data.PayloadNonce, got.PayloadNonce)
+			assert.Equal(t, tt.want.data.CryptoKey, got.CryptoKey)
+			assert.Equal(t, tt.want.data.CryptoKeyNonce, got.CryptoKeyNonce)
+
+			clearDataRecordsTable(t)
+		})
+	}
+}
+
+func createDataRecord(t *testing.T, userID int) int {
+	t.Helper()
+	_, err := db.Exec("INSERT INTO data_records "+
+		"(payload, metadata, payload_nonce, crypto_key, crypto_key_nonce, kind, user_id)"+
+		" VALUES ('some_payload', '{}', '{123}', 'key', '123', 0, $1)", userID)
+	require.NoError(t, err)
+	var lastInsertID int
+	err = db.Get(&lastInsertID, "SELECT MAX(id) FROM data_records")
+	require.NoError(t, err)
+	return lastInsertID
+}
+
 func getOrCreateUser(t *testing.T) domain.User {
 	t.Helper()
 	var user domain.User
