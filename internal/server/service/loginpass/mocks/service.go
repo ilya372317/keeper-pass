@@ -10,7 +10,6 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	domain "github.com/ilya372317/pass-keeper/internal/server/domain"
-	dto "github.com/ilya372317/pass-keeper/internal/server/dto"
 )
 
 // MockdataService is a mock of dataService interface.
@@ -37,7 +36,7 @@ func (m *MockdataService) EXPECT() *MockdataServiceMockRecorder {
 }
 
 // EncryptAndSaveData mocks base method.
-func (m *MockdataService) EncryptAndSaveData(arg0 context.Context, arg1 dto.SaveSimpleDataDTO) error {
+func (m *MockdataService) EncryptAndSaveData(arg0 context.Context, arg1 domain.Data) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EncryptAndSaveData", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -51,7 +50,7 @@ func (mr *MockdataServiceMockRecorder) EncryptAndSaveData(arg0, arg1 interface{}
 }
 
 // EncryptAndUpdateData mocks base method.
-func (m *MockdataService) EncryptAndUpdateData(arg0 context.Context, arg1 dto.UpdateSimpleDataDTO) error {
+func (m *MockdataService) EncryptAndUpdateData(arg0 context.Context, arg1 domain.Data) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "EncryptAndUpdateData", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -65,10 +64,10 @@ func (mr *MockdataServiceMockRecorder) EncryptAndUpdateData(arg0, arg1 interface
 }
 
 // GetAndDecryptData mocks base method.
-func (m *MockdataService) GetAndDecryptData(arg0 context.Context, arg1 int64) (*domain.Data, error) {
+func (m *MockdataService) GetAndDecryptData(arg0 context.Context, arg1 int64) (domain.Data, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAndDecryptData", arg0, arg1)
-	ret0, _ := ret[0].(*domain.Data)
+	ret0, _ := ret[0].(domain.Data)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

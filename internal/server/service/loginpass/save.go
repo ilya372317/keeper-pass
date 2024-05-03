@@ -10,6 +10,11 @@ import (
 )
 
 func (s *Service) Save(ctx context.Context, d dto.SaveLoginPassDTO) error {
+	user, ok := ctx.Value(domain.CtxUserKey{}).(*domain.User)
+	if !ok {
+		return fmt.Errorf("failed get user from context")
+	}
+
 	metadataString, err := json.Marshal(&d.Metadata)
 	if err != nil {
 		return fmt.Errorf("failed marshal metadata: %w", err)
@@ -21,13 +26,15 @@ func (s *Service) Save(ctx context.Context, d dto.SaveLoginPassDTO) error {
 	if err != nil {
 		return fmt.Errorf("failed marshal login pass payload: %w", err)
 	}
-	sd := dto.SaveSimpleDataDTO{
-		Payload:  string(payloadString),
-		Metadata: string(metadataString),
-		Type:     domain.KindLoginPass,
+	data := domain.Data{
+		Payload:            string(payloadString),
+		Metadata:           string(metadataString),
+		UserID:             user.ID,
+		Kind:               domain.KindLoginPass,
+		IsPayloadDecrypted: true,
 	}
 
-	if err = s.dataService.EncryptAndSaveData(ctx, sd); err != nil {
+	if err = s.dataService.EncryptAndSaveData(ctx, data); err != nil {
 		return fmt.Errorf("failed ecnrypt and save data: %w", err)
 	}
 

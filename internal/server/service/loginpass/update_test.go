@@ -15,12 +15,13 @@ import (
 
 func TestService_Update(t *testing.T) {
 	const userID = 1
-	var defaultDataInStorage = &domain.Data{
-		Payload:  `{"login":"password"}`,
-		Metadata: `{"url":"https://localhost"}`,
-		ID:       1,
-		UserID:   userID,
-		Kind:     domain.KindLoginPass,
+	var defaultDataInStorage = domain.Data{
+		Payload:            `{"login":"password"}`,
+		Metadata:           `{"url":"https://localhost"}`,
+		ID:                 1,
+		UserID:             userID,
+		Kind:               domain.KindLoginPass,
+		IsPayloadDecrypted: true,
 	}
 	ctrl := gomock.NewController(t)
 	dataStorage := loginpass_mock.NewMockdataService(ctrl)
@@ -43,11 +44,13 @@ func TestService_Update(t *testing.T) {
 			ID:       1,
 		}
 		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), gomock.Any()).Times(1).Return(defaultDataInStorage, nil)
-		dataStorage.EXPECT().EncryptAndUpdateData(gomock.Any(), dto.UpdateSimpleDataDTO{
-			Payload:  `{"login":"login","password":"123"}`,
-			Metadata: `{"url":"https://localhost:80"}`,
-			Type:     domain.KindLoginPass,
-			ID:       1,
+		dataStorage.EXPECT().EncryptAndUpdateData(gomock.Any(), domain.Data{
+			Payload:            `{"login":"login","password":"123"}`,
+			Metadata:           `{"url":"https://localhost:80"}`,
+			Kind:               domain.KindLoginPass,
+			ID:                 1,
+			UserID:             1,
+			IsPayloadDecrypted: true,
 		}).Times(1).Return(nil)
 
 		// Execute.
@@ -76,7 +79,9 @@ func TestService_Update(t *testing.T) {
 		arg := dto.UpdateLoginPassDTO{
 			ID: 1,
 		}
-		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(nil, fmt.Errorf("internal error"))
+		dataStorage.EXPECT().
+			GetAndDecryptData(gomock.Any(), int64(1)).Times(1).
+			Return(domain.Data{}, fmt.Errorf("internal error"))
 
 		// Execute.
 		got := serv.Update(ctx, arg)
@@ -91,7 +96,7 @@ func TestService_Update(t *testing.T) {
 		arg := dto.UpdateLoginPassDTO{
 			ID: 1,
 		}
-		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(&domain.Data{
+		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(domain.Data{
 			ID:     1,
 			UserID: 2,
 			Kind:   domain.KindLoginPass,
@@ -110,7 +115,7 @@ func TestService_Update(t *testing.T) {
 		arg := dto.UpdateLoginPassDTO{
 			ID: 1,
 		}
-		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(&domain.Data{
+		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(domain.Data{
 			ID:     1,
 			UserID: userID,
 			Kind:   domain.KindFile,
@@ -129,18 +134,21 @@ func TestService_Update(t *testing.T) {
 		arg := dto.UpdateLoginPassDTO{
 			ID: 1,
 		}
-		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(&domain.Data{
-			Payload:  "{}",
-			Metadata: "{}",
-			ID:       1,
-			UserID:   userID,
-			Kind:     domain.KindLoginPass,
+		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(domain.Data{
+			Payload:            "{}",
+			Metadata:           "{}",
+			ID:                 1,
+			UserID:             userID,
+			Kind:               domain.KindLoginPass,
+			IsPayloadDecrypted: true,
 		}, nil)
-		dataStorage.EXPECT().EncryptAndUpdateData(gomock.Any(), dto.UpdateSimpleDataDTO{
-			Payload:  "{}",
-			Metadata: "{}",
-			Type:     domain.KindLoginPass,
-			ID:       1,
+		dataStorage.EXPECT().EncryptAndUpdateData(gomock.Any(), domain.Data{
+			Payload:            "{}",
+			Metadata:           "{}",
+			Kind:               domain.KindLoginPass,
+			ID:                 1,
+			UserID:             1,
+			IsPayloadDecrypted: true,
 		}).Times(1).Return(fmt.Errorf("internal error"))
 
 		// Execute.

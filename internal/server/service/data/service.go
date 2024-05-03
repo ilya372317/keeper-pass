@@ -12,6 +12,8 @@ type keyring interface {
 
 type dataStorage interface {
 	SaveData(context.Context, domain.Data) error
+	GetDataByID(ctx context.Context, id int) (domain.Data, error)
+	UpdateByID(ctx context.Context, id int, dto domain.Data) error
 }
 
 type Service struct {

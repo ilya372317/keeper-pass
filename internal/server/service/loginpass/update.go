@@ -28,12 +28,6 @@ func (s *Service) Update(ctx context.Context, d dto.UpdateLoginPassDTO) error {
 		return fmt.Errorf("wrong data king")
 	}
 
-	updateDTO := dto.UpdateSimpleDataDTO{
-		ID:       data.ID,
-		Payload:  data.Payload,
-		Metadata: data.Metadata,
-		Type:     data.Kind,
-	}
 	var updatePayloadDTO dto.LoginPassPayloadDTO
 	if err = json.Unmarshal([]byte(data.Payload), &updatePayloadDTO); err != nil {
 		return fmt.Errorf("invalid payload in storage: %w", err)
@@ -43,7 +37,7 @@ func (s *Service) Update(ctx context.Context, d dto.UpdateLoginPassDTO) error {
 		if err != nil {
 			return fmt.Errorf("failed update metadata: %w", err)
 		}
-		updateDTO.Metadata = string(metadataContent)
+		data.Metadata = string(metadataContent)
 	}
 	if d.Password != nil {
 		updatePayloadDTO.Password = *d.Password
@@ -55,9 +49,9 @@ func (s *Service) Update(ctx context.Context, d dto.UpdateLoginPassDTO) error {
 	if err != nil {
 		return fmt.Errorf("failed marshal payload DTO for save")
 	}
-	updateDTO.Payload = string(savePayloadContent)
+	data.Payload = string(savePayloadContent)
 
-	if err = s.dataService.EncryptAndUpdateData(ctx, updateDTO); err != nil {
+	if err = s.dataService.EncryptAndUpdateData(ctx, data); err != nil {
 		return fmt.Errorf("failed update data in storage: %w", err)
 	}
 

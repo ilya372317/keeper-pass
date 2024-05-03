@@ -73,6 +73,21 @@ func (m *MockdataStorage) EXPECT() *MockdataStorageMockRecorder {
 	return m.recorder
 }
 
+// GetDataByID mocks base method.
+func (m *MockdataStorage) GetDataByID(ctx context.Context, id int) (domain.Data, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDataByID", ctx, id)
+	ret0, _ := ret[0].(domain.Data)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetDataByID indicates an expected call of GetDataByID.
+func (mr *MockdataStorageMockRecorder) GetDataByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDataByID", reflect.TypeOf((*MockdataStorage)(nil).GetDataByID), ctx, id)
+}
+
 // SaveData mocks base method.
 func (m *MockdataStorage) SaveData(arg0 context.Context, arg1 domain.Data) error {
 	m.ctrl.T.Helper()
@@ -85,4 +100,18 @@ func (m *MockdataStorage) SaveData(arg0 context.Context, arg1 domain.Data) error
 func (mr *MockdataStorageMockRecorder) SaveData(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveData", reflect.TypeOf((*MockdataStorage)(nil).SaveData), arg0, arg1)
+}
+
+// UpdateByID mocks base method.
+func (m *MockdataStorage) UpdateByID(ctx context.Context, id int, dto domain.Data) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateByID", ctx, id, dto)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateByID indicates an expected call of UpdateByID.
+func (mr *MockdataStorageMockRecorder) UpdateByID(ctx, id, dto interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateByID", reflect.TypeOf((*MockdataStorage)(nil).UpdateByID), ctx, id, dto)
 }

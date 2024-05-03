@@ -4,13 +4,12 @@ import (
 	"context"
 
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
-	"github.com/ilya372317/pass-keeper/internal/server/dto"
 )
 
 type dataService interface {
-	EncryptAndSaveData(context.Context, dto.SaveSimpleDataDTO) error
-	GetAndDecryptData(context.Context, int64) (*domain.Data, error)
-	EncryptAndUpdateData(context.Context, dto.UpdateSimpleDataDTO) error
+	EncryptAndSaveData(context.Context, domain.Data) error
+	GetAndDecryptData(context.Context, int64) (domain.Data, error)
+	EncryptAndUpdateData(context.Context, domain.Data) error
 }
 
 type Service struct {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/golang/mock/gomock"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
@@ -12,18 +13,30 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var ctxUser = &domain.User{
+	CreatedAT:      time.Now(),
+	UpdatedAT:      time.Now(),
+	Email:          "email",
+	HashedPassword: "pass",
+	Salt:           "123",
+	ID:             1,
+}
+
 func TestService_Save(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	dataServ := loginpass_mock.NewMockdataService(ctrl)
 	serv := New(dataServ)
+	ctxWithUser := context.WithValue(context.Background(), domain.CtxUserKey{}, ctxUser)
 
 	t.Run("success save case", func(t *testing.T) {
 		// Setup.
-		ctx := context.Background()
-		dataServ.EXPECT().EncryptAndSaveData(ctx, dto.SaveSimpleDataDTO{
-			Payload:  `{"login":"123","password":"123"}`,
-			Metadata: `{"url":"https://localhost"}`,
-			Type:     domain.KindLoginPass,
+		ctx := ctxWithUser
+		dataServ.EXPECT().EncryptAndSaveData(ctx, domain.Data{
+			Payload:            `{"login":"123","password":"123"}`,
+			Metadata:           `{"url":"https://localhost"}`,
+			Kind:               domain.KindLoginPass,
+			UserID:             1,
+			IsPayloadDecrypted: true,
 		}).
 			Times(1).
 			Return(nil)
@@ -44,11 +57,13 @@ func TestService_Save(t *testing.T) {
 
 	t.Run("failed encrypt and save data case", func(t *testing.T) {
 		// Prepare.
-		ctx := context.Background()
-		dataServ.EXPECT().EncryptAndSaveData(ctx, dto.SaveSimpleDataDTO{
-			Payload:  `{"login":"123","password":"123"}`,
-			Metadata: `{}`,
-			Type:     domain.KindLoginPass,
+		ctx := ctxWithUser
+		dataServ.EXPECT().EncryptAndSaveData(ctx, domain.Data{
+			Payload:            `{"login":"123","password":"123"}`,
+			Metadata:           `{}`,
+			Kind:               domain.KindLoginPass,
+			UserID:             1,
+			IsPayloadDecrypted: true,
 		}).
 			Times(1).
 			Return(fmt.Errorf("internal"))
@@ -60,6 +75,21 @@ func TestService_Save(t *testing.T) {
 
 		// Execute.
 		got := serv.Save(ctx, arg)
+		require.Error(t, got)
+	})
+
+	t.Run("missing user in context", func(t *testing.T) {
+		// Prepare.
+		ctx := context.Background()
+		arg := dto.SaveLoginPassDTO{
+			Metadata: dto.LoginPassMetadata{},
+			Login:    "123",
+			Password: "123",
+		}
+		// Execute.
+		got := serv.Save(ctx, arg)
+
+		// Assert.
 		require.Error(t, got)
 	})
 }
