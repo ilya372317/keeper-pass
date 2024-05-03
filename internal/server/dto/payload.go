@@ -1,6 +1,6 @@
 package dto
 
 type LoginPassPayloadDTO struct {
-	Login    string `json:"login"`
-	Password string `json:"password"`
+	Login    string `json:"login,omitempty"`
+	Password string `json:"password,omitempty"`
 }
