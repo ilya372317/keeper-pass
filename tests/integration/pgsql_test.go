@@ -504,6 +504,91 @@ func TestDataRepository_Update(t *testing.T) {
 			clearDataRecordsTable(t)
 		})
 	}
+	clearUsersTable(t)
+}
+
+func TestDataRepository_GetByID(t *testing.T) {
+	user := getOrCreateUser(t)
+	type want struct {
+		data domain.Data
+		err  bool
+	}
+	tests := []struct {
+		name       string
+		data       []domain.Data
+		want       want
+		argIsValid bool
+	}{
+		{
+			name: "success get case",
+			data: []domain.Data{
+				{
+					Payload:        "payload some",
+					Metadata:       "{}",
+					PayloadNonce:   "123",
+					CryptoKeyNonce: "123",
+					CryptoKey:      "123",
+					UserID:         user.ID,
+					Kind:           domain.KindLoginPass,
+				},
+			},
+			want: want{
+				data: domain.Data{
+					Payload:        "payload some",
+					Metadata:       "{}",
+					PayloadNonce:   "123",
+					CryptoKeyNonce: "123",
+					CryptoKey:      "123",
+					UserID:         user.ID,
+					Kind:           domain.KindLoginPass,
+				},
+				err: false,
+			},
+			argIsValid: true,
+		},
+		{
+			name: "item not found case",
+			data: nil,
+			want: want{
+				data: domain.Data{},
+				err:  true,
+			},
+			argIsValid: false,
+		},
+	}
+	ctx := context.Background()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for _, d := range tt.data {
+				err := dataRepo.SaveData(ctx, d)
+				require.NoError(t, err)
+			}
+			var lastInsertID int
+			if tt.argIsValid {
+				lastInsertID = getLastInsertData(t).ID
+			} else {
+				lastInsertID = 0
+			}
+
+			got, err := dataRepo.GetDataByID(ctx, lastInsertID)
+			if tt.want.err {
+				require.Error(t, err)
+				require.ErrorIs(t, err, sql.ErrNoRows)
+				return
+			} else {
+				require.NoError(t, err)
+			}
+
+			assert.Equal(t, tt.want.data.Metadata, got.Metadata)
+			assert.Equal(t, tt.want.data.Payload, got.Payload)
+			assert.Equal(t, tt.want.data.PayloadNonce, got.PayloadNonce)
+			assert.Equal(t, tt.want.data.CryptoKeyNonce, got.CryptoKeyNonce)
+			assert.Equal(t, tt.want.data.CryptoKey, got.CryptoKey)
+			assert.Equal(t, tt.want.data.Kind, got.Kind)
+
+			clearDataRecordsTable(t)
+		})
+	}
 }
 
 func createDataRecord(t *testing.T, userID int) int {
