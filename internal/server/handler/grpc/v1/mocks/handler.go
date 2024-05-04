@@ -131,3 +131,40 @@ func (mr *MockloginPassServiceMockRecorder) Update(ctx, d interface{}) *gomock.C
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockloginPassService)(nil).Update), ctx, d)
 }
+
+// MockcreditCardService is a mock of creditCardService interface.
+type MockcreditCardService struct {
+	ctrl     *gomock.Controller
+	recorder *MockcreditCardServiceMockRecorder
+}
+
+// MockcreditCardServiceMockRecorder is the mock recorder for MockcreditCardService.
+type MockcreditCardServiceMockRecorder struct {
+	mock *MockcreditCardService
+}
+
+// NewMockcreditCardService creates a new mock instance.
+func NewMockcreditCardService(ctrl *gomock.Controller) *MockcreditCardService {
+	mock := &MockcreditCardService{ctrl: ctrl}
+	mock.recorder = &MockcreditCardServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockcreditCardService) EXPECT() *MockcreditCardServiceMockRecorder {
+	return m.recorder
+}
+
+// Save mocks base method.
+func (m *MockcreditCardService) Save(ctx context.Context, d dto.SaveCreditCardDTO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save", ctx, d)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Save indicates an expected call of Save.
+func (mr *MockcreditCardServiceMockRecorder) Save(ctx, d interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockcreditCardService)(nil).Save), ctx, d)
+}

@@ -19,15 +19,21 @@ type loginPassService interface {
 	Show(ctx context.Context, id int) (domain.LoginPassData, error)
 }
 
-type Handler struct {
-	pb.UnimplementedPassServiceServer
-	authService      AuthService
-	loginPassService loginPassService
+type creditCardService interface {
+	Save(ctx context.Context, d dto.SaveCreditCardDTO) error
 }
 
-func New(authService AuthService, loginPassService loginPassService) *Handler {
+type Handler struct {
+	pb.UnimplementedPassServiceServer
+	authService       AuthService
+	loginPassService  loginPassService
+	creditCardService creditCardService
+}
+
+func New(authService AuthService, loginPassService loginPassService, creditCardService creditCardService) *Handler {
 	return &Handler{
-		authService:      authService,
-		loginPassService: loginPassService,
+		authService:       authService,
+		loginPassService:  loginPassService,
+		creditCardService: creditCardService,
 	}
 }

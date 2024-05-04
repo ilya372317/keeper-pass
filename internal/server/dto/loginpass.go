@@ -12,3 +12,12 @@ type UpdateLoginPassDTO struct {
 	Password *string            `json:"password" validate:"omitnil,min=3,max=255"`
 	ID       int64              `json:"id" validate:"required"`
 }
+
+type LoginPassMetadata struct {
+	URL string `json:"url,omitempty" validate:"omitempty,url"`
+}
+
+type LoginPassPayloadDTO struct {
+	Login    string `json:"login,omitempty"`
+	Password string `json:"password,omitempty"`
+}

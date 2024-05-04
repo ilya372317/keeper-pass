@@ -19,7 +19,7 @@ import (
 func TestHandler_ShowLoginPass(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	serv := v1_mock.NewMockloginPassService(ctrl)
-	handler := New(v1_mock.NewMockAuthService(ctrl), serv)
+	handler := Handler{loginPassService: serv}
 
 	t.Run("success show case", func(t *testing.T) {
 		// Prepare.

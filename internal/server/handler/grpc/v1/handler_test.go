@@ -221,7 +221,10 @@ func TestHandler_Register(t *testing.T) {
 				Register(gomock.Any(), tt.serviceConfig.argument).
 				AnyTimes().
 				Return(returnServiceUser, tt.serviceConfig.returnErr)
-			conn := setupServer(t, New(service, v1_mock.NewMockloginPassService(ctrl)))
+			h := Handler{
+				authService: service,
+			}
+			conn := setupServer(t, &h)
 			client := pb.NewPassServiceClient(conn)
 
 			got, err := client.Register(ctx, tt.argument)

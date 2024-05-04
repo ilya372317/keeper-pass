@@ -18,7 +18,9 @@ import (
 func TestHandler_SaveLoginPass(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	serv := v1_mock.NewMockloginPassService(ctrl)
-	handler := New(v1_mock.NewMockAuthService(ctrl), serv)
+	handler := Handler{
+		loginPassService: serv,
+	}
 	t.Run("success case", func(t *testing.T) {
 		// Prepare.
 		ctx := context.Background()
@@ -139,7 +141,9 @@ func TestHandler_SaveLoginPass(t *testing.T) {
 func TestHandler_SaveLoginPass1(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	serv := v1_mock.NewMockloginPassService(ctrl)
-	handler := New(v1_mock.NewMockAuthService(ctrl), serv)
+	handler := Handler{
+		loginPassService: serv,
+	}
 	t.Run("success update case with all nil value", func(t *testing.T) {
 		// Prepare.
 		ctx := context.Background()

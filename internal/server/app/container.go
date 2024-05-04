@@ -8,6 +8,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/interceptor"
 	"github.com/ilya372317/pass-keeper/internal/server/keyring"
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
+	"github.com/ilya372317/pass-keeper/internal/server/service/creditcard"
 	"github.com/ilya372317/pass-keeper/internal/server/service/data"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
 	"github.com/ilya372317/pass-keeper/internal/server/service/loginpass"
@@ -66,4 +67,8 @@ func (c *Container) SetKeyring(kring *keyring.Keyring) {
 
 func (c *Container) GetKeyring() *keyring.Keyring {
 	return c.KRing
+}
+
+func (c *Container) GetDefaultCreditCardService() *creditcard.Service {
+	return creditcard.New(c.GetDefaultDataService())
 }
