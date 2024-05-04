@@ -10,3 +10,11 @@ type SaveCreditCardDTO struct {
 	Expiration string             `validate:"cardexp" json:"expiration"`
 	CVV        int                `validate:"min=100,max=9999" json:"cvv"`
 }
+
+type UpdateCreditCardDTO struct {
+	Metadata   *CreditCardMetadata `json:"_" validate:"omitnil"`
+	CardNumber *string             `json:"card_number" validate:"omitnil,credit_card"`
+	Expiration *string             `json:"expiration" validate:"omitnil,cardexp"`
+	CVV        *int32              `json:"cvv" validate:"omitnil,min=100,max=9999"`
+	ID         int
+}
