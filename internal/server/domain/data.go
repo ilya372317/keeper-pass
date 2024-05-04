@@ -46,3 +46,15 @@ type LoginPassData struct {
 	Password string
 	ID       int
 }
+
+type CreditCardMetadata struct {
+	BankName string `json:"bank_name,omitempty"`
+}
+
+type CreditCardData struct {
+	Metadata   CreditCardMetadata `json:"metadata,omitempty"`
+	CardNumber string             `json:"card_number"`
+	Expiration string             `json:"expiration"`
+	CVV        int                `json:"cvv"`
+	ID         int                `json:"id,omitempty"`
+}

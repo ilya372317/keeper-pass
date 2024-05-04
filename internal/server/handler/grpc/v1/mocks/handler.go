@@ -169,6 +169,21 @@ func (mr *MockcreditCardServiceMockRecorder) Save(ctx, d interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockcreditCardService)(nil).Save), ctx, d)
 }
 
+// Show mocks base method.
+func (m *MockcreditCardService) Show(ctx context.Context, id int64) (domain.CreditCardData, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", ctx, id)
+	ret0, _ := ret[0].(domain.CreditCardData)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show.
+func (mr *MockcreditCardServiceMockRecorder) Show(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockcreditCardService)(nil).Show), ctx, id)
+}
+
 // Update mocks base method.
 func (m *MockcreditCardService) Update(ctx context.Context, d dto.UpdateCreditCardDTO) error {
 	m.ctrl.T.Helper()

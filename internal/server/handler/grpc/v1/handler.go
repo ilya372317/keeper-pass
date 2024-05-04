@@ -22,6 +22,7 @@ type loginPassService interface {
 type creditCardService interface {
 	Save(ctx context.Context, d dto.SaveCreditCardDTO) error
 	Update(ctx context.Context, d dto.UpdateCreditCardDTO) error
+	Show(ctx context.Context, id int64) (domain.CreditCardData, error)
 }
 
 type Handler struct {
