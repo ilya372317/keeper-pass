@@ -18,3 +18,9 @@ type UpdateCreditCardDTO struct {
 	CVV        *int32              `json:"cvv" validate:"omitnil,min=100,max=9999"`
 	ID         int
 }
+
+type CreditCardPayload struct {
+	CardNumber string `json:"card_number"`
+	Expiration string `json:"expiration"`
+	CVV        int    `json:"cvv"`
+}
