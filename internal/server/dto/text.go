@@ -1,7 +1,7 @@
 package dto
 
 type TextMetadata struct {
-	Info string `json:"info,omitempty"`
+	Info string `json:"info"`
 }
 
 type SaveTextDTO struct {

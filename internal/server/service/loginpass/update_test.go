@@ -118,7 +118,7 @@ func TestService_Update(t *testing.T) {
 		dataStorage.EXPECT().GetAndDecryptData(gomock.Any(), int64(1)).Times(1).Return(domain.Data{
 			ID:     1,
 			UserID: userID,
-			Kind:   domain.KindFile,
+			Kind:   domain.KindBinary,
 		}, nil)
 
 		// Execute.

@@ -86,7 +86,7 @@ func TestService_Show(t *testing.T) {
 			Metadata:           `{"url":"https://localhost"}`,
 			ID:                 1,
 			UserID:             1,
-			Kind:               domain.KindFile,
+			Kind:               domain.KindBinary,
 			IsPayloadDecrypted: true,
 		}, nil)
 

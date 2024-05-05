@@ -15,8 +15,9 @@ type Kind int
 
 const (
 	KindLoginPass  Kind = iota // KindLoginPass represent a login with password data type.
-	KindFile                   // KindFile represent a file data type.
 	KindCreditCard             // KindCreditCard represent a credit card data type.
+	KindText                   // KindText represent a text data type.
+	KindBinary                 // KindBinary represent a binary data type.
 )
 
 const CryptoKeyLength = 32
