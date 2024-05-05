@@ -12,6 +12,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/service/data"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
 	"github.com/ilya372317/pass-keeper/internal/server/service/loginpass"
+	"github.com/ilya372317/pass-keeper/internal/server/service/text"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -71,4 +72,8 @@ func (c *Container) GetKeyring() *keyring.Keyring {
 
 func (c *Container) GetDefaultCreditCardService() *creditcard.Service {
 	return creditcard.New(c.GetDefaultDataService())
+}
+
+func (c *Container) GetDefaultTextService() *text.Service {
+	return text.New(c.GetDefaultDataService())
 }

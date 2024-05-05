@@ -23,8 +23,12 @@ const (
 	PassService_Register_FullMethodName         = "/PassService/Register"
 	PassService_DeleteData_FullMethodName       = "/PassService/DeleteData"
 	PassService_IndexData_FullMethodName        = "/PassService/IndexData"
-	PassService_DownloadFile_FullMethodName     = "/PassService/DownloadFile"
-	PassService_UploadFile_FullMethodName       = "/PassService/UploadFile"
+	PassService_SaveText_FullMethodName         = "/PassService/SaveText"
+	PassService_UpdateText_FullMethodName       = "/PassService/UpdateText"
+	PassService_ShowTextData_FullMethodName     = "/PassService/ShowTextData"
+	PassService_SaveBinary_FullMethodName       = "/PassService/SaveBinary"
+	PassService_UpdateBinary_FullMethodName     = "/PassService/UpdateBinary"
+	PassService_ShowBinary_FullMethodName       = "/PassService/ShowBinary"
 	PassService_SaveLoginPass_FullMethodName    = "/PassService/SaveLoginPass"
 	PassService_UpdateLoginPass_FullMethodName  = "/PassService/UpdateLoginPass"
 	PassService_ShowLoginPass_FullMethodName    = "/PassService/ShowLoginPass"
@@ -44,9 +48,14 @@ type PassServiceClient interface {
 	DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error)
 	// Index all data types for user.
 	IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error)
-	// Download and upload files.
-	DownloadFile(ctx context.Context, in *GetFileContentRequest, opts ...grpc.CallOption) (PassService_DownloadFileClient, error)
-	UploadFile(ctx context.Context, opts ...grpc.CallOption) (PassService_UploadFileClient, error)
+	// Operations for text data.
+	SaveText(ctx context.Context, in *SaveTextRequest, opts ...grpc.CallOption) (*SaveTextResponse, error)
+	UpdateText(ctx context.Context, in *UpdateTextRequest, opts ...grpc.CallOption) (*UpdateTextResponse, error)
+	ShowTextData(ctx context.Context, in *ShowTextRequest, opts ...grpc.CallOption) (*ShowTextResponse, error)
+	// Operations for binary data.
+	SaveBinary(ctx context.Context, in *SaveBinaryRequest, opts ...grpc.CallOption) (*SaveBinaryResponse, error)
+	UpdateBinary(ctx context.Context, in *UpdateBinaryRequest, opts ...grpc.CallOption) (*UpdateBinaryResponse, error)
+	ShowBinary(ctx context.Context, in *ShowBinaryRequest, opts ...grpc.CallOption) (*ShowBinaryResponse, error)
 	// Operations for login password type.
 	SaveLoginPass(ctx context.Context, in *SaveLoginPassRequest, opts ...grpc.CallOption) (*SaveLoginPassResponse, error)
 	UpdateLoginPass(ctx context.Context, in *UpdateLoginPassRequest, opts ...grpc.CallOption) (*UpdateLoginPassResponse, error)
@@ -101,70 +110,58 @@ func (c *passServiceClient) IndexData(ctx context.Context, in *IndexDataRequest,
 	return out, nil
 }
 
-func (c *passServiceClient) DownloadFile(ctx context.Context, in *GetFileContentRequest, opts ...grpc.CallOption) (PassService_DownloadFileClient, error) {
-	stream, err := c.cc.NewStream(ctx, &PassService_ServiceDesc.Streams[0], PassService_DownloadFile_FullMethodName, opts...)
+func (c *passServiceClient) SaveText(ctx context.Context, in *SaveTextRequest, opts ...grpc.CallOption) (*SaveTextResponse, error) {
+	out := new(SaveTextResponse)
+	err := c.cc.Invoke(ctx, PassService_SaveText_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &passServiceDownloadFileClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type PassService_DownloadFileClient interface {
-	Recv() (*FileChunk, error)
-	grpc.ClientStream
-}
-
-type passServiceDownloadFileClient struct {
-	grpc.ClientStream
-}
-
-func (x *passServiceDownloadFileClient) Recv() (*FileChunk, error) {
-	m := new(FileChunk)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *passServiceClient) UploadFile(ctx context.Context, opts ...grpc.CallOption) (PassService_UploadFileClient, error) {
-	stream, err := c.cc.NewStream(ctx, &PassService_ServiceDesc.Streams[1], PassService_UploadFile_FullMethodName, opts...)
+func (c *passServiceClient) UpdateText(ctx context.Context, in *UpdateTextRequest, opts ...grpc.CallOption) (*UpdateTextResponse, error) {
+	out := new(UpdateTextResponse)
+	err := c.cc.Invoke(ctx, PassService_UpdateText_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &passServiceUploadFileClient{stream}
-	return x, nil
+	return out, nil
 }
 
-type PassService_UploadFileClient interface {
-	Send(*FileChunk) error
-	CloseAndRecv() (*UploadStatus, error)
-	grpc.ClientStream
-}
-
-type passServiceUploadFileClient struct {
-	grpc.ClientStream
-}
-
-func (x *passServiceUploadFileClient) Send(m *FileChunk) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *passServiceUploadFileClient) CloseAndRecv() (*UploadStatus, error) {
-	if err := x.ClientStream.CloseSend(); err != nil {
+func (c *passServiceClient) ShowTextData(ctx context.Context, in *ShowTextRequest, opts ...grpc.CallOption) (*ShowTextResponse, error) {
+	out := new(ShowTextResponse)
+	err := c.cc.Invoke(ctx, PassService_ShowTextData_FullMethodName, in, out, opts...)
+	if err != nil {
 		return nil, err
 	}
-	m := new(UploadStatus)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
+	return out, nil
+}
+
+func (c *passServiceClient) SaveBinary(ctx context.Context, in *SaveBinaryRequest, opts ...grpc.CallOption) (*SaveBinaryResponse, error) {
+	out := new(SaveBinaryResponse)
+	err := c.cc.Invoke(ctx, PassService_SaveBinary_FullMethodName, in, out, opts...)
+	if err != nil {
 		return nil, err
 	}
-	return m, nil
+	return out, nil
+}
+
+func (c *passServiceClient) UpdateBinary(ctx context.Context, in *UpdateBinaryRequest, opts ...grpc.CallOption) (*UpdateBinaryResponse, error) {
+	out := new(UpdateBinaryResponse)
+	err := c.cc.Invoke(ctx, PassService_UpdateBinary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *passServiceClient) ShowBinary(ctx context.Context, in *ShowBinaryRequest, opts ...grpc.CallOption) (*ShowBinaryResponse, error) {
+	out := new(ShowBinaryResponse)
+	err := c.cc.Invoke(ctx, PassService_ShowBinary_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *passServiceClient) SaveLoginPass(ctx context.Context, in *SaveLoginPassRequest, opts ...grpc.CallOption) (*SaveLoginPassResponse, error) {
@@ -232,9 +229,14 @@ type PassServiceServer interface {
 	DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error)
 	// Index all data types for user.
 	IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error)
-	// Download and upload files.
-	DownloadFile(*GetFileContentRequest, PassService_DownloadFileServer) error
-	UploadFile(PassService_UploadFileServer) error
+	// Operations for text data.
+	SaveText(context.Context, *SaveTextRequest) (*SaveTextResponse, error)
+	UpdateText(context.Context, *UpdateTextRequest) (*UpdateTextResponse, error)
+	ShowTextData(context.Context, *ShowTextRequest) (*ShowTextResponse, error)
+	// Operations for binary data.
+	SaveBinary(context.Context, *SaveBinaryRequest) (*SaveBinaryResponse, error)
+	UpdateBinary(context.Context, *UpdateBinaryRequest) (*UpdateBinaryResponse, error)
+	ShowBinary(context.Context, *ShowBinaryRequest) (*ShowBinaryResponse, error)
 	// Operations for login password type.
 	SaveLoginPass(context.Context, *SaveLoginPassRequest) (*SaveLoginPassResponse, error)
 	UpdateLoginPass(context.Context, *UpdateLoginPassRequest) (*UpdateLoginPassResponse, error)
@@ -262,11 +264,23 @@ func (UnimplementedPassServiceServer) DeleteData(context.Context, *DeleteDataReq
 func (UnimplementedPassServiceServer) IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IndexData not implemented")
 }
-func (UnimplementedPassServiceServer) DownloadFile(*GetFileContentRequest, PassService_DownloadFileServer) error {
-	return status.Errorf(codes.Unimplemented, "method DownloadFile not implemented")
+func (UnimplementedPassServiceServer) SaveText(context.Context, *SaveTextRequest) (*SaveTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveText not implemented")
 }
-func (UnimplementedPassServiceServer) UploadFile(PassService_UploadFileServer) error {
-	return status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
+func (UnimplementedPassServiceServer) UpdateText(context.Context, *UpdateTextRequest) (*UpdateTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateText not implemented")
+}
+func (UnimplementedPassServiceServer) ShowTextData(context.Context, *ShowTextRequest) (*ShowTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowTextData not implemented")
+}
+func (UnimplementedPassServiceServer) SaveBinary(context.Context, *SaveBinaryRequest) (*SaveBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveBinary not implemented")
+}
+func (UnimplementedPassServiceServer) UpdateBinary(context.Context, *UpdateBinaryRequest) (*UpdateBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBinary not implemented")
+}
+func (UnimplementedPassServiceServer) ShowBinary(context.Context, *ShowBinaryRequest) (*ShowBinaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowBinary not implemented")
 }
 func (UnimplementedPassServiceServer) SaveLoginPass(context.Context, *SaveLoginPassRequest) (*SaveLoginPassResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveLoginPass not implemented")
@@ -371,51 +385,112 @@ func _PassService_IndexData_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_DownloadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GetFileContentRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(PassServiceServer).DownloadFile(m, &passServiceDownloadFileServer{stream})
-}
-
-type PassService_DownloadFileServer interface {
-	Send(*FileChunk) error
-	grpc.ServerStream
-}
-
-type passServiceDownloadFileServer struct {
-	grpc.ServerStream
-}
-
-func (x *passServiceDownloadFileServer) Send(m *FileChunk) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _PassService_UploadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(PassServiceServer).UploadFile(&passServiceUploadFileServer{stream})
-}
-
-type PassService_UploadFileServer interface {
-	SendAndClose(*UploadStatus) error
-	Recv() (*FileChunk, error)
-	grpc.ServerStream
-}
-
-type passServiceUploadFileServer struct {
-	grpc.ServerStream
-}
-
-func (x *passServiceUploadFileServer) SendAndClose(m *UploadStatus) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *passServiceUploadFileServer) Recv() (*FileChunk, error) {
-	m := new(FileChunk)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _PassService_SaveText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveTextRequest)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(PassServiceServer).SaveText(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_SaveText_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).SaveText(ctx, req.(*SaveTextRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_UpdateText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTextRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).UpdateText(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_UpdateText_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).UpdateText(ctx, req.(*UpdateTextRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_ShowTextData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowTextRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).ShowTextData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_ShowTextData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).ShowTextData(ctx, req.(*ShowTextRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_SaveBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).SaveBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_SaveBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).SaveBinary(ctx, req.(*SaveBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_UpdateBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).UpdateBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_UpdateBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).UpdateBinary(ctx, req.(*UpdateBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PassService_ShowBinary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowBinaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PassServiceServer).ShowBinary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PassService_ShowBinary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PassServiceServer).ShowBinary(ctx, req.(*ShowBinaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _PassService_SaveLoginPass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -550,6 +625,30 @@ var PassService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PassService_IndexData_Handler,
 		},
 		{
+			MethodName: "SaveText",
+			Handler:    _PassService_SaveText_Handler,
+		},
+		{
+			MethodName: "UpdateText",
+			Handler:    _PassService_UpdateText_Handler,
+		},
+		{
+			MethodName: "ShowTextData",
+			Handler:    _PassService_ShowTextData_Handler,
+		},
+		{
+			MethodName: "SaveBinary",
+			Handler:    _PassService_SaveBinary_Handler,
+		},
+		{
+			MethodName: "UpdateBinary",
+			Handler:    _PassService_UpdateBinary_Handler,
+		},
+		{
+			MethodName: "ShowBinary",
+			Handler:    _PassService_ShowBinary_Handler,
+		},
+		{
 			MethodName: "SaveLoginPass",
 			Handler:    _PassService_SaveLoginPass_Handler,
 		},
@@ -574,17 +673,6 @@ var PassService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PassService_ShowCreditCard_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "DownloadFile",
-			Handler:       _PassService_DownloadFile_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "UploadFile",
-			Handler:       _PassService_UploadFile_Handler,
-			ClientStreams: true,
-		},
-	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/pass.proto",
 }

@@ -33,19 +33,6 @@ message Data {
   string metadata = 2;
 }
 
-message FileChunk {
-  bytes content = 1;
-}
-
-message GetFileContentRequest {
-  int64 id = 1;
-}
-
-message UploadStatus {
-  bool success = 1;
-  string message = 2;
-}
-
 message DeleteDataRequest {
   int64 id = 1;
 }
@@ -140,6 +127,70 @@ message ShowCreditCardResponse {
   CreditCard credit_card = 1;
 }
 
+message TextMetadata {
+  string info = 1;
+}
+
+message SaveTextRequest {
+  TextMetadata metadata = 2;
+  string data = 1;
+}
+
+message SaveTextResponse {}
+
+message UpdateTextRequest {
+  int64 id = 1;
+  optional TextMetadata metadata = 2;
+  optional string data = 3;
+}
+
+message UpdateTextResponse{}
+
+message ShowTextRequest {
+  int64 id = 1;
+}
+
+message Text {
+  int64 id = 1;
+  TextMetadata metadata = 2;
+  string data = 3;
+}
+
+message ShowTextResponse {
+  Text text = 1;
+}
+
+message Binary {
+  bytes data = 1;
+}
+
+message BinaryMetadata {
+  string info = 1;
+}
+
+message SaveBinaryRequest {
+  BinaryMetadata metadata = 1;
+  bytes data = 2;
+}
+
+message SaveBinaryResponse {}
+
+message UpdateBinaryRequest {
+  int64 id = 1;
+  optional BinaryMetadata metadata = 2;
+  optional bytes data = 3;
+}
+
+message UpdateBinaryResponse {}
+
+message ShowBinaryRequest {
+  int64 id = 1;
+}
+
+message ShowBinaryResponse {
+  Binary binary = 1;
+}
+
 service PassService {
   // Auth and register.
   rpc Auth(AuthRequest) returns (AuthResponse);
@@ -151,9 +202,15 @@ service PassService {
   // Index all data types for user.
   rpc IndexData(IndexDataRequest) returns (IndexDataResponse);
 
-  // Download and upload files.
-  rpc DownloadFile(GetFileContentRequest) returns (stream FileChunk);
-  rpc UploadFile(stream FileChunk) returns (UploadStatus);
+  // Operations for text data.
+  rpc SaveText(SaveTextRequest) returns (SaveTextResponse);
+  rpc UpdateText(UpdateTextRequest) returns (UpdateTextResponse);
+  rpc ShowTextData(ShowTextRequest) returns (ShowTextResponse);
+
+  // Operations for binary data.
+  rpc SaveBinary(SaveBinaryRequest) returns (SaveBinaryResponse);
+  rpc UpdateBinary(UpdateBinaryRequest) returns (UpdateBinaryResponse);
+  rpc ShowBinary(ShowBinaryRequest) returns (ShowBinaryResponse);
 
   // Operations for login password type.
   rpc SaveLoginPass(SaveLoginPassRequest) returns (SaveLoginPassResponse);

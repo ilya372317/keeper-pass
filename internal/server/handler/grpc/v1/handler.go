@@ -25,17 +25,30 @@ type creditCardService interface {
 	Show(ctx context.Context, id int64) (domain.CreditCardData, error)
 }
 
+type textService interface {
+	Save(ctx context.Context, d dto.SaveTextDTO) error
+	Update(ctx context.Context, d dto.UpdateTextDTO) error
+	Show(ctx context.Context, id int64) (domain.Text, error)
+}
+
 type Handler struct {
 	pb.UnimplementedPassServiceServer
 	authService       AuthService
 	loginPassService  loginPassService
 	creditCardService creditCardService
+	textService       textService
 }
 
-func New(authService AuthService, loginPassService loginPassService, creditCardService creditCardService) *Handler {
+func New(
+	authService AuthService,
+	loginPassService loginPassService,
+	creditCardService creditCardService,
+	textService textService,
+) *Handler {
 	return &Handler{
 		authService:       authService,
 		loginPassService:  loginPassService,
 		creditCardService: creditCardService,
+		textService:       textService,
 	}
 }

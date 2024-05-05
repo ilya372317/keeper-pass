@@ -18,7 +18,9 @@ func (a *App) StartGRPCServer(ctx context.Context) error {
 	server.RegisterHandler(
 		v1.New(a.c.GetDefaultAuthService(),
 			a.c.GetDefaultLoginPassService(),
-			a.c.GetDefaultCreditCardService()),
+			a.c.GetDefaultCreditCardService(),
+			a.c.GetDefaultTextService(),
+		),
 	)
 	err := server.StartAndListen(ctx)
 	if err != nil {

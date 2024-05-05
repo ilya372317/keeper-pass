@@ -58,3 +58,13 @@ type CreditCardData struct {
 	CVV        int                `json:"cvv"`
 	ID         int                `json:"id,omitempty"`
 }
+
+type TextMetadata struct {
+	Info string `json:"info"`
+}
+
+type Text struct {
+	Metadata TextMetadata `json:"metadata,omitempty"`
+	Info     string       `json:"info"`
+	ID       int64        `json:"id"`
+}

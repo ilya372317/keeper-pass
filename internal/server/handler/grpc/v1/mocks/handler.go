@@ -197,3 +197,69 @@ func (mr *MockcreditCardServiceMockRecorder) Update(ctx, d interface{}) *gomock.
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockcreditCardService)(nil).Update), ctx, d)
 }
+
+// MocktextService is a mock of textService interface.
+type MocktextService struct {
+	ctrl     *gomock.Controller
+	recorder *MocktextServiceMockRecorder
+}
+
+// MocktextServiceMockRecorder is the mock recorder for MocktextService.
+type MocktextServiceMockRecorder struct {
+	mock *MocktextService
+}
+
+// NewMocktextService creates a new mock instance.
+func NewMocktextService(ctrl *gomock.Controller) *MocktextService {
+	mock := &MocktextService{ctrl: ctrl}
+	mock.recorder = &MocktextServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MocktextService) EXPECT() *MocktextServiceMockRecorder {
+	return m.recorder
+}
+
+// Save mocks base method.
+func (m *MocktextService) Save(ctx context.Context, d dto.SaveTextDTO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save", ctx, d)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Save indicates an expected call of Save.
+func (mr *MocktextServiceMockRecorder) Save(ctx, d interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MocktextService)(nil).Save), ctx, d)
+}
+
+// Show mocks base method.
+func (m *MocktextService) Show(ctx context.Context, id int64) (domain.Text, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", ctx, id)
+	ret0, _ := ret[0].(domain.Text)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show.
+func (mr *MocktextServiceMockRecorder) Show(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MocktextService)(nil).Show), ctx, id)
+}
+
+// Update mocks base method.
+func (m *MocktextService) Update(ctx context.Context, d dto.UpdateTextDTO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, d)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Update indicates an expected call of Update.
+func (mr *MocktextServiceMockRecorder) Update(ctx, d interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MocktextService)(nil).Update), ctx, d)
+}
