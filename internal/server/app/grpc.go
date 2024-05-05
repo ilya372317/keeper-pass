@@ -20,6 +20,7 @@ func (a *App) StartGRPCServer(ctx context.Context) error {
 			a.c.GetDefaultLoginPassService(),
 			a.c.GetDefaultCreditCardService(),
 			a.c.GetDefaultTextService(),
+			a.c.GetDefaultBinaryService(),
 		),
 	)
 	err := server.StartAndListen(ctx)

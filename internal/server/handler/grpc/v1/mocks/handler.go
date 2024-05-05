@@ -263,3 +263,69 @@ func (mr *MocktextServiceMockRecorder) Update(ctx, d interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MocktextService)(nil).Update), ctx, d)
 }
+
+// MockbinaryService is a mock of binaryService interface.
+type MockbinaryService struct {
+	ctrl     *gomock.Controller
+	recorder *MockbinaryServiceMockRecorder
+}
+
+// MockbinaryServiceMockRecorder is the mock recorder for MockbinaryService.
+type MockbinaryServiceMockRecorder struct {
+	mock *MockbinaryService
+}
+
+// NewMockbinaryService creates a new mock instance.
+func NewMockbinaryService(ctrl *gomock.Controller) *MockbinaryService {
+	mock := &MockbinaryService{ctrl: ctrl}
+	mock.recorder = &MockbinaryServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockbinaryService) EXPECT() *MockbinaryServiceMockRecorder {
+	return m.recorder
+}
+
+// Save mocks base method.
+func (m *MockbinaryService) Save(ctx context.Context, d dto.SaveBinaryDTO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save", ctx, d)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Save indicates an expected call of Save.
+func (mr *MockbinaryServiceMockRecorder) Save(ctx, d interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockbinaryService)(nil).Save), ctx, d)
+}
+
+// Show mocks base method.
+func (m *MockbinaryService) Show(ctx context.Context, id int64) (domain.Binary, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", ctx, id)
+	ret0, _ := ret[0].(domain.Binary)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show.
+func (mr *MockbinaryServiceMockRecorder) Show(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockbinaryService)(nil).Show), ctx, id)
+}
+
+// Update mocks base method.
+func (m *MockbinaryService) Update(ctx context.Context, d dto.UpdateBinaryDTO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, d)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockbinaryServiceMockRecorder) Update(ctx, d interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockbinaryService)(nil).Update), ctx, d)
+}

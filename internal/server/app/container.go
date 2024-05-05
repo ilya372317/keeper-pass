@@ -8,6 +8,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/interceptor"
 	"github.com/ilya372317/pass-keeper/internal/server/keyring"
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
+	"github.com/ilya372317/pass-keeper/internal/server/service/binary"
 	"github.com/ilya372317/pass-keeper/internal/server/service/creditcard"
 	"github.com/ilya372317/pass-keeper/internal/server/service/data"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
@@ -76,4 +77,8 @@ func (c *Container) GetDefaultCreditCardService() *creditcard.Service {
 
 func (c *Container) GetDefaultTextService() *text.Service {
 	return text.New(c.GetDefaultDataService())
+}
+
+func (c *Container) GetDefaultBinaryService() *binary.Service {
+	return binary.New(c.GetDefaultDataService())
 }

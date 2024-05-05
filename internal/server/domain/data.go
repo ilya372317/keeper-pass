@@ -68,3 +68,13 @@ type Text struct {
 	Info     string       `json:"info"`
 	ID       int64        `json:"id"`
 }
+
+type BinaryMetadata struct {
+	Info string `json:"info"`
+}
+
+type Binary struct {
+	Metadata BinaryMetadata `json:"metadata,omitempty"`
+	Info     []byte         `json:"info"`
+	ID       int64          `json:"id"`
+}

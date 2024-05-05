@@ -31,12 +31,19 @@ type textService interface {
 	Show(ctx context.Context, id int64) (domain.Text, error)
 }
 
+type binaryService interface {
+	Save(ctx context.Context, d dto.SaveBinaryDTO) error
+	Update(ctx context.Context, d dto.UpdateBinaryDTO) error
+	Show(ctx context.Context, id int64) (domain.Binary, error)
+}
+
 type Handler struct {
 	pb.UnimplementedPassServiceServer
 	authService       AuthService
 	loginPassService  loginPassService
 	creditCardService creditCardService
 	textService       textService
+	binaryService     binaryService
 }
 
 func New(
@@ -44,11 +51,13 @@ func New(
 	loginPassService loginPassService,
 	creditCardService creditCardService,
 	textService textService,
+	binaryService binaryService,
 ) *Handler {
 	return &Handler{
 		authService:       authService,
 		loginPassService:  loginPassService,
 		creditCardService: creditCardService,
 		textService:       textService,
+		binaryService:     binaryService,
 	}
 }
