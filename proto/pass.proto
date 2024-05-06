@@ -205,7 +205,7 @@ service PassService {
   // Operations for text data.
   rpc SaveText(SaveTextRequest) returns (SaveTextResponse);
   rpc UpdateText(UpdateTextRequest) returns (UpdateTextResponse);
-  rpc ShowTextData(ShowTextRequest) returns (ShowTextResponse);
+  rpc ShowText(ShowTextRequest) returns (ShowTextResponse);
 
   // Operations for binary data.
   rpc SaveBinary(SaveBinaryRequest) returns (SaveBinaryResponse);

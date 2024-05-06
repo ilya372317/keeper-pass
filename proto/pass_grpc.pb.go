@@ -25,7 +25,7 @@ const (
 	PassService_IndexData_FullMethodName        = "/PassService/IndexData"
 	PassService_SaveText_FullMethodName         = "/PassService/SaveText"
 	PassService_UpdateText_FullMethodName       = "/PassService/UpdateText"
-	PassService_ShowTextData_FullMethodName     = "/PassService/ShowTextData"
+	PassService_ShowText_FullMethodName         = "/PassService/ShowText"
 	PassService_SaveBinary_FullMethodName       = "/PassService/SaveBinary"
 	PassService_UpdateBinary_FullMethodName     = "/PassService/UpdateBinary"
 	PassService_ShowBinary_FullMethodName       = "/PassService/ShowBinary"
@@ -51,7 +51,7 @@ type PassServiceClient interface {
 	// Operations for text data.
 	SaveText(ctx context.Context, in *SaveTextRequest, opts ...grpc.CallOption) (*SaveTextResponse, error)
 	UpdateText(ctx context.Context, in *UpdateTextRequest, opts ...grpc.CallOption) (*UpdateTextResponse, error)
-	ShowTextData(ctx context.Context, in *ShowTextRequest, opts ...grpc.CallOption) (*ShowTextResponse, error)
+	ShowText(ctx context.Context, in *ShowTextRequest, opts ...grpc.CallOption) (*ShowTextResponse, error)
 	// Operations for binary data.
 	SaveBinary(ctx context.Context, in *SaveBinaryRequest, opts ...grpc.CallOption) (*SaveBinaryResponse, error)
 	UpdateBinary(ctx context.Context, in *UpdateBinaryRequest, opts ...grpc.CallOption) (*UpdateBinaryResponse, error)
@@ -128,9 +128,9 @@ func (c *passServiceClient) UpdateText(ctx context.Context, in *UpdateTextReques
 	return out, nil
 }
 
-func (c *passServiceClient) ShowTextData(ctx context.Context, in *ShowTextRequest, opts ...grpc.CallOption) (*ShowTextResponse, error) {
+func (c *passServiceClient) ShowText(ctx context.Context, in *ShowTextRequest, opts ...grpc.CallOption) (*ShowTextResponse, error) {
 	out := new(ShowTextResponse)
-	err := c.cc.Invoke(ctx, PassService_ShowTextData_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, PassService_ShowText_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -232,7 +232,7 @@ type PassServiceServer interface {
 	// Operations for text data.
 	SaveText(context.Context, *SaveTextRequest) (*SaveTextResponse, error)
 	UpdateText(context.Context, *UpdateTextRequest) (*UpdateTextResponse, error)
-	ShowTextData(context.Context, *ShowTextRequest) (*ShowTextResponse, error)
+	ShowText(context.Context, *ShowTextRequest) (*ShowTextResponse, error)
 	// Operations for binary data.
 	SaveBinary(context.Context, *SaveBinaryRequest) (*SaveBinaryResponse, error)
 	UpdateBinary(context.Context, *UpdateBinaryRequest) (*UpdateBinaryResponse, error)
@@ -270,8 +270,8 @@ func (UnimplementedPassServiceServer) SaveText(context.Context, *SaveTextRequest
 func (UnimplementedPassServiceServer) UpdateText(context.Context, *UpdateTextRequest) (*UpdateTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateText not implemented")
 }
-func (UnimplementedPassServiceServer) ShowTextData(context.Context, *ShowTextRequest) (*ShowTextResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ShowTextData not implemented")
+func (UnimplementedPassServiceServer) ShowText(context.Context, *ShowTextRequest) (*ShowTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowText not implemented")
 }
 func (UnimplementedPassServiceServer) SaveBinary(context.Context, *SaveBinaryRequest) (*SaveBinaryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveBinary not implemented")
@@ -421,20 +421,20 @@ func _PassService_UpdateText_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_ShowTextData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PassService_ShowText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ShowTextRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).ShowTextData(ctx, in)
+		return srv.(PassServiceServer).ShowText(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_ShowTextData_FullMethodName,
+		FullMethod: PassService_ShowText_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).ShowTextData(ctx, req.(*ShowTextRequest))
+		return srv.(PassServiceServer).ShowText(ctx, req.(*ShowTextRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -633,8 +633,8 @@ var PassService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PassService_UpdateText_Handler,
 		},
 		{
-			MethodName: "ShowTextData",
-			Handler:    _PassService_ShowTextData_Handler,
+			MethodName: "ShowText",
+			Handler:    _PassService_ShowText_Handler,
 		},
 		{
 			MethodName: "SaveBinary",

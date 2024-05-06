@@ -66,7 +66,7 @@ type TextMetadata struct {
 
 type Text struct {
 	Metadata TextMetadata `json:"metadata,omitempty"`
-	Info     string       `json:"info"`
+	Data     string       `json:"data"`
 	ID       int64        `json:"id"`
 }
 
