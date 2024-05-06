@@ -1,7 +1,7 @@
 package dto
 
 type BinaryMetadata struct {
-	Info string `json:"info,omitempty"`
+	Info string `json:"info"`
 }
 
 type SaveBinaryDTO struct {
