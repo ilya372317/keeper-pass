@@ -68,4 +68,15 @@ func TestService_Save(t *testing.T) {
 		// Assert.
 		require.Error(t, got)
 	})
+
+	t.Run("missing user in ctx", func(t *testing.T) {
+		// Prepare.
+		arg := dto.SaveTextDTO{}
+
+		// Execute.
+		got := serv.Save(context.Background(), arg)
+
+		// Assert.
+		require.Error(t, got)
+	})
 }
