@@ -10,8 +10,8 @@ type SaveBinaryDTO struct {
 }
 
 type UpdateBinaryDTO struct {
-	Metadata *TextMetadata
-	Data     []byte
+	Metadata *BinaryMetadata
+	Data     *[]byte
 	ID       int64
 }
 

@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ilya372317/pass-keeper/internal/server/cryptomanager"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
+	"github.com/ilya372317/pass-keeper/internal/server/service/cryptomanager"
 )
 
 const generalKeySize = 32

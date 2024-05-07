@@ -8,9 +8,9 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/ilya372317/pass-keeper/internal/server/cryptomanager"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
 	keyringmock "github.com/ilya372317/pass-keeper/internal/server/keyring/mocks"
+	"github.com/ilya372317/pass-keeper/internal/server/service/cryptomanager"
 	"github.com/stretchr/testify/require"
 )
 

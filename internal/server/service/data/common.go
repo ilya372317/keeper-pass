@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/ilya372317/pass-keeper/internal/server/cryptomanager"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
+	"github.com/ilya372317/pass-keeper/internal/server/service/cryptomanager"
 )
 
 func (s *Service) encryptData(ctx context.Context, data domain.Data) (domain.Data, error) {

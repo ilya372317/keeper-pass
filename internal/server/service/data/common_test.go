@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/ilya372317/pass-keeper/internal/server/cryptomanager"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
+	"github.com/ilya372317/pass-keeper/internal/server/service/cryptomanager"
 	data_mock "github.com/ilya372317/pass-keeper/internal/server/service/data/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
