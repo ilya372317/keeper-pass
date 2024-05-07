@@ -5,7 +5,6 @@ import (
 
 	"github.com/ilya372317/pass-keeper/internal/server/dto"
 	pb "github.com/ilya372317/pass-keeper/proto"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
@@ -19,7 +18,8 @@ func (h *Handler) UpdateBinary(ctx context.Context, in *pb.UpdateBinaryRequest) 
 	}
 
 	if err := h.binaryService.Update(ctx, d); err != nil {
-		return nil, status.Errorf(codes.Internal, "failed update binary data: %v", err)
+		e := checkErr("binary", in.Id, err)
+		return nil, status.Errorf(e.Code(), e.String())
 	}
 
 	return &pb.UpdateBinaryResponse{}, nil

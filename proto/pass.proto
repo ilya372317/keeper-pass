@@ -161,6 +161,8 @@ message ShowTextResponse {
 }
 
 message Binary {
+  int64 id = 2;
+  BinaryMetadata metadata = 3;
   bytes data = 1;
 }
 

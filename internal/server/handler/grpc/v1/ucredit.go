@@ -2,9 +2,7 @@ package v1
 
 import (
 	"context"
-	"errors"
 
-	"github.com/ilya372317/pass-keeper/internal/server/domain"
 	"github.com/ilya372317/pass-keeper/internal/server/dto"
 	pb "github.com/ilya372317/pass-keeper/proto"
 	"google.golang.org/grpc/codes"
@@ -34,11 +32,8 @@ func (h *Handler) UpdateCreditCard(
 	}
 
 	if err := h.creditCardService.Update(ctx, d); err != nil {
-		if errors.Is(err, domain.ErrAccesDenied) {
-			return nil, status.Errorf(codes.PermissionDenied, "you can`t edit data belongs to other person")
-		}
-
-		return nil, status.Errorf(codes.Internal, "failed update data with id [%d]: %v", in.Id, err)
+		e := checkErr("credit-card", in.Id, err)
+		return nil, status.Errorf(e.Code(), e.String())
 	}
 
 	return &pb.UpdateCreditCardResponse{}, nil

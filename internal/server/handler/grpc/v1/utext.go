@@ -5,7 +5,6 @@ import (
 
 	"github.com/ilya372317/pass-keeper/internal/server/dto"
 	pb "github.com/ilya372317/pass-keeper/proto"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
@@ -19,7 +18,8 @@ func (h *Handler) UpdateText(ctx context.Context, in *pb.UpdateTextRequest) (*pb
 	}
 
 	if err := h.textService.Update(ctx, d); err != nil {
-		return nil, status.Errorf(codes.Internal, "failed update text: %v", err)
+		e := checkErr("text", in.Id, err)
+		return nil, status.Errorf(e.Code(), e.String())
 	}
 
 	return &pb.UpdateTextResponse{}, nil

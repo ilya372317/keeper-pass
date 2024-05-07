@@ -366,7 +366,6 @@ linters:
     - asciicheck
     - bodyclose
     - containedctx
-    - dupl
     - dupword
     - durationcheck
     - errcheck

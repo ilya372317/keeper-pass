@@ -76,6 +76,6 @@ type BinaryMetadata struct {
 
 type Binary struct {
 	Metadata BinaryMetadata `json:"metadata,omitempty"`
-	Info     []byte         `json:"info"`
+	Data     []byte         `json:"data"`
 	ID       int64          `json:"id"`
 }

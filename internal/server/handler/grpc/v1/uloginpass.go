@@ -30,7 +30,8 @@ func (h *Handler) UpdateLoginPass(
 	}
 
 	if err := h.loginPassService.Update(ctx, d); err != nil {
-		return nil, status.Errorf(codes.Internal, "failed update login pass value with id [%d]: %v", d.ID, err)
+		e := checkErr("loginpass", in.Id, err)
+		return nil, status.Errorf(e.Code(), e.String())
 	}
 
 	return &pb.UpdateLoginPassResponse{}, nil
