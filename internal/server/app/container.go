@@ -10,9 +10,9 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
 	"github.com/ilya372317/pass-keeper/internal/server/service/binary"
 	"github.com/ilya372317/pass-keeper/internal/server/service/creditcard"
-	"github.com/ilya372317/pass-keeper/internal/server/service/data"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
 	"github.com/ilya372317/pass-keeper/internal/server/service/loginpass"
+	"github.com/ilya372317/pass-keeper/internal/server/service/securedata"
 	"github.com/ilya372317/pass-keeper/internal/server/service/text"
 	"github.com/jmoiron/sqlx"
 )
@@ -39,8 +39,8 @@ func (c *Container) GetDefaultLoginPassService() *loginpass.Service {
 	return loginpass.New(c.GetDefaultDataService())
 }
 
-func (c *Container) GetDefaultDataService() *data.Service {
-	return data.New(c.GetKeyring(), c.GetPostgresqlDataRepo())
+func (c *Container) GetDefaultDataService() *securedata.Service {
+	return securedata.New(c.GetKeyring(), c.GetPostgresqlDataRepo())
 }
 
 func (c *Container) GetPostgresqlUserRepo() *userrepo.Repository {

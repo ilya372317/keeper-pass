@@ -591,6 +591,61 @@ func TestDataRepository_GetByID(t *testing.T) {
 	}
 }
 
+func TestDataRepository_GetAll(t *testing.T) {
+	type want struct {
+		count int
+	}
+	tests := []struct {
+		name        string
+		want        want
+		recordCount int
+	}{
+		{
+			name: "filled storage",
+			want: want{
+				count: 3,
+			},
+			recordCount: 3,
+		},
+		{
+			name: "empty storage case",
+			want: want{
+				count: 0,
+			},
+			recordCount: 0,
+		},
+	}
+	user := getOrCreateUser(t)
+	ctx := context.Background()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fillDataRecordsTable(t, tt.recordCount, user.ID)
+
+			got, err := dataRepo.GetAll(ctx)
+			require.NoError(t, err)
+			assert.Len(t, got, tt.want.count)
+
+			clearDataRecordsTable(t)
+		})
+	}
+	clearUsersTable(t)
+}
+
+func fillDataRecordsTable(t *testing.T, recordsCount int, userID uint) {
+	t.Helper()
+	tx, err := db.Beginx()
+	require.NoError(t, err)
+	for i := 0; i < recordsCount; i++ {
+		_, err = tx.Exec(
+			"INSERT INTO data_records (payload, metadata, payload_nonce, crypto_key, crypto_key_nonce, kind, user_id)"+
+				" VALUES ('{}', '{}', '123', '123', '123', 1, $1)",
+			userID)
+		require.NoError(t, err)
+	}
+	err = tx.Commit()
+	require.NoError(t, err)
+}
+
 func createDataRecord(t *testing.T, userID int) int {
 	t.Helper()
 	_, err := db.Exec("INSERT INTO data_records "+

@@ -1,4 +1,4 @@
-package data
+package securedata
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
-	data_mock "github.com/ilya372317/pass-keeper/internal/server/service/data/mocks"
+	data_mock "github.com/ilya372317/pass-keeper/internal/server/service/securedata/mocks"
 	"github.com/stretchr/testify/require"
 )
 

@@ -1,4 +1,4 @@
-package data
+package securedata
 
 import (
 	"context"
