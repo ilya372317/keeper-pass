@@ -41,11 +41,11 @@ message DeleteDataResponse {
   bool success = 1;
 }
 
-message IndexDataRequest {
+message IndexRequest {
 }
 
-message IndexDataResponse {
-  repeated Data data = 1;
+message IndexResponse {
+  repeated IndexItem items = 1;
 }
 
 message LoginPassMetadata {
@@ -193,16 +193,22 @@ message ShowBinaryResponse {
   Binary binary = 1;
 }
 
+message IndexItem {
+  int64 id = 1;
+  string info = 2;
+  int32 type = 3;
+}
+
 service PassService {
   // Auth and register.
   rpc Auth(AuthRequest) returns (AuthResponse);
   rpc Register(RegisterRequest) returns (RegisterResponse);
 
   // Delete for all data types.
-  rpc DeleteData(DeleteDataRequest) returns (DeleteDataResponse);
+  rpc Delete(DeleteDataRequest) returns (DeleteDataResponse);
 
   // Index all data types for user.
-  rpc IndexData(IndexDataRequest) returns (IndexDataResponse);
+  rpc Index(IndexRequest) returns (IndexResponse);
 
   // Operations for text data.
   rpc SaveText(SaveTextRequest) returns (SaveTextResponse);

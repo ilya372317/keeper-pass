@@ -10,6 +10,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
 	"github.com/ilya372317/pass-keeper/internal/server/service/binary"
 	"github.com/ilya372317/pass-keeper/internal/server/service/creditcard"
+	"github.com/ilya372317/pass-keeper/internal/server/service/generaldata"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
 	"github.com/ilya372317/pass-keeper/internal/server/service/loginpass"
 	"github.com/ilya372317/pass-keeper/internal/server/service/securedata"
@@ -81,4 +82,8 @@ func (c *Container) GetDefaultTextService() *text.Service {
 
 func (c *Container) GetDefaultBinaryService() *binary.Service {
 	return binary.New(c.GetDefaultDataService())
+}
+
+func (c *Container) GetDefaultGeneralDataService() *generaldata.Service {
+	return generaldata.New(c.GetPostgresqlDataRepo())
 }

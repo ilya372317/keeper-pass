@@ -27,7 +27,7 @@ func TestHandler_ShowLoginPass(t *testing.T) {
 		arg := &pb.ShowLoginPassRequest{
 			Id: 1,
 		}
-		serv.EXPECT().Show(gomock.Any(), 1).Times(1).Return(domain.LoginPassData{
+		serv.EXPECT().Show(gomock.Any(), 1).Times(1).Return(domain.LoginPass{
 			Metadata: domain.LoginPassMetadata{
 				URL: "https://localhost",
 			},
@@ -55,7 +55,7 @@ func TestHandler_ShowLoginPass(t *testing.T) {
 		serv.EXPECT().
 			Show(gomock.Any(), 1).
 			Times(1).
-			Return(domain.LoginPassData{}, fmt.Errorf("internal error %w", sql.ErrNoRows))
+			Return(domain.LoginPass{}, fmt.Errorf("internal error %w", sql.ErrNoRows))
 
 		// Execute.
 		_, err := handler.ShowLoginPass(ctx, arg)
@@ -74,7 +74,7 @@ func TestHandler_ShowLoginPass(t *testing.T) {
 		serv.EXPECT().
 			Show(gomock.Any(), 1).
 			Times(1).
-			Return(domain.LoginPassData{}, domain.ErrNotSupportedOperation)
+			Return(domain.LoginPass{}, domain.ErrNotSupportedOperation)
 
 		// Execute.
 		_, err := handler.ShowLoginPass(ctx, arg)
@@ -92,7 +92,7 @@ func TestHandler_ShowLoginPass(t *testing.T) {
 		arg := &pb.ShowLoginPassRequest{Id: 1}
 		serv.EXPECT().Show(gomock.Any(), 1).
 			Times(1).
-			Return(domain.LoginPassData{}, fmt.Errorf("failed get data"))
+			Return(domain.LoginPass{}, fmt.Errorf("failed get data"))
 
 		// Execute.
 		_, err := handler.ShowLoginPass(ctx, arg)
@@ -109,7 +109,7 @@ func TestHandler_ShowLoginPass(t *testing.T) {
 		ctx := context.Background()
 		serv.EXPECT().Show(gomock.Any(), 1).
 			Times(1).
-			Return(domain.LoginPassData{}, domain.ErrAccesDenied)
+			Return(domain.LoginPass{}, domain.ErrAccesDenied)
 		arg := &pb.ShowLoginPassRequest{Id: 1}
 
 		// Execute.

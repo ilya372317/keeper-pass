@@ -104,10 +104,10 @@ func (mr *MockloginPassServiceMockRecorder) Save(ctx, d interface{}) *gomock.Cal
 }
 
 // Show mocks base method.
-func (m *MockloginPassService) Show(ctx context.Context, id int) (domain.LoginPassData, error) {
+func (m *MockloginPassService) Show(ctx context.Context, id int) (domain.LoginPass, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Show", ctx, id)
-	ret0, _ := ret[0].(domain.LoginPassData)
+	ret0, _ := ret[0].(domain.LoginPass)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -170,10 +170,10 @@ func (mr *MockcreditCardServiceMockRecorder) Save(ctx, d interface{}) *gomock.Ca
 }
 
 // Show mocks base method.
-func (m *MockcreditCardService) Show(ctx context.Context, id int64) (domain.CreditCardData, error) {
+func (m *MockcreditCardService) Show(ctx context.Context, id int64) (domain.CreditCard, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Show", ctx, id)
-	ret0, _ := ret[0].(domain.CreditCardData)
+	ret0, _ := ret[0].(domain.CreditCard)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -328,4 +328,56 @@ func (m *MockbinaryService) Update(ctx context.Context, d dto.UpdateBinaryDTO) e
 func (mr *MockbinaryServiceMockRecorder) Update(ctx, d interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockbinaryService)(nil).Update), ctx, d)
+}
+
+// MockgeneralDataService is a mock of generalDataService interface.
+type MockgeneralDataService struct {
+	ctrl     *gomock.Controller
+	recorder *MockgeneralDataServiceMockRecorder
+}
+
+// MockgeneralDataServiceMockRecorder is the mock recorder for MockgeneralDataService.
+type MockgeneralDataServiceMockRecorder struct {
+	mock *MockgeneralDataService
+}
+
+// NewMockgeneralDataService creates a new mock instance.
+func NewMockgeneralDataService(ctrl *gomock.Controller) *MockgeneralDataService {
+	mock := &MockgeneralDataService{ctrl: ctrl}
+	mock.recorder = &MockgeneralDataServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockgeneralDataService) EXPECT() *MockgeneralDataServiceMockRecorder {
+	return m.recorder
+}
+
+// Delete mocks base method.
+func (m *MockgeneralDataService) Delete(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockgeneralDataServiceMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockgeneralDataService)(nil).Delete), ctx, id)
+}
+
+// Index mocks base method.
+func (m *MockgeneralDataService) Index(ctx context.Context) ([]domain.GeneralData, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Index", ctx)
+	ret0, _ := ret[0].([]domain.GeneralData)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Index indicates an expected call of Index.
+func (mr *MockgeneralDataServiceMockRecorder) Index(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockgeneralDataService)(nil).Index), ctx)
 }

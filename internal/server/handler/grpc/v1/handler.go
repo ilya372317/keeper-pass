@@ -16,13 +16,13 @@ type AuthService interface {
 type loginPassService interface {
 	Save(ctx context.Context, d dto.SaveLoginPassDTO) error
 	Update(ctx context.Context, d dto.UpdateLoginPassDTO) error
-	Show(ctx context.Context, id int) (domain.LoginPassData, error)
+	Show(ctx context.Context, id int) (domain.LoginPass, error)
 }
 
 type creditCardService interface {
 	Save(ctx context.Context, d dto.SaveCreditCardDTO) error
 	Update(ctx context.Context, d dto.UpdateCreditCardDTO) error
-	Show(ctx context.Context, id int64) (domain.CreditCardData, error)
+	Show(ctx context.Context, id int64) (domain.CreditCard, error)
 }
 
 type textService interface {
@@ -37,13 +37,19 @@ type binaryService interface {
 	Show(ctx context.Context, id int64) (domain.Binary, error)
 }
 
+type generalDataService interface {
+	Index(ctx context.Context) ([]domain.GeneralData, error)
+	Delete(ctx context.Context, id int64) error
+}
+
 type Handler struct {
 	pb.UnimplementedPassServiceServer
-	authService       AuthService
-	loginPassService  loginPassService
-	creditCardService creditCardService
-	textService       textService
-	binaryService     binaryService
+	authService        AuthService
+	loginPassService   loginPassService
+	creditCardService  creditCardService
+	textService        textService
+	binaryService      binaryService
+	generalDataService generalDataService
 }
 
 func New(
@@ -52,6 +58,7 @@ func New(
 	creditCardService creditCardService,
 	textService textService,
 	binaryService binaryService,
+	generalDataService generalDataService,
 ) *Handler {
 	return &Handler{
 		authService:       authService,

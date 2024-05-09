@@ -37,22 +37,26 @@ type Data struct {
 	IsPayloadDecrypted bool      // IsPayloadDecrypted flag indicates is payload encrypted or decrypted
 }
 
+// LoginPassMetadata represent metadata of login pass data type.
 type LoginPassMetadata struct {
 	URL string
 }
 
-type LoginPassData struct {
+// LoginPass represent login pass data type.
+type LoginPass struct {
 	Metadata LoginPassMetadata
 	Login    string
 	Password string
 	ID       int
 }
 
+// CreditCardMetadata represent metadata for credit card data type.
 type CreditCardMetadata struct {
 	BankName string `json:"bank_name,omitempty"`
 }
 
-type CreditCardData struct {
+// CreditCard represent credit card information data type.
+type CreditCard struct {
 	Metadata   CreditCardMetadata `json:"metadata,omitempty"`
 	CardNumber string             `json:"card_number"`
 	Expiration string             `json:"expiration"`
@@ -60,22 +64,34 @@ type CreditCardData struct {
 	ID         int                `json:"id,omitempty"`
 }
 
+// TextMetadata represent metadata of text type.
 type TextMetadata struct {
 	Info string `json:"info"`
 }
 
+// Text represent text data type.
 type Text struct {
 	Metadata TextMetadata `json:"metadata,omitempty"`
 	Data     string       `json:"data"`
 	ID       int64        `json:"id"`
 }
 
+// BinaryMetadata represent metadata of binary type.
 type BinaryMetadata struct {
 	Info string `json:"info"`
 }
 
+// Binary represent binary data type.
 type Binary struct {
 	Metadata BinaryMetadata `json:"metadata,omitempty"`
 	Data     []byte         `json:"data"`
 	ID       int64          `json:"id"`
+}
+
+// GeneralData represent universal data representation for all types. Not Provide actual payload of data because
+// it required for decrypt and may be slow and unnecessary for list information list.
+type GeneralData struct {
+	Info string `json:"info"`
+	ID   int64  `json:"id"`
+	Kind int8   `json:"kind"`
 }

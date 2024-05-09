@@ -27,7 +27,7 @@ func TestHandler_ShowCreditCard(t *testing.T) {
 
 	t.Run("success case", func(t *testing.T) {
 		// Prepare.
-		serv.EXPECT().Show(gomock.Any(), gomock.Any()).Times(1).Return(domain.CreditCardData{
+		serv.EXPECT().Show(gomock.Any(), gomock.Any()).Times(1).Return(domain.CreditCard{
 			Metadata: domain.CreditCardMetadata{
 				BankName: "string",
 			},
@@ -56,7 +56,7 @@ func TestHandler_ShowCreditCard(t *testing.T) {
 		serv.EXPECT().
 			Show(gomock.Any(), gomock.Any()).
 			Times(1).
-			Return(domain.CreditCardData{}, sql.ErrNoRows)
+			Return(domain.CreditCard{}, sql.ErrNoRows)
 
 		// Execute.
 		got, err := handler.ShowCreditCard(ctx, &pb.ShowCreditCardRequest{Id: arg})
@@ -74,7 +74,7 @@ func TestHandler_ShowCreditCard(t *testing.T) {
 		serv.EXPECT().
 			Show(gomock.Any(), gomock.Any()).
 			Times(1).
-			Return(domain.CreditCardData{}, domain.ErrNotSupportedOperation)
+			Return(domain.CreditCard{}, domain.ErrNotSupportedOperation)
 
 		// Execute.
 		got, err := handler.ShowCreditCard(ctx, &pb.ShowCreditCardRequest{Id: arg})
@@ -92,7 +92,7 @@ func TestHandler_ShowCreditCard(t *testing.T) {
 		serv.EXPECT().
 			Show(gomock.Any(), gomock.Any()).
 			Times(1).
-			Return(domain.CreditCardData{}, fmt.Errorf("internal"))
+			Return(domain.CreditCard{}, fmt.Errorf("internal"))
 
 		// Execute.
 		got, err := handler.ShowCreditCard(ctx, &pb.ShowCreditCardRequest{Id: arg})

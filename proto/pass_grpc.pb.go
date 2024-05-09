@@ -21,8 +21,8 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	PassService_Auth_FullMethodName             = "/PassService/Auth"
 	PassService_Register_FullMethodName         = "/PassService/Register"
-	PassService_DeleteData_FullMethodName       = "/PassService/DeleteData"
-	PassService_IndexData_FullMethodName        = "/PassService/IndexData"
+	PassService_Delete_FullMethodName           = "/PassService/Delete"
+	PassService_Index_FullMethodName            = "/PassService/Index"
 	PassService_SaveText_FullMethodName         = "/PassService/SaveText"
 	PassService_UpdateText_FullMethodName       = "/PassService/UpdateText"
 	PassService_ShowText_FullMethodName         = "/PassService/ShowText"
@@ -45,9 +45,9 @@ type PassServiceClient interface {
 	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	// Delete for all data types.
-	DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error)
+	Delete(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error)
 	// Index all data types for user.
-	IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error)
+	Index(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexResponse, error)
 	// Operations for text data.
 	SaveText(ctx context.Context, in *SaveTextRequest, opts ...grpc.CallOption) (*SaveTextResponse, error)
 	UpdateText(ctx context.Context, in *UpdateTextRequest, opts ...grpc.CallOption) (*UpdateTextResponse, error)
@@ -92,18 +92,18 @@ func (c *passServiceClient) Register(ctx context.Context, in *RegisterRequest, o
 	return out, nil
 }
 
-func (c *passServiceClient) DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error) {
+func (c *passServiceClient) Delete(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error) {
 	out := new(DeleteDataResponse)
-	err := c.cc.Invoke(ctx, PassService_DeleteData_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, PassService_Delete_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *passServiceClient) IndexData(ctx context.Context, in *IndexDataRequest, opts ...grpc.CallOption) (*IndexDataResponse, error) {
-	out := new(IndexDataResponse)
-	err := c.cc.Invoke(ctx, PassService_IndexData_FullMethodName, in, out, opts...)
+func (c *passServiceClient) Index(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexResponse, error) {
+	out := new(IndexResponse)
+	err := c.cc.Invoke(ctx, PassService_Index_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -226,9 +226,9 @@ type PassServiceServer interface {
 	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	// Delete for all data types.
-	DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error)
+	Delete(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error)
 	// Index all data types for user.
-	IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error)
+	Index(context.Context, *IndexRequest) (*IndexResponse, error)
 	// Operations for text data.
 	SaveText(context.Context, *SaveTextRequest) (*SaveTextResponse, error)
 	UpdateText(context.Context, *UpdateTextRequest) (*UpdateTextResponse, error)
@@ -258,11 +258,11 @@ func (UnimplementedPassServiceServer) Auth(context.Context, *AuthRequest) (*Auth
 func (UnimplementedPassServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedPassServiceServer) DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteData not implemented")
+func (UnimplementedPassServiceServer) Delete(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedPassServiceServer) IndexData(context.Context, *IndexDataRequest) (*IndexDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IndexData not implemented")
+func (UnimplementedPassServiceServer) Index(context.Context, *IndexRequest) (*IndexResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Index not implemented")
 }
 func (UnimplementedPassServiceServer) SaveText(context.Context, *SaveTextRequest) (*SaveTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveText not implemented")
@@ -349,38 +349,38 @@ func _PassService_Register_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_DeleteData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PassService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).DeleteData(ctx, in)
+		return srv.(PassServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_DeleteData_FullMethodName,
+		FullMethod: PassService_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).DeleteData(ctx, req.(*DeleteDataRequest))
+		return srv.(PassServiceServer).Delete(ctx, req.(*DeleteDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PassService_IndexData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IndexDataRequest)
+func _PassService_Index_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndexRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PassServiceServer).IndexData(ctx, in)
+		return srv.(PassServiceServer).Index(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PassService_IndexData_FullMethodName,
+		FullMethod: PassService_Index_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PassServiceServer).IndexData(ctx, req.(*IndexDataRequest))
+		return srv.(PassServiceServer).Index(ctx, req.(*IndexRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -617,12 +617,12 @@ var PassService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PassService_Register_Handler,
 		},
 		{
-			MethodName: "DeleteData",
-			Handler:    _PassService_DeleteData_Handler,
+			MethodName: "Delete",
+			Handler:    _PassService_Delete_Handler,
 		},
 		{
-			MethodName: "IndexData",
-			Handler:    _PassService_IndexData_Handler,
+			MethodName: "Index",
+			Handler:    _PassService_Index_Handler,
 		},
 		{
 			MethodName: "SaveText",
