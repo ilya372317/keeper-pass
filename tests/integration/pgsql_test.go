@@ -621,7 +621,7 @@ func TestDataRepository_GetAll(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			fillDataRecordsTable(t, tt.recordCount, user.ID)
 
-			got, err := dataRepo.GetAll(ctx)
+			got, err := dataRepo.GetAll(ctx, user.ID)
 			require.NoError(t, err)
 			assert.Len(t, got, tt.want.count)
 

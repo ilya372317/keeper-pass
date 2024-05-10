@@ -20,12 +20,12 @@ func TestService_GetAllEncrypted(t *testing.T) {
 
 	t.Run("success get all case", func(t *testing.T) {
 		// Prepare.
-		strg.EXPECT().GetAll(gomock.Any()).Times(1).Return([]domain.Data{
+		strg.EXPECT().GetAll(gomock.Any(), uint(1)).Times(1).Return([]domain.Data{
 			{}, {}, {},
 		}, nil)
 
 		// Execute.
-		got, err := serv.GetAllEncrypted(ctx)
+		got, err := serv.GetAllEncrypted(ctx, 1)
 
 		// Assert.
 		require.NoError(t, err)
@@ -34,10 +34,10 @@ func TestService_GetAllEncrypted(t *testing.T) {
 
 	t.Run("failed get data from storage", func(t *testing.T) {
 		// Prepare.
-		strg.EXPECT().GetAll(gomock.Any()).Times(1).Return(nil, fmt.Errorf("internal"))
+		strg.EXPECT().GetAll(gomock.Any(), uint(1)).Times(1).Return(nil, fmt.Errorf("internal"))
 
 		// Execute.
-		got, err := serv.GetAllEncrypted(ctx)
+		got, err := serv.GetAllEncrypted(ctx, 1)
 
 		// Assert.
 		require.Error(t, err)

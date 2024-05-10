@@ -74,18 +74,18 @@ func (m *MockdataStorage) EXPECT() *MockdataStorageMockRecorder {
 }
 
 // GetAll mocks base method.
-func (m *MockdataStorage) GetAll(ctx context.Context) ([]domain.Data, error) {
+func (m *MockdataStorage) GetAll(ctx context.Context, userID uint) ([]domain.Data, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAll", ctx)
+	ret := m.ctrl.Call(m, "GetAll", ctx, userID)
 	ret0, _ := ret[0].([]domain.Data)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAll indicates an expected call of GetAll.
-func (mr *MockdataStorageMockRecorder) GetAll(ctx interface{}) *gomock.Call {
+func (mr *MockdataStorageMockRecorder) GetAll(ctx, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockdataStorage)(nil).GetAll), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockdataStorage)(nil).GetAll), ctx, userID)
 }
 
 // GetDataByID mocks base method.

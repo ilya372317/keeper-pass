@@ -7,7 +7,7 @@ import (
 )
 
 type dataStorage interface {
-	GetAll(context.Context) ([]domain.Data, error)
+	GetAllEncrypted(ctx context.Context, userID uint) ([]domain.Data, error)
 }
 
 type Service struct {

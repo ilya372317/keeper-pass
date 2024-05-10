@@ -37,10 +37,10 @@ func (c *Container) GetDefaultAuthService() *auth.Service {
 }
 
 func (c *Container) GetDefaultLoginPassService() *loginpass.Service {
-	return loginpass.New(c.GetDefaultDataService())
+	return loginpass.New(c.GetDefaultSecureDataService())
 }
 
-func (c *Container) GetDefaultDataService() *securedata.Service {
+func (c *Container) GetDefaultSecureDataService() *securedata.Service {
 	return securedata.New(c.GetKeyring(), c.GetPostgresqlDataRepo())
 }
 
@@ -73,17 +73,17 @@ func (c *Container) GetKeyring() *keyring.Keyring {
 }
 
 func (c *Container) GetDefaultCreditCardService() *creditcard.Service {
-	return creditcard.New(c.GetDefaultDataService())
+	return creditcard.New(c.GetDefaultSecureDataService())
 }
 
 func (c *Container) GetDefaultTextService() *text.Service {
-	return text.New(c.GetDefaultDataService())
+	return text.New(c.GetDefaultSecureDataService())
 }
 
 func (c *Container) GetDefaultBinaryService() *binary.Service {
-	return binary.New(c.GetDefaultDataService())
+	return binary.New(c.GetDefaultSecureDataService())
 }
 
 func (c *Container) GetDefaultGeneralDataService() *generaldata.Service {
-	return generaldata.New(c.GetPostgresqlDataRepo())
+	return generaldata.New(c.GetDefaultSecureDataService())
 }

@@ -61,10 +61,11 @@ func New(
 	generalDataService generalDataService,
 ) *Handler {
 	return &Handler{
-		authService:       authService,
-		loginPassService:  loginPassService,
-		creditCardService: creditCardService,
-		textService:       textService,
-		binaryService:     binaryService,
+		authService:        authService,
+		loginPassService:   loginPassService,
+		creditCardService:  creditCardService,
+		textService:        textService,
+		binaryService:      binaryService,
+		generalDataService: generalDataService,
 	}
 }

@@ -2,7 +2,6 @@ package interceptor
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
 	"github.com/ilya372317/pass-keeper/internal/server/dto"
@@ -71,7 +70,6 @@ func (a *AuthInterceptor) authorize(ctx context.Context, method string, openMeth
 		}
 	}
 
-	fmt.Println(method)
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return ctx, status.Errorf(codes.Unauthenticated, "metadata is not provided")

@@ -1,12 +1,12 @@
 package domain
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
 
 var (
-	ErrPayloadNotValid       = fmt.Errorf("payload not valid")
 	ErrNotSupportedOperation = fmt.Errorf("this method can`t get data of this kind")
 )
 
@@ -21,6 +21,10 @@ const (
 )
 
 const CryptoKeyLength = 32
+
+type DataRepresentation interface {
+	GetInfo() string
+}
 
 // Data represent a storing data.
 type Data struct {
@@ -37,6 +41,41 @@ type Data struct {
 	IsPayloadDecrypted bool      // IsPayloadDecrypted flag indicates is payload encrypted or decrypted
 }
 
+func (d Data) ToDataRepresentation() (DataRepresentation, error) {
+	var result DataRepresentation
+	switch d.Kind {
+	case KindLoginPass:
+		lp := LoginPass{}
+		if err := json.Unmarshal([]byte(d.Metadata), &lp.Metadata); err != nil {
+			return nil, fmt.Errorf("invalid metadata for unmarshal to login pass data type: %w", err)
+		}
+		result = lp
+	case KindCreditCard:
+		cc := CreditCard{}
+		if err := json.Unmarshal([]byte(d.Metadata), &cc.Metadata); err != nil {
+			return nil, fmt.Errorf("invalid metadata for unmarshal to credit card data type: %w", err)
+		}
+		result = cc
+	case KindText:
+		t := Text{}
+		if err := json.Unmarshal([]byte(d.Metadata), &t.Metadata); err != nil {
+			return nil, fmt.Errorf("invalid metadata for unmarshal to text data type: %w", err)
+		}
+		result = t
+	case KindBinary:
+		b := Binary{}
+		if err := json.Unmarshal([]byte(d.Metadata), &b.Metadata); err != nil {
+			return nil, fmt.Errorf("invalid metadata for unmarshal to binary data type: %w", err)
+		}
+		result = b
+	}
+	if result == nil {
+		return nil, fmt.Errorf("failed convert data to specific representation. Unknown kind")
+	}
+
+	return result, nil
+}
+
 // LoginPassMetadata represent metadata of login pass data type.
 type LoginPassMetadata struct {
 	URL string
@@ -48,6 +87,10 @@ type LoginPass struct {
 	Login    string
 	Password string
 	ID       int
+}
+
+func (lp LoginPass) GetInfo() string {
+	return lp.Metadata.URL
 }
 
 // CreditCardMetadata represent metadata for credit card data type.
@@ -64,6 +107,10 @@ type CreditCard struct {
 	ID         int                `json:"id,omitempty"`
 }
 
+func (cc CreditCard) GetInfo() string {
+	return cc.Metadata.BankName
+}
+
 // TextMetadata represent metadata of text type.
 type TextMetadata struct {
 	Info string `json:"info"`
@@ -76,6 +123,10 @@ type Text struct {
 	ID       int64        `json:"id"`
 }
 
+func (t Text) GetInfo() string {
+	return t.Metadata.Info
+}
+
 // BinaryMetadata represent metadata of binary type.
 type BinaryMetadata struct {
 	Info string `json:"info"`
@@ -86,6 +137,10 @@ type Binary struct {
 	Metadata BinaryMetadata `json:"metadata,omitempty"`
 	Data     []byte         `json:"data"`
 	ID       int64          `json:"id"`
+}
+
+func (b Binary) GetInfo() string {
+	return b.Metadata.Info
 }
 
 // GeneralData represent universal data representation for all types. Not Provide actual payload of data because
