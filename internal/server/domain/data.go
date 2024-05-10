@@ -20,6 +20,10 @@ const (
 	KindBinary                 // KindBinary represent a binary data type.
 )
 
+// KindsCanBeSimpleDeleted includes only data kinds which can be simple deleted from data storage.
+// Not required any additional manipulation on deleting.
+var KindsCanBeSimpleDeleted = []Kind{KindLoginPass, KindCreditCard, KindText, KindBinary}
+
 const CryptoKeyLength = 32
 
 type DataRepresentation interface {

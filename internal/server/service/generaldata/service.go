@@ -7,7 +7,8 @@ import (
 )
 
 type dataStorage interface {
-	GetAllEncrypted(ctx context.Context, userID uint) ([]domain.Data, error)
+	GetAllEncrypted(context.Context, uint) ([]domain.Data, error)
+	DeleteSimple(context.Context, int64, uint) error
 }
 
 type Service struct {

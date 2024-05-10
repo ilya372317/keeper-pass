@@ -33,12 +33,11 @@ message Data {
   string metadata = 2;
 }
 
-message DeleteDataRequest {
+message DeleteRequest {
   int64 id = 1;
 }
 
-message DeleteDataResponse {
-  bool success = 1;
+message DeleteResponse {
 }
 
 message IndexRequest {
@@ -205,7 +204,7 @@ service PassService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
 
   // Delete for all data types.
-  rpc Delete(DeleteDataRequest) returns (DeleteDataResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
 
   // Index all data types for user.
   rpc Index(IndexRequest) returns (IndexResponse);

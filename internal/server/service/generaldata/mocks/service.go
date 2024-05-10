@@ -35,17 +35,31 @@ func (m *MockdataStorage) EXPECT() *MockdataStorageMockRecorder {
 	return m.recorder
 }
 
-// GetAllEncrypted mocks base method.
-func (m *MockdataStorage) GetAllEncrypted(ctx context.Context, userID uint) ([]domain.Data, error) {
+// DeleteSimple mocks base method.
+func (m *MockdataStorage) DeleteSimple(arg0 context.Context, arg1 int64, arg2 uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllEncrypted", ctx, userID)
+	ret := m.ctrl.Call(m, "DeleteSimple", arg0, arg1, arg2)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteSimple indicates an expected call of DeleteSimple.
+func (mr *MockdataStorageMockRecorder) DeleteSimple(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSimple", reflect.TypeOf((*MockdataStorage)(nil).DeleteSimple), arg0, arg1, arg2)
+}
+
+// GetAllEncrypted mocks base method.
+func (m *MockdataStorage) GetAllEncrypted(arg0 context.Context, arg1 uint) ([]domain.Data, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllEncrypted", arg0, arg1)
 	ret0, _ := ret[0].([]domain.Data)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAllEncrypted indicates an expected call of GetAllEncrypted.
-func (mr *MockdataStorageMockRecorder) GetAllEncrypted(ctx, userID interface{}) *gomock.Call {
+func (mr *MockdataStorageMockRecorder) GetAllEncrypted(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllEncrypted", reflect.TypeOf((*MockdataStorage)(nil).GetAllEncrypted), ctx, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllEncrypted", reflect.TypeOf((*MockdataStorage)(nil).GetAllEncrypted), arg0, arg1)
 }

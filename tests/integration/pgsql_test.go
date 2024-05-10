@@ -631,6 +631,34 @@ func TestDataRepository_GetAll(t *testing.T) {
 	clearUsersTable(t)
 }
 
+func TestDataRepository_Delete(t *testing.T) {
+	// Prepare.
+	user := getOrCreateUser(t)
+	defer clearUsersTable(t)
+	ctx := context.Background()
+	fillDataRecordsTable(t, 3, user.ID)
+	defer clearDataRecordsTable(t)
+	recordIds := getExistedDataRecordIds(t, user.ID)
+	recordIdsToDelete := recordIds[0 : len(recordIds)-1]
+
+	// Execute.
+	got := dataRepo.Delete(ctx, recordIdsToDelete, user.ID, domain.KindsCanBeSimpleDeleted)
+
+	// Assert.
+	require.NoError(t, got)
+	dataIdsAfterDeleting := getExistedDataRecordIds(t, user.ID)
+	assert.Len(t, dataIdsAfterDeleting, 1)
+}
+
+func getExistedDataRecordIds(t *testing.T, userID uint) []int {
+	t.Helper()
+	res := make([]int, 0)
+	err := db.Select(&res, "SELECT id FROM data_records WHERE user_id = $1", userID)
+	require.NoError(t, err)
+
+	return res
+}
+
 func fillDataRecordsTable(t *testing.T, recordsCount int, userID uint) {
 	t.Helper()
 	tx, err := db.Beginx()

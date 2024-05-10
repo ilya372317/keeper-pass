@@ -15,6 +15,7 @@ type dataStorage interface {
 	GetDataByID(ctx context.Context, id int) (domain.Data, error)
 	UpdateByID(ctx context.Context, id int, dto domain.Data) error
 	GetAll(ctx context.Context, userID uint) ([]domain.Data, error)
+	Delete(ctx context.Context, ids []int, userID uint, kinds []domain.Kind) error
 }
 
 type Service struct {
