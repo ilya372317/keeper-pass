@@ -41,3 +41,41 @@ func TestService_SaveLogin(t *testing.T) {
 		require.Error(t, err)
 	})
 }
+
+func TestService_SaveCard(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	c := passkeeper_mock.NewMockpassClient(ctrl)
+	serv := Service{passClient: c}
+	ctx := context.Background()
+
+	t.Run("success case", func(t *testing.T) {
+		// Prepare.
+		c.EXPECT().SaveCard(gomock.Any(), "number", "exp", 123, "bank name")
+
+		// Execute.
+		err := serv.SaveCard(ctx, "number", "exp", "123", "bank name")
+
+		// Assert.
+		require.NoError(t, err)
+	})
+
+	t.Run("invalid code given", func(t *testing.T) {
+		// Execute.
+		err := serv.SaveCard(ctx, "number", "exp", "invalid-code", "bank name")
+
+		// Assert.
+		require.Error(t, err)
+	})
+
+	t.Run("failed save in client", func(t *testing.T) {
+		// Prepare.
+		c.EXPECT().SaveCard(gomock.Any(), "number", "exp", 123, "bank name").
+			Times(1).Return(fmt.Errorf("internal"))
+
+		// Execute.
+		err := serv.SaveCard(ctx, "number", "exp", "123", "bank name")
+
+		// Assert.
+		require.Error(t, err)
+	})
+}

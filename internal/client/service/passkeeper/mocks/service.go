@@ -79,6 +79,20 @@ func (mr *MockpassClientMockRecorder) Register(arg0, arg1, arg2 interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockpassClient)(nil).Register), arg0, arg1, arg2)
 }
 
+// SaveCard mocks base method.
+func (m *MockpassClient) SaveCard(arg0 context.Context, arg1, arg2 string, arg3 int, arg4 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveCard", arg0, arg1, arg2, arg3, arg4)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveCard indicates an expected call of SaveCard.
+func (mr *MockpassClientMockRecorder) SaveCard(arg0, arg1, arg2, arg3, arg4 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveCard", reflect.TypeOf((*MockpassClient)(nil).SaveCard), arg0, arg1, arg2, arg3, arg4)
+}
+
 // SaveLogin mocks base method.
 func (m *MockpassClient) SaveLogin(arg0 context.Context, arg1, arg2, arg3 string) error {
 	m.ctrl.T.Helper()

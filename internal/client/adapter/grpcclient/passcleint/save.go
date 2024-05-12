@@ -22,3 +22,17 @@ func (pc *PassClient) SaveLogin(ctx context.Context, login string, password stri
 
 	return nil
 }
+
+func (pc *PassClient) SaveCard(ctx context.Context, number, exp string, code int, bankName string) error {
+	req := &pb.SaveCreditCardRequest{
+		Metadata:   &pb.CreditCardMetadata{BankName: bankName},
+		CardNumber: number,
+		Expiration: exp,
+		Cvv:        int32(code),
+	}
+	if _, err := pc.c.SaveCreditCard(ctx, req); err != nil {
+		return fmt.Errorf("grpc save card request failed: %w", err)
+	}
+
+	return nil
+}

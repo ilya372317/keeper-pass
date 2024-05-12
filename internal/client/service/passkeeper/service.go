@@ -11,6 +11,7 @@ type passClient interface {
 	All(ctx context.Context) ([]domain.ShortData, error)
 	Register(context.Context, string, string) error
 	SaveLogin(context.Context, string, string, string) error
+	SaveCard(context.Context, string, string, int, string) error
 }
 
 type tokenStorage interface {

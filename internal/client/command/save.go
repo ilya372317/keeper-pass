@@ -4,12 +4,14 @@ import (
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/ilya372317/pass-keeper/pkg/validation"
 	"github.com/spf13/cobra"
 )
 
 const (
 	saveArgCount      = 0
 	saveLoginArgCount = 3
+	saveCardArgCount  = 4
 )
 
 func (mc *MainCommand) getSaveCommand() *cobra.Command {
@@ -31,11 +33,12 @@ on it own not do anything. for actual save data you need use subcommand like log
 		Run:     run,
 	}
 	cmd.AddCommand(mc.getSaveLoginCommand())
+	cmd.AddCommand(mc.getSaveCardCommand())
 
 	return cmd
 }
 
-type saveLoginValidate struct {
+type saveLoginValidator struct {
 	URL      string `validate:"required,url"`
 	Login    string `validate:"required"`
 	Password string `validate:"required"`
@@ -44,7 +47,7 @@ type saveLoginValidate struct {
 func (mc *MainCommand) getSaveLoginCommand() *cobra.Command {
 	run := func(cmd *cobra.Command, args []string) {
 		login, password, url := args[0], args[1], args[2]
-		validateStruct := saveLoginValidate{
+		validateStruct := saveLoginValidator{
 			URL:      url,
 			Login:    login,
 			Password: password,
@@ -69,6 +72,51 @@ func (mc *MainCommand) getSaveLoginCommand() *cobra.Command {
 		Long:    `command for save login pass pair type data`,
 		Example: "passkeep save login test 123 'https://localhost'",
 		Args:    cobra.MinimumNArgs(saveLoginArgCount),
+		Run:     run,
+	}
+}
+
+type cardValidator struct {
+	CardNumber string `validate:"required,credit_card"`
+	Expiration string `validate:"required,cardexp"`
+	CVV        string `validate:"required,number"`
+	BankName   string `validate:"required"`
+}
+
+func (mc *MainCommand) getSaveCardCommand() *cobra.Command {
+	run := func(cmd *cobra.Command, args []string) {
+		number, exp, cvv, bankName := args[0], args[1], args[2], args[3]
+		validateStruct := cardValidator{
+			CardNumber: number,
+			Expiration: exp,
+			CVV:        cvv,
+			BankName:   bankName,
+		}
+		validate := validator.New(validator.WithRequiredStructEnabled())
+		if err := validate.RegisterValidation("cardexp", validation.CardExpValidation); err != nil {
+			fmt.Println("failed register validator for check card expiration." +
+				" this internal error can fix only developer of the app. sorry about that...")
+			return
+		}
+		if err := validate.Struct(&validateStruct); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := mc.passKeeperService.SaveCard(cmd.Context(), number, exp, cvv, bankName); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println("successfully save card information!")
+	}
+
+	return &cobra.Command{
+		Use:     "card [number] [exp] [cvv] [bank name]",
+		Short:   "command for save credit card information",
+		Long:    `command for save credit card information`,
+		Example: "passkeep save credit 374245455400126 02/24 123",
+		Args:    cobra.MinimumNArgs(saveCardArgCount),
 		Run:     run,
 	}
 }

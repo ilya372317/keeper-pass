@@ -13,6 +13,7 @@ type passKeeperService interface {
 	All(context.Context) ([]domain.ShortData, error)
 	Register(context.Context, string, string) error
 	SaveLogin(context.Context, string, string, string) error
+	SaveCard(context.Context, string, string, string, string) error
 }
 
 type MainCommand struct {
