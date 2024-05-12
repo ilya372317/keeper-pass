@@ -3,8 +3,8 @@ package app
 import (
 	"os"
 
+	"github.com/ilya372317/pass-keeper/internal/client/adapter/grpcclient/localstore/tokenstore"
 	"github.com/ilya372317/pass-keeper/internal/client/adapter/grpcclient/passcleint"
-	"github.com/ilya372317/pass-keeper/internal/client/adapter/localstore/tokenstore"
 	"github.com/ilya372317/pass-keeper/internal/client/config"
 	"github.com/ilya372317/pass-keeper/internal/client/interceptor"
 	"github.com/ilya372317/pass-keeper/internal/client/service/passkeeper"

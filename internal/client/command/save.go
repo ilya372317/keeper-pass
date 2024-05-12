@@ -3,6 +3,7 @@ package command
 import (
 	"fmt"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/cobra"
 )
 
@@ -34,9 +35,32 @@ on it own not do anything. for actual save data you need use subcommand like log
 	return cmd
 }
 
+type saveLoginValidate struct {
+	URL      string `validate:"required,url"`
+	Login    string `validate:"required"`
+	Password string `validate:"required"`
+}
+
 func (mc *MainCommand) getSaveLoginCommand() *cobra.Command {
 	run := func(cmd *cobra.Command, args []string) {
-		fmt.Println("login save work!")
+		login, password, url := args[0], args[1], args[2]
+		validateStruct := saveLoginValidate{
+			URL:      url,
+			Login:    login,
+			Password: password,
+		}
+		validate := validator.New(validator.WithRequiredStructEnabled())
+		if err := validate.Struct(&validateStruct); err != nil {
+			fmt.Printf("%v\n", err)
+			return
+		}
+
+		if err := mc.passKeeperService.SaveLogin(cmd.Context(), login, password, url); err != nil {
+			fmt.Printf("%v", err)
+			return
+		}
+
+		fmt.Println("login info successfully saved!")
 	}
 
 	return &cobra.Command{
