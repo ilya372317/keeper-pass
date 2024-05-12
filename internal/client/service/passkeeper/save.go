@@ -26,3 +26,11 @@ func (s *Service) SaveCard(ctx context.Context, number, exp, code, bankName stri
 
 	return nil
 }
+
+func (s *Service) SaveText(ctx context.Context, info, data string) error {
+	if err := s.passClient.SaveText(ctx, info, data); err != nil {
+		return fmt.Errorf("failed save text info: %w", err)
+	}
+
+	return nil
+}

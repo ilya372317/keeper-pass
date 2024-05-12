@@ -105,3 +105,17 @@ func (mr *MockpassKeeperServiceMockRecorder) SaveLogin(arg0, arg1, arg2, arg3 in
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveLogin", reflect.TypeOf((*MockpassKeeperService)(nil).SaveLogin), arg0, arg1, arg2, arg3)
 }
+
+// SaveText mocks base method.
+func (m *MockpassKeeperService) SaveText(arg0 context.Context, arg1, arg2 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveText", arg0, arg1, arg2)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveText indicates an expected call of SaveText.
+func (mr *MockpassKeeperServiceMockRecorder) SaveText(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveText", reflect.TypeOf((*MockpassKeeperService)(nil).SaveText), arg0, arg1, arg2)
+}

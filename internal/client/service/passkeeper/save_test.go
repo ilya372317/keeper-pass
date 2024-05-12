@@ -79,3 +79,32 @@ func TestService_SaveCard(t *testing.T) {
 		require.Error(t, err)
 	})
 }
+
+func TestService_SaveText(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	c := passkeeper_mock.NewMockpassClient(ctrl)
+	serv := Service{passClient: c}
+	ctx := context.Background()
+
+	t.Run("success save case", func(t *testing.T) {
+		// Prepare.
+		c.EXPECT().SaveText(gomock.Any(), "info", "data").Times(1).Return(nil)
+
+		// Execute.
+		err := serv.SaveText(ctx, "info", "data")
+
+		// Assert.
+		require.NoError(t, err)
+	})
+
+	t.Run("failed in client", func(t *testing.T) {
+		// Prepare.
+		c.EXPECT().SaveText(gomock.Any(), "info", "data").Times(1).Return(fmt.Errorf("internal"))
+
+		// Execute.
+		err := serv.SaveText(ctx, "info", "data")
+
+		// Assert.
+		require.Error(t, err)
+	})
+}

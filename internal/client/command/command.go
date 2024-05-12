@@ -14,6 +14,7 @@ type passKeeperService interface {
 	Register(context.Context, string, string) error
 	SaveLogin(context.Context, string, string, string) error
 	SaveCard(context.Context, string, string, string, string) error
+	SaveText(context.Context, string, string) error
 }
 
 type MainCommand struct {

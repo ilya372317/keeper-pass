@@ -12,6 +12,7 @@ const (
 	saveArgCount      = 0
 	saveLoginArgCount = 3
 	saveCardArgCount  = 4
+	saveTextArgCount  = 2
 )
 
 func (mc *MainCommand) getSaveCommand() *cobra.Command {
@@ -34,6 +35,7 @@ on it own not do anything. for actual save data you need use subcommand like log
 	}
 	cmd.AddCommand(mc.getSaveLoginCommand())
 	cmd.AddCommand(mc.getSaveCardCommand())
+	cmd.AddCommand(mc.getSaveTextCommand())
 
 	return cmd
 }
@@ -117,6 +119,42 @@ func (mc *MainCommand) getSaveCardCommand() *cobra.Command {
 		Long:    `command for save credit card information`,
 		Example: "passkeep save credit 374245455400126 02/24 123",
 		Args:    cobra.MinimumNArgs(saveCardArgCount),
+		Run:     run,
+	}
+}
+
+type textValidator struct {
+	Info string `validate:"required"`
+	Data string `validate:"required"`
+}
+
+func (mc *MainCommand) getSaveTextCommand() *cobra.Command {
+	run := func(cmd *cobra.Command, args []string) {
+		info, data := args[0], args[1]
+		validateStruct := textValidator{
+			Info: info,
+			Data: data,
+		}
+		validate := validator.New(validator.WithRequiredStructEnabled())
+		if err := validate.Struct(&validateStruct); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := mc.passKeeperService.SaveText(cmd.Context(), info, data); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println("text data saved successfully!")
+	}
+
+	return &cobra.Command{
+		Use:     "text [info] [data]",
+		Short:   "command for save text information",
+		Long:    `command for save text information`,
+		Example: "passkeep save text 'info about text data' text",
+		Args:    cobra.MinimumNArgs(saveTextArgCount),
 		Run:     run,
 	}
 }

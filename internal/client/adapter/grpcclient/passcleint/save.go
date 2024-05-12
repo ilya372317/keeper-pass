@@ -36,3 +36,15 @@ func (pc *PassClient) SaveCard(ctx context.Context, number, exp string, code int
 
 	return nil
 }
+
+func (pc *PassClient) SaveText(ctx context.Context, info string, data string) error {
+	req := &pb.SaveTextRequest{
+		Metadata: &pb.TextMetadata{Info: info},
+		Data:     data,
+	}
+	if _, err := pc.c.SaveText(ctx, req); err != nil {
+		return fmt.Errorf("grpc save text request failed: %w", err)
+	}
+
+	return nil
+}

@@ -194,3 +194,66 @@ func TestMainCommand_getSaveCardCommand(t *testing.T) {
 		})
 	}
 }
+
+func TestMainCommand_getSaveTextCommand(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	serv := command_mock.NewMockpassKeeperService(ctrl)
+	mainCmd := MainCommand{passKeeperService: serv}
+	saveTextCmd := mainCmd.getSaveTextCommand()
+	validInfo := "info"
+	validData := "data"
+	validArgs := []string{validInfo, validData}
+
+	t.Run("success case", func(t *testing.T) {
+		// Prepare.
+		serv.EXPECT().SaveText(gomock.Any(), validInfo, validData).Times(1).Return(nil)
+		saveTextCmd.SetArgs(validArgs)
+
+		// Execute.
+		err := saveTextCmd.Execute()
+
+		// Assert.
+		require.NoError(t, err)
+	})
+
+	t.Run("fail in service", func(t *testing.T) {
+		// Prepare.
+		serv.EXPECT().SaveText(gomock.Any(), validInfo, validData).Times(1).Return(fmt.Errorf("internal"))
+		saveTextCmd.SetArgs(validArgs)
+
+		// Execute.
+		err := saveTextCmd.Execute()
+
+		// Assert.
+		require.NoError(t, err)
+	})
+
+	validateTests := []struct {
+		name string
+		info string
+		data string
+	}{
+		{
+			name: "invalid info",
+			info: "",
+			data: validData,
+		},
+		{
+			name: "invalid data",
+			info: "",
+			data: validData,
+		},
+	}
+	for _, tt := range validateTests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Prepare.
+			saveTextCmd.SetArgs([]string{tt.info, tt.data})
+
+			// Execute.
+			err := saveTextCmd.Execute()
+
+			// Assert.
+			require.NoError(t, err)
+		})
+	}
+}

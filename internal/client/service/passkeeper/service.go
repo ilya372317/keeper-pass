@@ -12,6 +12,7 @@ type passClient interface {
 	Register(context.Context, string, string) error
 	SaveLogin(context.Context, string, string, string) error
 	SaveCard(context.Context, string, string, int, string) error
+	SaveText(ctx context.Context, info string, data string) error
 }
 
 type tokenStorage interface {
