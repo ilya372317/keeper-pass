@@ -50,6 +50,20 @@ func (mr *MockpassKeeperServiceMockRecorder) All(arg0 interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "All", reflect.TypeOf((*MockpassKeeperService)(nil).All), arg0)
 }
 
+// Delete mocks base method.
+func (m *MockpassKeeperService) Delete(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockpassKeeperServiceMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockpassKeeperService)(nil).Delete), ctx, id)
+}
+
 // Login mocks base method.
 func (m *MockpassKeeperService) Login(arg0 context.Context, arg1, arg2 string) error {
 	m.ctrl.T.Helper()

@@ -50,6 +50,20 @@ func (mr *MockpassClientMockRecorder) All(ctx interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "All", reflect.TypeOf((*MockpassClient)(nil).All), ctx)
 }
 
+// Delete mocks base method.
+func (m *MockpassClient) Delete(arg0 context.Context, arg1 int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockpassClientMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockpassClient)(nil).Delete), arg0, arg1)
+}
+
 // Login mocks base method.
 func (m *MockpassClient) Login(arg0 context.Context, arg1, arg2 string) (string, error) {
 	m.ctrl.T.Helper()
@@ -122,17 +136,17 @@ func (mr *MockpassClientMockRecorder) SaveLogin(arg0, arg1, arg2, arg3 interface
 }
 
 // SaveText mocks base method.
-func (m *MockpassClient) SaveText(ctx context.Context, info, data string) error {
+func (m *MockpassClient) SaveText(arg0 context.Context, arg1, arg2 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SaveText", ctx, info, data)
+	ret := m.ctrl.Call(m, "SaveText", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // SaveText indicates an expected call of SaveText.
-func (mr *MockpassClientMockRecorder) SaveText(ctx, info, data interface{}) *gomock.Call {
+func (mr *MockpassClientMockRecorder) SaveText(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveText", reflect.TypeOf((*MockpassClient)(nil).SaveText), ctx, info, data)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveText", reflect.TypeOf((*MockpassClient)(nil).SaveText), arg0, arg1, arg2)
 }
 
 // MocktokenStorage is a mock of tokenStorage interface.
