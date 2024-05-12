@@ -8,7 +8,7 @@ import (
 
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/keyring"
-	"github.com/ilya372317/pass-keeper/internal/server/logger"
+	"github.com/ilya372317/pass-keeper/pkg/logger"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )

@@ -7,7 +7,7 @@ import (
 	"sync"
 
 	"github.com/ilya372317/pass-keeper/internal/server/config"
-	"github.com/ilya372317/pass-keeper/internal/server/logger"
+	"github.com/ilya372317/pass-keeper/pkg/logger"
 	pb "github.com/ilya372317/pass-keeper/proto"
 	"google.golang.org/grpc"
 )

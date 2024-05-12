@@ -8,7 +8,7 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	mygrpc "github.com/ilya372317/pass-keeper/internal/server/handler/grpc"
 	v1 "github.com/ilya372317/pass-keeper/internal/server/handler/grpc/v1"
-	"github.com/ilya372317/pass-keeper/internal/server/logger"
+	"github.com/ilya372317/pass-keeper/pkg/logger"
 	"google.golang.org/grpc"
 )
 
