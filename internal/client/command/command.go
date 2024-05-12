@@ -10,7 +10,8 @@ import (
 
 type passKeeperService interface {
 	Login(context.Context, string, string) error
-	All(ctx context.Context) ([]domain.ShortData, error)
+	All(context.Context) ([]domain.ShortData, error)
+	Register(context.Context, string, string) error
 }
 
 type MainCommand struct {
@@ -27,6 +28,8 @@ func (mc *MainCommand) GetRootCommandList() []*cobra.Command {
 	return []*cobra.Command{
 		mc.getLoginCommand(),
 		mc.getAllCommand(),
+		mc.getRegisterCommand(),
+		mc.getSaveCommand(),
 	}
 }
 

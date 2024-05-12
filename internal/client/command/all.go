@@ -9,7 +9,7 @@ import (
 )
 
 func (mc *MainCommand) getAllCommand() *cobra.Command {
-	return &cobra.Command{Use: "all", Run: func(cmd *cobra.Command, args []string) {
+	run := func(cmd *cobra.Command, args []string) {
 		data, err := mc.passKeeperService.All(cmd.Context())
 		if err != nil {
 			if errors.Is(err, domain.ErrUnauthenticated) {
@@ -23,6 +23,14 @@ func (mc *MainCommand) getAllCommand() *cobra.Command {
 		for _, d := range data {
 			fmt.Printf("%-10d %-40s %-10s\n", d.ID, d.Info, d.StringKind())
 		}
-	},
-		Args: cobra.MaximumNArgs(0)}
+	}
+
+	return &cobra.Command{
+		Use:     "all",
+		Short:   "list your data. required be auth",
+		Long:    `list your data in tabel view. with column ID, INFO, TYPE. required be auth`,
+		Example: "passkeep all",
+		Args:    cobra.MaximumNArgs(0),
+		Run:     run,
+	}
 }

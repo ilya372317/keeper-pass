@@ -9,6 +9,7 @@ import (
 type passClient interface {
 	Login(context.Context, string, string) (string, error)
 	All(ctx context.Context) ([]domain.ShortData, error)
+	Register(context.Context, string, string) error
 }
 
 type tokenStorage interface {

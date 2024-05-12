@@ -36,18 +36,18 @@ func (m *MockpassKeeperService) EXPECT() *MockpassKeeperServiceMockRecorder {
 }
 
 // All mocks base method.
-func (m *MockpassKeeperService) All(ctx context.Context) ([]domain.ShortData, error) {
+func (m *MockpassKeeperService) All(arg0 context.Context) ([]domain.ShortData, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "All", ctx)
+	ret := m.ctrl.Call(m, "All", arg0)
 	ret0, _ := ret[0].([]domain.ShortData)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // All indicates an expected call of All.
-func (mr *MockpassKeeperServiceMockRecorder) All(ctx interface{}) *gomock.Call {
+func (mr *MockpassKeeperServiceMockRecorder) All(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "All", reflect.TypeOf((*MockpassKeeperService)(nil).All), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "All", reflect.TypeOf((*MockpassKeeperService)(nil).All), arg0)
 }
 
 // Login mocks base method.
@@ -62,4 +62,18 @@ func (m *MockpassKeeperService) Login(arg0 context.Context, arg1, arg2 string) e
 func (mr *MockpassKeeperServiceMockRecorder) Login(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockpassKeeperService)(nil).Login), arg0, arg1, arg2)
+}
+
+// Register mocks base method.
+func (m *MockpassKeeperService) Register(arg0 context.Context, arg1, arg2 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Register", arg0, arg1, arg2)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Register indicates an expected call of Register.
+func (mr *MockpassKeeperServiceMockRecorder) Register(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockpassKeeperService)(nil).Register), arg0, arg1, arg2)
 }

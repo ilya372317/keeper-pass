@@ -15,6 +15,27 @@ type loginValidator struct {
 }
 
 func (mc *MainCommand) getLoginCommand() *cobra.Command {
+	run := func(cmd *cobra.Command, args []string) {
+		email, password := args[0], args[1]
+		validateStruct := loginValidator{
+			Email:    email,
+			Password: password,
+		}
+		validate := validator.New(validator.WithRequiredStructEnabled())
+
+		if validationErr := validate.Struct(&validateStruct); validationErr != nil {
+			fmt.Printf("invalid argument given: %v\n", validationErr)
+			return
+		}
+
+		if err := mc.passKeeperService.Login(cmd.Context(), email, password); err != nil {
+			fmt.Printf("failed login: %v\n", err)
+			return
+		}
+
+		fmt.Println("you successfully login.")
+	}
+
 	cmd := &cobra.Command{
 		Use:   "login [login] [password]",
 		Short: "login on server",
@@ -22,29 +43,8 @@ func (mc *MainCommand) getLoginCommand() *cobra.Command {
 ~/.passtoken with auth jwt token`,
 		Example: "passkeep login 1@gmail.com 123",
 		Args:    cobra.MinimumNArgs(loginArgCount),
-		Run:     mc.runLogin,
+		Run:     run,
 	}
 
 	return cmd
-}
-
-func (mc *MainCommand) runLogin(cmd *cobra.Command, args []string) {
-	email, password := args[0], args[1]
-	validateStruct := loginValidator{
-		Email:    email,
-		Password: password,
-	}
-	validate := validator.New(validator.WithRequiredStructEnabled())
-
-	if validationErr := validate.Struct(&validateStruct); validationErr != nil {
-		fmt.Printf("invalid argument given: %v\n", validationErr)
-		return
-	}
-
-	if err := mc.passKeeperService.Login(cmd.Context(), email, password); err != nil {
-		fmt.Printf("failed login: %v\n", err)
-		return
-	}
-
-	fmt.Println("you successfully login.")
 }

@@ -65,6 +65,20 @@ func (mr *MockpassClientMockRecorder) Login(arg0, arg1, arg2 interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockpassClient)(nil).Login), arg0, arg1, arg2)
 }
 
+// Register mocks base method.
+func (m *MockpassClient) Register(arg0 context.Context, arg1, arg2 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Register", arg0, arg1, arg2)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Register indicates an expected call of Register.
+func (mr *MockpassClientMockRecorder) Register(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockpassClient)(nil).Register), arg0, arg1, arg2)
+}
+
 // MocktokenStorage is a mock of tokenStorage interface.
 type MocktokenStorage struct {
 	ctrl     *gomock.Controller

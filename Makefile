@@ -49,3 +49,7 @@ ggen:
 start-server:
 	go build -ldflags "-X main.configFilePath=$(CONFIG_FILE) -X main.masterKey=$(MASTER_KEY)" -o build/temp_server cmd/server/main.go
 	-./build/temp_server
+
+.PHONY: bc
+bc:
+	go build -o build/passkeep cmd/client/main.go
