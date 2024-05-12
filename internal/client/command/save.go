@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	saveArgCount      = 0
-	saveLoginArgCount = 3
-	saveCardArgCount  = 4
-	saveTextArgCount  = 2
+	saveArgCount       = 0
+	saveLoginArgCount  = 3
+	saveCardArgCount   = 4
+	saveTextArgCount   = 2
+	saveBinaryArgCount = 2
 )
 
 func (mc *MainCommand) getSaveCommand() *cobra.Command {
@@ -36,6 +37,7 @@ on it own not do anything. for actual save data you need use subcommand like log
 	cmd.AddCommand(mc.getSaveLoginCommand())
 	cmd.AddCommand(mc.getSaveCardCommand())
 	cmd.AddCommand(mc.getSaveTextCommand())
+	cmd.AddCommand(mc.getSaveBinaryCommand())
 
 	return cmd
 }
@@ -155,6 +157,42 @@ func (mc *MainCommand) getSaveTextCommand() *cobra.Command {
 		Long:    `command for save text information`,
 		Example: "passkeep save text 'info about text data' text",
 		Args:    cobra.MinimumNArgs(saveTextArgCount),
+		Run:     run,
+	}
+}
+
+type saveBinaryValidator struct {
+	Info     string `validate:"required"`
+	FilePath string `validate:"required"`
+}
+
+func (mc *MainCommand) getSaveBinaryCommand() *cobra.Command {
+	run := func(cmd *cobra.Command, args []string) {
+		info, filePath := args[0], args[1]
+		validateStruct := saveBinaryValidator{
+			Info:     info,
+			FilePath: filePath,
+		}
+		validate := validator.New(validator.WithRequiredStructEnabled())
+		if err := validate.Struct(&validateStruct); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := mc.passKeeperService.SaveBinary(cmd.Context(), info, filePath); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println("binary data was successfully saved!")
+	}
+
+	return &cobra.Command{
+		Use:     "binary [info] [file path]",
+		Short:   "command for save data from file",
+		Long:    `command for save data from file`,
+		Example: "passkeep save binary 'info about saving data' ./file.txt",
+		Args:    cobra.MinimumNArgs(saveBinaryArgCount),
 		Run:     run,
 	}
 }

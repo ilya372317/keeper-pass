@@ -48,3 +48,16 @@ func (pc *PassClient) SaveText(ctx context.Context, info string, data string) er
 
 	return nil
 }
+
+func (pc *PassClient) SaveBinary(ctx context.Context, info string, data []byte) error {
+	req := &pb.SaveBinaryRequest{
+		Metadata: &pb.BinaryMetadata{Info: info},
+		Data:     data,
+	}
+
+	if _, err := pc.c.SaveBinary(ctx, req); err != nil {
+		return fmt.Errorf("grpc save binary request failed: %w", err)
+	}
+
+	return nil
+}

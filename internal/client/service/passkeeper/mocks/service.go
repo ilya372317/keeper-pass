@@ -79,6 +79,20 @@ func (mr *MockpassClientMockRecorder) Register(arg0, arg1, arg2 interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockpassClient)(nil).Register), arg0, arg1, arg2)
 }
 
+// SaveBinary mocks base method.
+func (m *MockpassClient) SaveBinary(arg0 context.Context, arg1 string, arg2 []byte) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveBinary", arg0, arg1, arg2)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveBinary indicates an expected call of SaveBinary.
+func (mr *MockpassClientMockRecorder) SaveBinary(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveBinary", reflect.TypeOf((*MockpassClient)(nil).SaveBinary), arg0, arg1, arg2)
+}
+
 // SaveCard mocks base method.
 func (m *MockpassClient) SaveCard(arg0 context.Context, arg1, arg2 string, arg3 int, arg4 string) error {
 	m.ctrl.T.Helper()

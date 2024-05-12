@@ -13,6 +13,7 @@ type passClient interface {
 	SaveLogin(context.Context, string, string, string) error
 	SaveCard(context.Context, string, string, int, string) error
 	SaveText(ctx context.Context, info string, data string) error
+	SaveBinary(context.Context, string, []byte) error
 }
 
 type tokenStorage interface {

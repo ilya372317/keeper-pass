@@ -257,3 +257,70 @@ func TestMainCommand_getSaveTextCommand(t *testing.T) {
 		})
 	}
 }
+
+func TestMainCommand_getSaveBinaryCommand(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	serv := command_mock.NewMockpassKeeperService(ctrl)
+	mainCmd := MainCommand{passKeeperService: serv}
+	saveBinaryCmd := mainCmd.getSaveBinaryCommand()
+	validInfo := "info"
+	validFilePath := "./file.txt"
+	validArgs := []string{validInfo, validFilePath}
+
+	t.Run("success case", func(t *testing.T) {
+		// Prepare.
+		serv.EXPECT().SaveBinary(gomock.Any(), validInfo, validFilePath).Times(1).Return(nil)
+		saveBinaryCmd.SetArgs(validArgs)
+
+		// Execute.
+		err := saveBinaryCmd.Execute()
+
+		// Assert.
+		require.NoError(t, err)
+	})
+
+	t.Run("fail in service", func(t *testing.T) {
+		// Prepare.
+		serv.
+			EXPECT().
+			SaveBinary(gomock.Any(), validInfo, validFilePath).
+			Times(1).
+			Return(fmt.Errorf("internal"))
+		saveBinaryCmd.SetArgs(validArgs)
+
+		// Execute.
+		err := saveBinaryCmd.Execute()
+
+		// Assert.
+		require.NoError(t, err)
+	})
+
+	validateTests := []struct {
+		name     string
+		info     string
+		filePath string
+	}{
+		{
+			name:     "invalid info",
+			info:     "",
+			filePath: validFilePath,
+		},
+		{
+			name:     "invalid path",
+			info:     validInfo,
+			filePath: "",
+		},
+	}
+	for _, tt := range validateTests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Prepare.
+			saveBinaryCmd.SetArgs([]string{tt.info, tt.filePath})
+
+			// Execute.
+			err := saveBinaryCmd.Execute()
+
+			// Assert.
+			require.NoError(t, err)
+		})
+	}
+}
