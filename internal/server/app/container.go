@@ -1,9 +1,9 @@
 package app
 
 import (
-	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/datarepo"
-	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/keyrepo"
-	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/userrepo"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/data"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/key"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/user"
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/interceptor"
 	"github.com/ilya372317/pass-keeper/internal/server/keyring"
@@ -44,12 +44,12 @@ func (c *Container) GetDefaultSecureDataService() *securedata.Service {
 	return securedata.New(c.GetKeyring(), c.GetPostgresqlDataRepo())
 }
 
-func (c *Container) GetPostgresqlUserRepo() *userrepo.Repository {
-	return userrepo.New(c.pgsqlx)
+func (c *Container) GetPostgresqlUserRepo() *user.Repository {
+	return user.New(c.pgsqlx)
 }
 
-func (c *Container) GetPostgresqlDataRepo() *datarepo.Repository {
-	return datarepo.New(c.pgsqlx)
+func (c *Container) GetPostgresqlDataRepo() *data.Repository {
+	return data.New(c.pgsqlx)
 }
 
 func (c *Container) GetJWTTokenManager() *jwtmanager.JWTManager {
@@ -60,8 +60,8 @@ func (c *Container) GetAuthInterceptor() *interceptor.AuthInterceptor {
 	return interceptor.NewAuthInterceptor(c.GetJWTTokenManager(), c.GetPostgresqlUserRepo())
 }
 
-func (c *Container) GetKeyRepository() *keyrepo.Repository {
-	return keyrepo.New(c.pgsqlx)
+func (c *Container) GetKeyRepository() *key.Repository {
+	return key.New(c.pgsqlx)
 }
 
 func (c *Container) SetKeyring(kring *keyring.Keyring) {

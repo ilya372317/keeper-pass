@@ -10,12 +10,12 @@ import (
 
 	"github.com/golang-migrate/migrate/v4/database/pgx/v5"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/datarepo"
-	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/keyrepo"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/data"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/key"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/userrepo"
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/user"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
 	"github.com/jmoiron/sqlx"
 	"github.com/ory/dockertest"
@@ -25,9 +25,9 @@ import (
 
 var (
 	db       *sqlx.DB
-	userRepo *userrepo.Repository
-	keyRepo  *keyrepo.Repository
-	dataRepo *datarepo.Repository
+	userRepo *user.Repository
+	keyRepo  *key.Repository
+	dataRepo *data.Repository
 )
 
 type keysFields struct {
@@ -42,9 +42,9 @@ func TestMain(m *testing.M) {
 		return
 	}
 	db = database
-	userRepo = userrepo.New(database)
-	keyRepo = keyrepo.New(database)
-	dataRepo = datarepo.New(database)
+	userRepo = user.New(database)
+	keyRepo = key.New(database)
+	dataRepo = data.New(database)
 	m.Run()
 	if err = closeTestConnection(database, pool, resource); err != nil {
 		log.Fatal(err)

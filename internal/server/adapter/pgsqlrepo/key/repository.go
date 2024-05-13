@@ -1,11 +1,34 @@
-package keyrepo
+package key
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
+	"github.com/jmoiron/sqlx"
 )
+
+// Repository for key storage.
+type Repository struct {
+	db *sqlx.DB
+}
+
+// New creates new repository.
+func New(db *sqlx.DB) *Repository {
+	return &Repository{db: db}
+}
+
+func (r *Repository) GetKey(ctx context.Context) (*domain.Keys, error) {
+	var result domain.Keys
+
+	err := r.db.GetContext(ctx, &result, "SELECT * FROM keys WHERE is_current = true")
+
+	if err != nil {
+		return nil, fmt.Errorf("failed get key: %w", err)
+	}
+
+	return &result, nil
+}
 
 func (r *Repository) SaveKey(ctx context.Context, key *domain.Keys) error {
 	tx, err := r.db.Beginx()
