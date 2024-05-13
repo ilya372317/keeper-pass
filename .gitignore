@@ -19,3 +19,15 @@
 
 # Go workspace file
 go.work
+
+# Linter
+/golangci-lint
+
+#IDE
+/.idea
+/docker/.env
+.vscode
+
+/build
+
+.DS_Store

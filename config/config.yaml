@@ -1,0 +1,16 @@
+grpc:
+  host: "localhost:3200"
+  tls_cert_path: "./cert/server-cert.pem"
+  tls_key_path: "./cert/server-key.pem"
+jwt:
+  secret_key: "secret-key"
+  token_exp: 6h
+main_db:
+  host: localhost
+  port: 5432
+  name: pass
+  user: root
+  password: root
+  read_timeout: 1m
+  write_timeout: 1m
+  timeout: 1m
