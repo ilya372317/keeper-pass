@@ -9,8 +9,8 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
-	keyringmock "github.com/ilya372317/pass-keeper/internal/server/keyring/mocks"
 	"github.com/ilya372317/pass-keeper/internal/server/service/cryptomanager"
+	keyring_mock "github.com/ilya372317/pass-keeper/internal/server/service/keyring/mocks"
 	"github.com/stretchr/testify/require"
 )
 
@@ -21,7 +21,7 @@ func TestKeyring_GetGeneralKeyWithKeyInStorage(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockKeyStorage := keyringmock.NewMockkeyStorage(ctrl)
+	mockKeyStorage := keyring_mock.NewMockkeyStorage(ctrl)
 	masterKey := []byte("123423gjduvydhsj")
 	k := New(masterKey, mockKeyStorage)
 
@@ -57,7 +57,7 @@ func TestKeyring_GetGeneralKey_ErrorRetrievingKey(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockKeyStorage := keyringmock.NewMockkeyStorage(ctrl)
+	mockKeyStorage := keyring_mock.NewMockkeyStorage(ctrl)
 	k := New([]byte("masterKeydjgkvjd"), mockKeyStorage)
 
 	ctx := context.Background()
@@ -75,7 +75,7 @@ func TestKeyring_GetGeneralKeyInvalidMasterKeySize(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockKeyStorage := keyringmock.NewMockkeyStorage(ctrl)
+	mockKeyStorage := keyring_mock.NewMockkeyStorage(ctrl)
 	k := New([]byte("invalidkey"), mockKeyStorage)
 
 	ctx := context.Background()
@@ -88,7 +88,7 @@ func TestKeyring_InitGeneralKey(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockKeyStorage := keyringmock.NewMockkeyStorage(ctrl)
+	mockKeyStorage := keyring_mock.NewMockkeyStorage(ctrl)
 	masterKey := []byte("masterKey12345678901234567890123")
 	k := New(masterKey, mockKeyStorage)
 
