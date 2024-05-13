@@ -15,6 +15,10 @@ type passClient interface {
 	SaveText(context.Context, string, string) error
 	SaveBinary(context.Context, string, []byte) error
 	Delete(context.Context, int) error
+	ShowLoginPass(context.Context, int) (domain.LoginPass, error)
+	ShowCard(context.Context, int) (domain.CreditCard, error)
+	ShowText(context.Context, int) (domain.Text, error)
+	ShowBinary(context.Context, int) (domain.Binary, error)
 }
 
 type tokenStorage interface {

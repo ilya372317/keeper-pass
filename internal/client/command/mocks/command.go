@@ -51,17 +51,17 @@ func (mr *MockpassKeeperServiceMockRecorder) All(arg0 interface{}) *gomock.Call 
 }
 
 // Delete mocks base method.
-func (m *MockpassKeeperService) Delete(ctx context.Context, id string) error {
+func (m *MockpassKeeperService) Delete(arg0 context.Context, arg1 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockpassKeeperServiceMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
+func (mr *MockpassKeeperServiceMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockpassKeeperService)(nil).Delete), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockpassKeeperService)(nil).Delete), arg0, arg1)
 }
 
 // Login mocks base method.
@@ -146,4 +146,19 @@ func (m *MockpassKeeperService) SaveText(arg0 context.Context, arg1, arg2 string
 func (mr *MockpassKeeperServiceMockRecorder) SaveText(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveText", reflect.TypeOf((*MockpassKeeperService)(nil).SaveText), arg0, arg1, arg2)
+}
+
+// Show mocks base method.
+func (m *MockpassKeeperService) Show(arg0 context.Context, arg1, arg2 string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", arg0, arg1, arg2)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show.
+func (mr *MockpassKeeperServiceMockRecorder) Show(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockpassKeeperService)(nil).Show), arg0, arg1, arg2)
 }

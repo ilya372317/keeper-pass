@@ -134,3 +134,85 @@ func (pc *PassClient) Delete(ctx context.Context, id int) error {
 
 	return nil
 }
+
+func (pc *PassClient) ShowLoginPass(ctx context.Context, id int) (domain.LoginPass, error) {
+	req := &pb.ShowLoginPassRequest{Id: int64(id)}
+	resp, err := pc.c.ShowLoginPass(ctx, req)
+	if err != nil {
+		return domain.LoginPass{}, fmt.Errorf("grpc show login pass request failed: %w", err)
+	}
+	lp := resp.LoginPass
+	if lp == nil || lp.Metadata == nil {
+		return domain.LoginPass{},
+			fmt.Errorf("invalid show login pass response recived from grpc server: %w", err)
+	}
+
+	return domain.LoginPass{
+		URL:      lp.Metadata.Url,
+		Login:    lp.Login,
+		Password: lp.Password,
+		ID:       int(lp.Id),
+	}, nil
+}
+
+func (pc *PassClient) ShowCard(ctx context.Context, id int) (domain.CreditCard, error) {
+	req := &pb.ShowCreditCardRequest{Id: int64(id)}
+	resp, err := pc.c.ShowCreditCard(ctx, req)
+	if err != nil {
+		return domain.CreditCard{}, fmt.Errorf("grpc show credit card request failed: %w", err)
+	}
+
+	cc := resp.CreditCard
+
+	if cc == nil || cc.Metadata == nil {
+		return domain.CreditCard{},
+			fmt.Errorf("invalid show credit card response recived from grpc server: %w", err)
+	}
+
+	return domain.CreditCard{
+		BankName:   cc.Metadata.BankName,
+		CardNumber: cc.CardNumber,
+		Exp:        cc.Expiration,
+		Code:       int(cc.Cvv),
+		ID:         int(cc.Id),
+	}, nil
+}
+
+func (pc *PassClient) ShowText(ctx context.Context, id int) (domain.Text, error) {
+	req := &pb.ShowTextRequest{Id: int64(id)}
+	resp, err := pc.c.ShowText(ctx, req)
+	if err != nil {
+		return domain.Text{}, fmt.Errorf("grpc show text request failed: %w", err)
+	}
+
+	t := resp.Text
+	if t == nil || t.Metadata == nil {
+		return domain.Text{}, fmt.Errorf("invalid show text response recived from grpc server: %w", err)
+	}
+
+	return domain.Text{
+		Info: t.Metadata.Info,
+		Data: t.Data,
+		ID:   int(t.Id),
+	}, nil
+}
+
+func (pc *PassClient) ShowBinary(ctx context.Context, id int) (domain.Binary, error) {
+	req := &pb.ShowBinaryRequest{Id: int64(id)}
+	resp, err := pc.c.ShowBinary(ctx, req)
+	if err != nil {
+		return domain.Binary{}, fmt.Errorf("grpc show binary request failed: %w", err)
+	}
+
+	b := resp.Binary
+
+	if b == nil || b.Metadata == nil {
+		return domain.Binary{}, fmt.Errorf("invalid show binary response from grpc server recived: %w", err)
+	}
+
+	return domain.Binary{
+		Info: b.Metadata.Info,
+		Data: b.Data,
+		ID:   int(b.Id),
+	}, nil
+}

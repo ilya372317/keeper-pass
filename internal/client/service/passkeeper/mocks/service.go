@@ -149,6 +149,66 @@ func (mr *MockpassClientMockRecorder) SaveText(arg0, arg1, arg2 interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveText", reflect.TypeOf((*MockpassClient)(nil).SaveText), arg0, arg1, arg2)
 }
 
+// ShowBinary mocks base method.
+func (m *MockpassClient) ShowBinary(arg0 context.Context, arg1 int) (domain.Binary, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowBinary", arg0, arg1)
+	ret0, _ := ret[0].(domain.Binary)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowBinary indicates an expected call of ShowBinary.
+func (mr *MockpassClientMockRecorder) ShowBinary(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowBinary", reflect.TypeOf((*MockpassClient)(nil).ShowBinary), arg0, arg1)
+}
+
+// ShowCard mocks base method.
+func (m *MockpassClient) ShowCard(arg0 context.Context, arg1 int) (domain.CreditCard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowCard", arg0, arg1)
+	ret0, _ := ret[0].(domain.CreditCard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowCard indicates an expected call of ShowCard.
+func (mr *MockpassClientMockRecorder) ShowCard(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowCard", reflect.TypeOf((*MockpassClient)(nil).ShowCard), arg0, arg1)
+}
+
+// ShowLoginPass mocks base method.
+func (m *MockpassClient) ShowLoginPass(arg0 context.Context, arg1 int) (domain.LoginPass, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowLoginPass", arg0, arg1)
+	ret0, _ := ret[0].(domain.LoginPass)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowLoginPass indicates an expected call of ShowLoginPass.
+func (mr *MockpassClientMockRecorder) ShowLoginPass(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowLoginPass", reflect.TypeOf((*MockpassClient)(nil).ShowLoginPass), arg0, arg1)
+}
+
+// ShowText mocks base method.
+func (m *MockpassClient) ShowText(arg0 context.Context, arg1 int) (domain.Text, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowText", arg0, arg1)
+	ret0, _ := ret[0].(domain.Text)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowText indicates an expected call of ShowText.
+func (mr *MockpassClientMockRecorder) ShowText(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowText", reflect.TypeOf((*MockpassClient)(nil).ShowText), arg0, arg1)
+}
+
 // MocktokenStorage is a mock of tokenStorage interface.
 type MocktokenStorage struct {
 	ctrl     *gomock.Controller

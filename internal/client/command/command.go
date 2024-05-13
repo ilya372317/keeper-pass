@@ -16,7 +16,8 @@ type passKeeperService interface {
 	SaveCard(context.Context, string, string, string, string) error
 	SaveText(context.Context, string, string) error
 	SaveBinary(context.Context, string, string) error
-	Delete(ctx context.Context, id string) error
+	Delete(context.Context, string) error
+	Show(context.Context, string, string) (string, error)
 }
 
 type MainCommand struct {
@@ -36,6 +37,7 @@ func (mc *MainCommand) GetRootCommandList() []*cobra.Command {
 		mc.getRegisterCommand(),
 		mc.getSaveCommand(),
 		mc.getDeleteCommand(),
+		mc.getShowCommand(),
 	}
 }
 
