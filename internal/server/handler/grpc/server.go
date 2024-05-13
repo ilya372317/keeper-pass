@@ -10,6 +10,7 @@ import (
 	"github.com/ilya372317/pass-keeper/pkg/logger"
 	pb "github.com/ilya372317/pass-keeper/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 type Server struct {
@@ -20,11 +21,13 @@ type Server struct {
 func New(cnfg config.Config,
 	unaryInterceptors []grpc.UnaryServerInterceptor,
 	streamInterceptors []grpc.StreamServerInterceptor,
+	credentials credentials.TransportCredentials,
 ) *Server {
 	return &Server{
 		srv: grpc.NewServer(
 			grpc.ChainUnaryInterceptor(unaryInterceptors...),
 			grpc.ChainStreamInterceptor(streamInterceptors...),
+			grpc.Creds(credentials),
 		),
 		conf: cnfg}
 }

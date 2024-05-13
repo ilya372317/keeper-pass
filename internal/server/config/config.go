@@ -11,6 +11,8 @@ const defaultTokenExpInHours = 6
 
 type GRPCConfig struct {
 	Host        string
+	TLSCertPath string
+	TLSKeyPath  string
 	OpenMethods []string
 }
 
@@ -60,6 +62,8 @@ func New(configPath string) (Config, error) {
 		GRPC: GRPCConfig{
 			Host:        viper.GetString("grpc.host"),
 			OpenMethods: viper.GetStringSlice("grpc.open_methods"),
+			TLSCertPath: viper.GetString("grpc.tls_cert_path"),
+			TLSKeyPath:  viper.GetString("grpc.tls_key_path"),
 		},
 		JWT: JWTConfig{
 			SecretKey:        viper.GetString("jwt.secret_key"),

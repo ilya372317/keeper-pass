@@ -10,6 +10,7 @@ import (
 type GRPCConfig struct {
 	OpenMethods     map[string]any
 	Host            string
+	TLSCertPath     string
 	RefreshDuration time.Duration
 }
 
@@ -37,6 +38,7 @@ func New(configPath string) Config {
 			Host:            viper.GetString("grpc.host"),
 			OpenMethods:     viper.GetStringMap("grpc.open_methods"),
 			RefreshDuration: viper.GetDuration("grpc.refresh_token_duration"),
+			TLSCertPath:     viper.GetString("grpc.tls_cert"),
 		},
 	}
 

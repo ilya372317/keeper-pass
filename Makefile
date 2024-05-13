@@ -53,3 +53,8 @@ start-server:
 .PHONY: bc
 bc:
 	go build -o build/passkeep cmd/client/main.go
+
+.PHONY: gen clean server client test cert
+cert:
+	cd cert; ./gen.sh; cd ..
+
