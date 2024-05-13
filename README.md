@@ -66,3 +66,4 @@ server cmd/server/main.go'`
    расшифровывается конкретный элемент данных
 
 Более подробное описание в диаграмме `crypt.drawio` в этом репозитории
+<img src="crypt.drawio.svg">
