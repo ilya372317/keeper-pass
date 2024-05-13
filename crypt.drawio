@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net" modified="2024-05-13T08:08:55.521Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="OKVJvdiSfQ7kbnML_lLA" version="24.3.0" type="github">
+  <diagram name="Страница — 1" id="QAtlPuho-gRasSEK4x9O">
+    <mxGraphModel dx="1026" dy="602" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4r84KtlRIIiCcem3gLo3-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4r84KtlRIIiCcem3gLo3-1" target="4r84KtlRIIiCcem3gLo3-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4r84KtlRIIiCcem3gLo3-1" target="4r84KtlRIIiCcem3gLo3-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-1" value="master-key" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="75" y="250" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-6" value="Передается при сборке через ldflags" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="70" y="70" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4r84KtlRIIiCcem3gLo3-8" target="4r84KtlRIIiCcem3gLo3-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4r84KtlRIIiCcem3gLo3-8" target="4r84KtlRIIiCcem3gLo3-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-8" value="general-key" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="304" y="250" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-10" value="Шифруется и дешифруется master-key. Храниться в базе данных в зашифрованном виде. При старте сервера извлекается из базы данных, расшифровывается и храниться в keyring" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="270" y="20" width="220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4r84KtlRIIiCcem3gLo3-12" target="4r84KtlRIIiCcem3gLo3-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4r84KtlRIIiCcem3gLo3-12" target="4r84KtlRIIiCcem3gLo3-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-12" value="data-key" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="560" y="250" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-14" value="Шифруется и дешифруется с помощью general-key. Для каждой записи с данными генерируется свой. Используется для шифрования и дешифрования конкретного элемента данных. В базе данных храниться в зашифрованном виде" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="590" y="30" width="270" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="4r84KtlRIIiCcem3gLo3-16" target="4r84KtlRIIiCcem3gLo3-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-16" value="data" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="810" y="250" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4r84KtlRIIiCcem3gLo3-18" value="Элемент данных. Хранится в базе данных в зашифрованном виде. Шифруется и дешифруется с помощью data-key" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="960" y="40" width="230" height="100" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
