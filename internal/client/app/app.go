@@ -12,12 +12,17 @@ const tokenFilePerm = 0600
 var tokenFile *os.File
 
 type App struct {
-	c    *Container
-	conf config.Config
+	c            *Container
+	buildDate    string
+	buildVersion string
+	conf         config.Config
 }
 
-func New() (*App, error) {
-	a := &App{}
+func New(buildDate, buildVersion string) (*App, error) {
+	a := &App{
+		buildDate:    buildDate,
+		buildVersion: buildVersion,
+	}
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, fmt.Errorf("failed get user home dir: %w", err)

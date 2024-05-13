@@ -22,11 +22,15 @@ type passKeeperService interface {
 
 type MainCommand struct {
 	passKeeperService passKeeperService
+	buildVersion      string
+	buildDate         string
 }
 
-func New(passKeeperService passKeeperService) *MainCommand {
+func New(passKeeperService passKeeperService, buildVersion, buildDate string) *MainCommand {
 	return &MainCommand{
 		passKeeperService: passKeeperService,
+		buildDate:         buildDate,
+		buildVersion:      buildVersion,
 	}
 }
 
@@ -38,6 +42,7 @@ func (mc *MainCommand) GetRootCommandList() []*cobra.Command {
 		mc.getSaveCommand(),
 		mc.getDeleteCommand(),
 		mc.getShowCommand(),
+		mc.getVersionCommand(mc.buildVersion, mc.buildDate),
 	}
 }
 

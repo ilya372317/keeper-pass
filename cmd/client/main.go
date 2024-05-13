@@ -7,9 +7,19 @@ import (
 	"github.com/ilya372317/pass-keeper/pkg/logger"
 )
 
+const (
+	defaultBuildDate    = "N/A"
+	defaultBuildVersion = "N/A"
+)
+
+var (
+	buildVersion = defaultBuildVersion
+	buildDate    = defaultBuildDate
+)
+
 func main() {
 	logger.InitMust()
-	a, err := app.New()
+	a, err := app.New(buildDate, buildVersion)
 	if err != nil {
 		fmt.Println(err)
 		return
