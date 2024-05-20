@@ -20,17 +20,23 @@ type passKeeperService interface {
 	Show(context.Context, string, string) (string, error)
 }
 
-type MainCommand struct {
-	passKeeperService passKeeperService
-	buildVersion      string
-	buildDate         string
+type terminalInterfaceApp interface {
+	Run(ctx context.Context) error
 }
 
-func New(passKeeperService passKeeperService, buildVersion, buildDate string) *MainCommand {
+type MainCommand struct {
+	terminalInterfaceApp terminalInterfaceApp
+	passKeeperService    passKeeperService
+	buildVersion         string
+	buildDate            string
+}
+
+func New(passKeeperService passKeeperService, buildVersion, buildDate string, tui terminalInterfaceApp) *MainCommand {
 	return &MainCommand{
-		passKeeperService: passKeeperService,
-		buildDate:         buildDate,
-		buildVersion:      buildVersion,
+		passKeeperService:    passKeeperService,
+		buildDate:            buildDate,
+		buildVersion:         buildVersion,
+		terminalInterfaceApp: tui,
 	}
 }
 
@@ -43,6 +49,7 @@ func (mc *MainCommand) GetRootCommandList() []*cobra.Command {
 		mc.getDeleteCommand(),
 		mc.getShowCommand(),
 		mc.getVersionCommand(mc.buildVersion, mc.buildDate),
+		mc.getTUICommand(),
 	}
 }
 

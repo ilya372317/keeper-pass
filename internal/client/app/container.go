@@ -11,6 +11,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/client/config"
 	"github.com/ilya372317/pass-keeper/internal/client/interceptor"
 	"github.com/ilya372317/pass-keeper/internal/client/service/passkeeper"
+	"github.com/ilya372317/pass-keeper/internal/client/ui"
 	pb "github.com/ilya372317/pass-keeper/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -96,4 +97,8 @@ func (c *Container) loadTLSCredentials() (credentials.TransportCredentials, erro
 	}
 
 	return credentials.NewTLS(tlsConf), nil
+}
+
+func (c *Container) getDefaultTUIApp() *ui.UserInterface {
+	return ui.New(c.GetDefaultPassKeeperService())
 }

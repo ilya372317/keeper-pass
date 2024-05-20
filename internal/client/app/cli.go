@@ -7,7 +7,7 @@ import (
 )
 
 func (a *App) ExecuteCommandCLI() error {
-	mainCommand := command.New(a.c.GetDefaultPassKeeperService(), a.buildVersion, a.buildDate)
+	mainCommand := command.New(a.c.GetDefaultPassKeeperService(), a.buildVersion, a.buildDate, a.c.getDefaultTUIApp())
 
 	if err := mainCommand.Execute(); err != nil {
 		return fmt.Errorf("failed execute command CLI: %w", err)

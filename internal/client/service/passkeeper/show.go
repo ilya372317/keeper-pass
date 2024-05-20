@@ -50,3 +50,41 @@ func (s *Service) Show(ctx context.Context, id, kindAlias string) (string, error
 
 	return data.ToString(), nil
 }
+
+// ShowLoginPass retrieve login pass from client.
+func (s *Service) ShowLoginPass(ctx context.Context, id int) (*domain.LoginPass, error) {
+	lp, err := s.passClient.ShowLoginPass(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed get login pass from client: %w", err)
+	}
+
+	return &lp, nil
+}
+
+// ShowCreditCard retrieve credit card from client.
+func (s *Service) ShowCreditCard(ctx context.Context, id int) (*domain.CreditCard, error) {
+	cc, err := s.passClient.ShowCard(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed get credit card data from client: %w", err)
+	}
+
+	return &cc, nil
+}
+
+func (s *Service) ShowText(ctx context.Context, id int) (*domain.Text, error) {
+	text, err := s.passClient.ShowText(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed get text from client: %w", err)
+	}
+
+	return &text, nil
+}
+
+func (s *Service) ShowBinary(ctx context.Context, id int) (*domain.Binary, error) {
+	binary, err := s.passClient.ShowBinary(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed get binary from client: %w", err)
+	}
+
+	return &binary, nil
+}

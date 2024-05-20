@@ -24,8 +24,10 @@ const (
 // Not required any additional manipulation on deleting.
 var KindsCanBeSimpleDeleted = []Kind{KindLoginPass, KindCreditCard, KindText, KindBinary}
 
+// CryptoKeyLength length of general key.
 const CryptoKeyLength = 32
 
+// DataRepresentation interface for types which able to represent himself as string.
 type DataRepresentation interface {
 	GetInfo() string
 }
@@ -45,6 +47,7 @@ type Data struct {
 	IsPayloadDecrypted bool      // IsPayloadDecrypted flag indicates is payload encrypted or decrypted
 }
 
+// ToDataRepresentation parse union data type to specific by kind.
 func (d Data) ToDataRepresentation() (DataRepresentation, error) {
 	var result DataRepresentation
 	switch d.Kind {
@@ -93,6 +96,7 @@ type LoginPass struct {
 	ID       int
 }
 
+// GetInfo parse LoginPass to string.
 func (lp LoginPass) GetInfo() string {
 	return lp.Metadata.URL
 }
@@ -111,6 +115,7 @@ type CreditCard struct {
 	ID         int                `json:"id,omitempty"`
 }
 
+// GetInfo parse CreditCard to string.
 func (cc CreditCard) GetInfo() string {
 	return cc.Metadata.BankName
 }
@@ -127,6 +132,7 @@ type Text struct {
 	ID       int64        `json:"id"`
 }
 
+// GetInfo parse Text to string.
 func (t Text) GetInfo() string {
 	return t.Metadata.Info
 }
@@ -143,6 +149,7 @@ type Binary struct {
 	ID       int64          `json:"id"`
 }
 
+// GetInfo parse Binary to string.
 func (b Binary) GetInfo() string {
 	return b.Metadata.Info
 }
