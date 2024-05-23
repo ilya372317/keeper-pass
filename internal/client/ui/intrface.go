@@ -3,6 +3,8 @@ package ui
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/ilya372317/pass-keeper/internal/client/domain"
 	"github.com/rivo/tview"
@@ -11,6 +13,8 @@ import (
 const (
 	mainPageName     = "index"
 	errModalPageName = "error_modal"
+
+	shortWidth = 5
 )
 
 type passKeeperService interface {
@@ -36,7 +40,7 @@ type UserInterface struct {
 
 func New(service passKeeperService) *UserInterface {
 	pages := tview.NewPages()
-	app := tview.NewApplication().SetRoot(pages, true).EnableMouse(true)
+	app := tview.NewApplication().SetRoot(pages, true).EnableMouse(true).EnablePaste(true)
 
 	return &UserInterface{
 		passKeeperService: service,
@@ -99,10 +103,43 @@ func (ui *UserInterface) buildShowDataForm(ctx context.Context, d domain.ShortDa
 		}
 		return ui.buildShowLoginPassForm(lp), nil
 	case domain.KindCreditCard:
+		cc, err := ui.passKeeperService.ShowCreditCard(ctx, int(d.ID))
+		if err != nil {
+			return nil, fmt.Errorf("failed show credit card page: %w", err)
+		}
+		return ui.buildShowCreditCardForm(cc), nil
 	case domain.KindText:
 	case domain.KindBinary:
 	}
 	return nil, fmt.Errorf("ui can`t show data of type: %s", d.StringKind())
+}
+
+func (ui *UserInterface) buildShowCreditCardForm(cc *domain.CreditCard) *tview.Form {
+	const expItemCount = 2
+	const mothIndex = 0
+	const yearIndex = 1
+	expItems := strings.Split(cc.Exp, "/")
+	var expMonth, expYear string
+	if len(expItems) >= expItemCount {
+		expMonth, expYear = expItems[mothIndex], expItems[yearIndex]
+	}
+	form := tview.NewForm()
+	form.SetBorder(true).
+		SetTitle(fmt.Sprintf("credit card data #%d", cc.ID)).
+		SetTitleAlign(tview.AlignCenter)
+	form.AddInputField("number: ", cc.CardNumber, 0, nil, nil)
+	form.AddInputField("mm: ", expMonth, shortWidth, nil, nil)
+	form.AddInputField("yy: ", expYear, shortWidth, nil, nil)
+	form.AddInputField("CVV: ", strconv.Itoa(cc.Code), 0, nil, nil)
+	form.AddInputField("bank name: ", cc.BankName, 0, nil, nil)
+	form.AddButton("update", func() {
+	})
+	form.AddButton("back", func() {
+		ui.pages.SwitchToPage(mainPageName)
+		ui.pages.RemovePage(getItemPageName(int64(cc.ID)))
+	})
+
+	return form
 }
 
 func (ui *UserInterface) buildShowLoginPassForm(lp *domain.LoginPass) *tview.Form {
@@ -111,8 +148,6 @@ func (ui *UserInterface) buildShowLoginPassForm(lp *domain.LoginPass) *tview.For
 	form.AddInputField("password: ", lp.Password, 0, nil, nil)
 	form.AddInputField("URL: ", lp.URL, 0, nil, nil)
 	form.AddButton("update", func() {
-		ui.pages.SwitchToPage(mainPageName)
-		ui.pages.RemovePage(getItemPageName(int64(lp.ID)))
 	})
 	form.AddButton("back", func() {
 		ui.pages.SwitchToPage(mainPageName)
