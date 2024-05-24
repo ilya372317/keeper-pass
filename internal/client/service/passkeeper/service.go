@@ -19,6 +19,7 @@ type passClient interface {
 	ShowCard(context.Context, int) (domain.CreditCard, error)
 	ShowText(context.Context, int) (domain.Text, error)
 	ShowBinary(context.Context, int) (domain.Binary, error)
+	UpdateLoginPass(ctx context.Context, data *domain.LoginPass) error
 }
 
 type tokenStorage interface {

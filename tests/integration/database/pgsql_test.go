@@ -1,4 +1,4 @@
-package integration
+package database
 
 import (
 	"context"
@@ -36,7 +36,7 @@ type keysFields struct {
 }
 
 func TestMain(m *testing.M) {
-	database, pool, resource, err := makeTestConnection("../../db/migrations")
+	database, pool, resource, err := makeTestConnection("../../../db/migrations")
 	if err != nil {
 		log.Fatal(err)
 		return

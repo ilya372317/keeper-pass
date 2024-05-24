@@ -209,6 +209,20 @@ func (mr *MockpassClientMockRecorder) ShowText(arg0, arg1 interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowText", reflect.TypeOf((*MockpassClient)(nil).ShowText), arg0, arg1)
 }
 
+// UpdateLoginPass mocks base method.
+func (m *MockpassClient) UpdateLoginPass(ctx context.Context, data *domain.LoginPass) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateLoginPass", ctx, data)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateLoginPass indicates an expected call of UpdateLoginPass.
+func (mr *MockpassClientMockRecorder) UpdateLoginPass(ctx, data interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateLoginPass", reflect.TypeOf((*MockpassClient)(nil).UpdateLoginPass), ctx, data)
+}
+
 // MocktokenStorage is a mock of tokenStorage interface.
 type MocktokenStorage struct {
 	ctrl     *gomock.Controller

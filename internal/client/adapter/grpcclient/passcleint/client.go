@@ -216,3 +216,15 @@ func (pc *PassClient) ShowBinary(ctx context.Context, id int) (domain.Binary, er
 		ID:   int(b.Id),
 	}, nil
 }
+
+func (pc *PassClient) UpdateLoginPass(ctx context.Context, data *domain.LoginPass) error {
+	if _, err := pc.c.UpdateLoginPass(ctx, &pb.UpdateLoginPassRequest{
+		Id:       int64(data.ID),
+		Metadata: &pb.LoginPassMetadata{Url: data.URL},
+		Login:    &data.Login,
+		Password: &data.Password,
+	}); err != nil {
+		return fmt.Errorf("failed update login pass by grpc client: %w", err)
+	}
+	return nil
+}

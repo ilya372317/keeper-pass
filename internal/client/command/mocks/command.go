@@ -162,3 +162,40 @@ func (mr *MockpassKeeperServiceMockRecorder) Show(arg0, arg1, arg2 interface{}) 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockpassKeeperService)(nil).Show), arg0, arg1, arg2)
 }
+
+// MockterminalInterfaceApp is a mock of terminalInterfaceApp interface.
+type MockterminalInterfaceApp struct {
+	ctrl     *gomock.Controller
+	recorder *MockterminalInterfaceAppMockRecorder
+}
+
+// MockterminalInterfaceAppMockRecorder is the mock recorder for MockterminalInterfaceApp.
+type MockterminalInterfaceAppMockRecorder struct {
+	mock *MockterminalInterfaceApp
+}
+
+// NewMockterminalInterfaceApp creates a new mock instance.
+func NewMockterminalInterfaceApp(ctrl *gomock.Controller) *MockterminalInterfaceApp {
+	mock := &MockterminalInterfaceApp{ctrl: ctrl}
+	mock.recorder = &MockterminalInterfaceAppMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockterminalInterfaceApp) EXPECT() *MockterminalInterfaceAppMockRecorder {
+	return m.recorder
+}
+
+// Run mocks base method.
+func (m *MockterminalInterfaceApp) Run(ctx context.Context) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Run", ctx)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Run indicates an expected call of Run.
+func (mr *MockterminalInterfaceAppMockRecorder) Run(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockterminalInterfaceApp)(nil).Run), ctx)
+}

@@ -58,3 +58,18 @@ bc:
 cert:
 	cd cert; ./gen.sh; cd ..
 
+.PHONY: genmock
+genmock:
+	mockgen -source internal/client/service/passkeeper/service.go -destination internal/client/service/passkeeper/mocks/service.go -package passkeeper_mock
+	mockgen -source internal/client/command/command.go -destination internal/client/command/mocks/command.go -package command_mock
+	mockgen -source internal/server/handler/grpc/v1/handler.go -destination internal/server/handler/grpc/v1/mocks/handler.go -package v1_mock
+	mockgen -source internal/server/service/auth/service.go -destination internal/server/service/auth/mocks/service.go -package auth_mock
+	mockgen -source internal/server/service/binary/service.go -destination internal/server/service/binary/mocks/service.go -package binary_mock
+	mockgen -source internal/server/service/creditcard/service.go -destination internal/server/service/creditcard/mocks/service.go -package creditcard_mock
+	mockgen -source internal/server/service/generaldata/service.go -destination internal/server/service/generaldata/mocks/service.go -package generaldata_mock
+	mockgen -source internal/server/service/keyring/keyring.go -destination internal/server/service/keyring/mocks/keyring.go -package keyring_mock
+	mockgen -source internal/server/service/loginpass/service.go -destination internal/server/service/loginpass/mocks/service.go -package loginpass_mock
+	mockgen -source internal/server/service/securedata/service.go -destination internal/server/service/securedata/mocks/service.go -package data_mock
+	mockgen -source internal/server/service/text/service.go -destination internal/server/service/text/mocks/service.go -package text_mock
+
+
