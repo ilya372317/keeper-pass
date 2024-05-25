@@ -198,6 +198,18 @@ message IndexItem {
   int32 type = 3;
 }
 
+message FileUploadRequest {
+  oneof data {
+    string filename = 1;
+    bytes content = 2;
+  }
+}
+
+message UploadStatus {
+  bool success = 1;
+  string message = 2;
+}
+
 service PassService {
   // Auth and register.
   rpc Auth(AuthRequest) returns (AuthResponse);
@@ -228,4 +240,6 @@ service PassService {
   rpc SaveCreditCard(SaveCreditCardRequest) returns (SaveCreditCardResponse);
   rpc UpdateCreditCard(UpdateCreditCardRequest) returns (UpdateCreditCardResponse);
   rpc ShowCreditCard(ShowCreditCardRequest) returns (ShowCreditCardResponse);
+
+  rpc Upload(stream FileUploadRequest) returns (UploadStatus) {}
 }

@@ -6,6 +6,7 @@ package v1_mock
 
 import (
 	context "context"
+	io "io"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -380,4 +381,41 @@ func (m *MockgeneralDataService) Index(ctx context.Context) ([]domain.GeneralDat
 func (mr *MockgeneralDataServiceMockRecorder) Index(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockgeneralDataService)(nil).Index), ctx)
+}
+
+// MockfileService is a mock of fileService interface.
+type MockfileService struct {
+	ctrl     *gomock.Controller
+	recorder *MockfileServiceMockRecorder
+}
+
+// MockfileServiceMockRecorder is the mock recorder for MockfileService.
+type MockfileServiceMockRecorder struct {
+	mock *MockfileService
+}
+
+// NewMockfileService creates a new mock instance.
+func NewMockfileService(ctrl *gomock.Controller) *MockfileService {
+	mock := &MockfileService{ctrl: ctrl}
+	mock.recorder = &MockfileServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockfileService) EXPECT() *MockfileServiceMockRecorder {
+	return m.recorder
+}
+
+// Upload mocks base method.
+func (m *MockfileService) Upload(ctx context.Context, filePath string, file io.Reader) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Upload", ctx, filePath, file)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Upload indicates an expected call of Upload.
+func (mr *MockfileServiceMockRecorder) Upload(ctx, filePath, file interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Upload", reflect.TypeOf((*MockfileService)(nil).Upload), ctx, filePath, file)
 }

@@ -35,6 +35,7 @@ const (
 	PassService_SaveCreditCard_FullMethodName   = "/PassService/SaveCreditCard"
 	PassService_UpdateCreditCard_FullMethodName = "/PassService/UpdateCreditCard"
 	PassService_ShowCreditCard_FullMethodName   = "/PassService/ShowCreditCard"
+	PassService_Upload_FullMethodName           = "/PassService/Upload"
 )
 
 // PassServiceClient is the client API for PassService service.
@@ -64,6 +65,7 @@ type PassServiceClient interface {
 	SaveCreditCard(ctx context.Context, in *SaveCreditCardRequest, opts ...grpc.CallOption) (*SaveCreditCardResponse, error)
 	UpdateCreditCard(ctx context.Context, in *UpdateCreditCardRequest, opts ...grpc.CallOption) (*UpdateCreditCardResponse, error)
 	ShowCreditCard(ctx context.Context, in *ShowCreditCardRequest, opts ...grpc.CallOption) (*ShowCreditCardResponse, error)
+	Upload(ctx context.Context, opts ...grpc.CallOption) (PassService_UploadClient, error)
 }
 
 type passServiceClient struct {
@@ -218,6 +220,40 @@ func (c *passServiceClient) ShowCreditCard(ctx context.Context, in *ShowCreditCa
 	return out, nil
 }
 
+func (c *passServiceClient) Upload(ctx context.Context, opts ...grpc.CallOption) (PassService_UploadClient, error) {
+	stream, err := c.cc.NewStream(ctx, &PassService_ServiceDesc.Streams[0], PassService_Upload_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &passServiceUploadClient{stream}
+	return x, nil
+}
+
+type PassService_UploadClient interface {
+	Send(*FileUploadRequest) error
+	CloseAndRecv() (*UploadStatus, error)
+	grpc.ClientStream
+}
+
+type passServiceUploadClient struct {
+	grpc.ClientStream
+}
+
+func (x *passServiceUploadClient) Send(m *FileUploadRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *passServiceUploadClient) CloseAndRecv() (*UploadStatus, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UploadStatus)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // PassServiceServer is the server API for PassService service.
 // All implementations must embed UnimplementedPassServiceServer
 // for forward compatibility
@@ -245,6 +281,7 @@ type PassServiceServer interface {
 	SaveCreditCard(context.Context, *SaveCreditCardRequest) (*SaveCreditCardResponse, error)
 	UpdateCreditCard(context.Context, *UpdateCreditCardRequest) (*UpdateCreditCardResponse, error)
 	ShowCreditCard(context.Context, *ShowCreditCardRequest) (*ShowCreditCardResponse, error)
+	Upload(PassService_UploadServer) error
 	mustEmbedUnimplementedPassServiceServer()
 }
 
@@ -299,6 +336,9 @@ func (UnimplementedPassServiceServer) UpdateCreditCard(context.Context, *UpdateC
 }
 func (UnimplementedPassServiceServer) ShowCreditCard(context.Context, *ShowCreditCardRequest) (*ShowCreditCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ShowCreditCard not implemented")
+}
+func (UnimplementedPassServiceServer) Upload(PassService_UploadServer) error {
+	return status.Errorf(codes.Unimplemented, "method Upload not implemented")
 }
 func (UnimplementedPassServiceServer) mustEmbedUnimplementedPassServiceServer() {}
 
@@ -601,6 +641,32 @@ func _PassService_ShowCreditCard_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PassService_Upload_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(PassServiceServer).Upload(&passServiceUploadServer{stream})
+}
+
+type PassService_UploadServer interface {
+	SendAndClose(*UploadStatus) error
+	Recv() (*FileUploadRequest, error)
+	grpc.ServerStream
+}
+
+type passServiceUploadServer struct {
+	grpc.ServerStream
+}
+
+func (x *passServiceUploadServer) SendAndClose(m *UploadStatus) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *passServiceUploadServer) Recv() (*FileUploadRequest, error) {
+	m := new(FileUploadRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // PassService_ServiceDesc is the grpc.ServiceDesc for PassService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -673,6 +739,12 @@ var PassService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PassService_ShowCreditCard_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Upload",
+			Handler:       _PassService_Upload_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "proto/pass.proto",
 }

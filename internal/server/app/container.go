@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/filerepo/file"
 	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/data"
 	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/key"
 	"github.com/ilya372317/pass-keeper/internal/server/adapter/pgsqlrepo/user"
@@ -9,6 +10,7 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/service/auth"
 	"github.com/ilya372317/pass-keeper/internal/server/service/binary"
 	"github.com/ilya372317/pass-keeper/internal/server/service/creditcard"
+	fileserv "github.com/ilya372317/pass-keeper/internal/server/service/file"
 	"github.com/ilya372317/pass-keeper/internal/server/service/generaldata"
 	"github.com/ilya372317/pass-keeper/internal/server/service/jwtmanager"
 	"github.com/ilya372317/pass-keeper/internal/server/service/keyring"
@@ -16,19 +18,27 @@ import (
 	"github.com/ilya372317/pass-keeper/internal/server/service/securedata"
 	"github.com/ilya372317/pass-keeper/internal/server/service/text"
 	"github.com/jmoiron/sqlx"
+	"github.com/minio/minio-go/v7"
 )
 
 type Container struct {
 	pgsqlx *sqlx.DB
 	KRing  *keyring.Keyring
 
+	minIOClient *minio.Client
+
 	conf config.Config
 }
 
-func NewContainer(conf config.Config, pgsqlx *sqlx.DB) *Container {
+func NewContainer(
+	conf config.Config,
+	pgsqlx *sqlx.DB,
+	minIOClient *minio.Client,
+) *Container {
 	return &Container{
-		conf:   conf,
-		pgsqlx: pgsqlx,
+		conf:        conf,
+		pgsqlx:      pgsqlx,
+		minIOClient: minIOClient,
 	}
 }
 
@@ -86,4 +96,12 @@ func (c *Container) GetDefaultBinaryService() *binary.Service {
 
 func (c *Container) GetDefaultGeneralDataService() *generaldata.Service {
 	return generaldata.New(c.GetDefaultSecureDataService())
+}
+
+func (c *Container) GetDefaultFileStorage() *file.Storage {
+	return file.New(c.minIOClient)
+}
+
+func (c *Container) GetDefaultFileService() *fileserv.Service {
+	return fileserv.New(c.GetDefaultFileStorage())
 }

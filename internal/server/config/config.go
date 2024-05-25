@@ -9,6 +9,14 @@ import (
 
 const defaultTokenExpInHours = 6
 
+type MinIOConfig struct {
+	Host,
+	Login,
+	Password,
+	CertPath,
+	CryptKey string
+}
+
 type GRPCConfig struct {
 	Host        string
 	TLSCertPath string
@@ -41,6 +49,7 @@ type SQLConfig struct {
 }
 
 type Config struct {
+	MinIO  MinIOConfig
 	GRPC   GRPCConfig
 	JWT    JWTConfig
 	MainDB SQLConfig
@@ -57,8 +66,18 @@ func New(configPath string) (Config, error) {
 	viper.SetDefault("jwt.secret_key", "")
 	viper.SetDefault("jwt.token_exp", time.Hour*defaultTokenExpInHours)
 	viper.SetDefault("grpc.open_methods", []string{"/PassService/Auth", "/PassService/Register"})
+	viper.SetDefault("minio.host", "localhost:9000")
+	viper.SetDefault("minio.login", "minioadmin")
+	viper.SetDefault("minio.password", "minioadmin")
 
 	cnfg = Config{
+		MinIO: MinIOConfig{
+			Host:     viper.GetString("minio.host"),
+			Login:    viper.GetString("minio.login"),
+			Password: viper.GetString("minio.password"),
+			CertPath: viper.GetString("minio.cert_path"),
+			CryptKey: viper.GetString("minio.crypt_key"),
+		},
 		GRPC: GRPCConfig{
 			Host:        viper.GetString("grpc.host"),
 			OpenMethods: viper.GetStringSlice("grpc.open_methods"),

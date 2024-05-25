@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"io"
 
 	"github.com/ilya372317/pass-keeper/internal/server/domain"
 	"github.com/ilya372317/pass-keeper/internal/server/dto"
@@ -42,6 +43,10 @@ type generalDataService interface {
 	Delete(ctx context.Context, id int64) error
 }
 
+type fileService interface {
+	Upload(ctx context.Context, filePath string, file io.Reader) error
+}
+
 type Handler struct {
 	pb.UnimplementedPassServiceServer
 	authService        AuthService
@@ -50,6 +55,7 @@ type Handler struct {
 	textService        textService
 	binaryService      binaryService
 	generalDataService generalDataService
+	fileService        fileService
 }
 
 func New(
@@ -59,6 +65,7 @@ func New(
 	textService textService,
 	binaryService binaryService,
 	generalDataService generalDataService,
+	fileService fileService,
 ) *Handler {
 	return &Handler{
 		authService:        authService,
@@ -67,5 +74,6 @@ func New(
 		textService:        textService,
 		binaryService:      binaryService,
 		generalDataService: generalDataService,
+		fileService:        fileService,
 	}
 }

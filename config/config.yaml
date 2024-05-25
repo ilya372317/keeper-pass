@@ -14,3 +14,9 @@ main_db:
   read_timeout: 1m
   write_timeout: 1m
   timeout: 1m
+minio:
+  host: "localhost:9000"
+  login: "ilya"
+  password: "12345678"
+  cert_path: "/Users/ilya/.minio/certs/public.crt"
+  crypt_key: "23848392018373827384938475837482"

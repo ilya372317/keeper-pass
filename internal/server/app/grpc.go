@@ -29,6 +29,7 @@ func (a *App) StartGRPCServer(ctx context.Context) error {
 			a.c.GetDefaultTextService(),
 			a.c.GetDefaultBinaryService(),
 			a.c.GetDefaultGeneralDataService(),
+			a.c.GetDefaultFileService(),
 		),
 	)
 	err = server.StartAndListen(ctx)

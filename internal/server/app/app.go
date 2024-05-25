@@ -6,14 +6,20 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ilya372317/pass-keeper/internal/server/adapter/filerepo/file"
 	"github.com/ilya372317/pass-keeper/internal/server/config"
 	"github.com/ilya372317/pass-keeper/internal/server/service/keyring"
 	"github.com/ilya372317/pass-keeper/pkg/logger"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
-const timeForGetKeyring = time.Second * 5
+const (
+	timeForGetKeyring        = time.Second * 5
+	timeForCreateMinIOBucket = time.Second * 5
+)
 
 type App struct {
 	c    *Container
@@ -34,7 +40,12 @@ func New(configPath, masterKey string) (*App, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed make connection with postgresql db: %w", err)
 	}
-	app.c = NewContainer(conf, pgsqlxConnect)
+
+	minIOClient, err := app.newMinIOConnection(conf.MinIO)
+	if err != nil {
+		return nil, fmt.Errorf("failed cerate minio connection: %w", err)
+	}
+	app.c = NewContainer(conf, pgsqlxConnect, minIOClient)
 	ctx, stop := context.WithTimeout(context.Background(), timeForGetKeyring)
 	defer stop()
 	kring := keyring.New([]byte(masterKey), app.c.GetKeyRepository())
@@ -43,6 +54,30 @@ func New(configPath, masterKey string) (*App, error) {
 	}
 	app.c.SetKeyring(kring)
 	return &app, nil
+}
+
+func (a *App) newMinIOConnection(conf config.MinIOConfig) (*minio.Client, error) {
+	client, err := minio.New(conf.Host, &minio.Options{
+		Creds:  credentials.NewStaticV4(conf.Login, conf.Password, ""),
+		Secure: false,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed create minio client instance: %w", err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeForCreateMinIOBucket)
+	defer cancel()
+	bucketExist, err := client.BucketExists(ctx, file.BucketName)
+	if err != nil {
+		return nil, fmt.Errorf("failed check if main minio bucket exists: %w", err)
+	}
+	if !bucketExist {
+		if err = client.MakeBucket(ctx, file.BucketName, minio.MakeBucketOptions{}); err != nil {
+			return nil, fmt.Errorf("failed create main minio bucket: %w", err)
+		}
+	}
+
+	return client, nil
 }
 
 func (a *App) newPgSqlxConnect(cfg config.SQLConfig) (*sqlx.DB, error) {
